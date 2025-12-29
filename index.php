@@ -242,15 +242,44 @@ function handleDownload() {
             $content_type = 'text/plain';
             break;
         case 'ast':
-            $file = "{$tmp_dir}/result.json";
+            $result_file = "{$tmp_dir}/result.json";
+            if (!file_exists($result_file)) {
+                http_response_code(404);
+                echo json_encode(['error' => 'File not found']);
+                exit;
+            }
+            
+            $result = json_decode(file_get_contents($result_file), true);
+            $content = json_encode($result['outputs']['ast'], JSON_PRETTY_PRINT);
             $filename = "ast_{$session_id}.json";
             $content_type = 'application/json';
-            break;
+            
+            header('Content-Type: ' . $content_type);
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Length: ' . strlen($content));
+            echo $content;
+            exit;
+            
         case 'asm':
-            $file = "{$tmp_dir}/result.json";
+            $result_file = "{$tmp_dir}/result.json";
+            if (!file_exists($result_file)) {
+                http_response_code(404);
+                echo json_encode(['error' => 'File not found']);
+                exit;
+            }
+            
+            $result = json_decode(file_get_contents($result_file), true);
+            $assembly = $result['outputs']['asm'] ?? [];
+            $content = is_array($assembly) ? implode("\n", $assembly) : $assembly;
             $filename = "assembly_{$session_id}.asm";
             $content_type = 'text/plain';
-            break;
+            
+            header('Content-Type: ' . $content_type);
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Length: ' . strlen($content));
+            echo $content;
+            exit;
+            
         default:
             http_response_code(400);
             echo json_encode(['error' => 'Invalid download type']);
@@ -294,13 +323,15 @@ function handleErrorReport() {
     ];
 }
 
+// ... [Previous functions: generateVisualizationData, getCFGNodeColor, getMemorySectionColor, createASTNodes, getASTNodeColor, simulateTokens, simulateAST, simulateSymbolTable, simulateIR, simulateOptimization, simulateAssembly] ...
+
+// These functions remain the same as before
 function generateVisualizationData($result, $stage, $view) {
-    // Generate nodes and edges for visualization
+    // ... same as before ...
     $nodes = [];
     $edges = [];
     
     if ($view === 'pipeline') {
-        // Create pipeline nodes
         $stages = [
             ['id' => 'lexical', 'name' => 'Lexical Analysis', 'x' => -30, 'y' => 0, 'z' => 0],
             ['id' => 'syntax', 'name' => 'Syntax Analysis', 'x' => -18, 'y' => 0, 'z' => 0],
@@ -345,14 +376,12 @@ function generateVisualizationData($result, $stage, $view) {
             ];
         }
     } elseif ($view === 'ast') {
-        // Create AST nodes
         if (isset($result['outputs']['ast'])) {
             $ast = $result['outputs']['ast'];
             $node_id = 0;
             createASTNodes($ast, $nodes, $edges, $node_id, 0, 10, 0, -1);
         }
     } elseif ($view === 'cfg') {
-        // Create Control Flow Graph nodes
         $cfg_nodes = [
             ['id' => 'entry', 'name' => 'Entry', 'x' => 0, 'y' => 20, 'z' => 0, 'type' => 'entry'],
             ['id' => 'decl', 'name' => 'Declarations', 'x' => -10, 'y' => 10, 'z' => 0, 'type' => 'declaration'],
@@ -376,7 +405,6 @@ function generateVisualizationData($result, $stage, $view) {
             ];
         }
         
-        // Create edges for CFG
         $cfg_edges = [
             ['from' => 'entry', 'to' => 'decl', 'type' => 'control_flow'],
             ['from' => 'decl', 'to' => 'init', 'type' => 'control_flow'],
@@ -391,7 +419,6 @@ function generateVisualizationData($result, $stage, $view) {
             $edges[] = $edge;
         }
     } elseif ($view === 'memory') {
-        // Create Memory Layout nodes
         $memory_sections = [
             ['id' => 'text', 'name' => 'Text (Code)', 'x' => -20, 'y' => 15, 'z' => 0, 'size' => 4, 'height' => 3],
             ['id' => 'data', 'name' => 'Data', 'x' => -10, 'y' => 15, 'z' => 0, 'size' => 3, 'height' => 4],
@@ -414,7 +441,6 @@ function generateVisualizationData($result, $stage, $view) {
             ];
         }
         
-        // Create memory allocation nodes
         $allocations = [
             ['id' => 'var_x', 'name' => 'int x = 10', 'x' => -20, 'y' => 5, 'z' => 5, 'size' => 1.5],
             ['id' => 'var_y', 'name' => 'int y = 20', 'x' => -20, 'y' => 2, 'z' => 5, 'size' => 1.5],
@@ -493,20 +519,17 @@ function createASTNodes($node, &$nodes, &$edges, &$node_id, $x, $y, $z, $parent_
         ];
     }
     
-    // Handle child nodes
     $child_index = 0;
     foreach ($node as $key => $value) {
         if ($key === 'type' || $key === 'name' || $key === 'value') continue;
         
         if (is_array($value) && isset($value['type'])) {
-            // Single child node
             $child_x = $x + 15;
             $child_y = $y - 8 - ($child_index * 8);
             $child_z = $z + ($child_index * 5);
             createASTNodes($value, $nodes, $edges, $node_id, $child_x, $child_y, $child_z, $current_id);
             $child_index++;
         } elseif (is_array($value) && is_array(reset($value)) && isset(reset($value)['type'])) {
-            // Array of child nodes
             foreach ($value as $child) {
                 if (is_array($child) && isset($child['type'])) {
                     $child_x = $x + 15;
@@ -538,18 +561,15 @@ function simulateTokens($code) {
     $tokens = [];
     $errors = [];
     
-    // Clean the code - remove comments first
-    $code = preg_replace('/\/\/.*$/m', '', $code); // Remove single line comments
-    $code = preg_replace('/\/\*.*?\*\//s', '', $code); // Remove multi-line comments
+    $code = preg_replace('/\/\/.*$/m', '', $code);
+    $code = preg_replace('/\/\*.*?\*\//s', '', $code);
     
-    // Analyze the code for errors
     $lines = explode("\n", $code);
     
     foreach ($lines as $lineNum => $line) {
         $line = trim($line);
         if (empty($line)) continue;
         
-        // Skip preprocessor directives - they don't need semicolons
         if (strpos($line, '#') === 0) {
             $tokens[] = [
                 'type' => 'PREPROCESSOR',
@@ -559,7 +579,6 @@ function simulateTokens($code) {
             continue;
         }
         
-        // Check for unterminated strings (simple check)
         $quoteCount = substr_count($line, '"');
         if ($quoteCount % 2 != 0) {
             $errors[] = [
@@ -570,7 +589,6 @@ function simulateTokens($code) {
             ];
         }
         
-        // Simple tokenization - improved regex
         $words = preg_split('/(\s+|(?<=[(){};=+\-\/*<>!,])|(?=[(){};=+\-\/*<>!,]))/', $line, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         
         foreach ($words as $word) {
@@ -583,7 +601,6 @@ function simulateTokens($code) {
                 'line' => $lineNum + 1
             ];
             
-            // Classify tokens - FIXED: Better classification
             $keywords = ['int', 'return', 'if', 'else', 'for', 'while', 'printf', 'main', 'char', 'float', 'double', 'void', 'include'];
             $types = ['int', 'char', 'float', 'double', 'void'];
             
@@ -615,32 +632,24 @@ function simulateTokens($code) {
 function simulateAST($code) {
     $errors = [];
     
-    // FIXED: Better syntax error checking
     $lines = explode("\n", $code);
     $brace_count = 0;
-    $in_string = false;
-    $in_comment = false;
     
     foreach ($lines as $lineNum => $line) {
-        $original_line = $line;
         $line = trim($line);
         if (empty($line)) continue;
         
-        // Skip preprocessor directives
         if (strpos($line, '#') === 0) {
             continue;
         }
         
-        // Skip comments
         if (strpos($line, '//') === 0) {
             continue;
         }
         
-        // Simple brace counting
         $brace_count += substr_count($line, '{');
         $brace_count -= substr_count($line, '}');
         
-        // Check for missing semicolons - but be smarter about it
         if (!empty($line) && 
             substr($line, -1) !== ';' &&
             substr($line, -1) !== '{' &&
@@ -652,7 +661,6 @@ function simulateAST($code) {
             !preg_match('/^\/\*/', $line) &&
             !preg_match('/^\*/', $line)) {
             
-            // Check if this looks like a statement that should end with semicolon
             if (preg_match('/(=\s*[^;]+|printf\s*\(|return\s+[^;])$/', $line)) {
                 $errors[] = [
                     'type' => 'syntax',
@@ -664,7 +672,6 @@ function simulateAST($code) {
         }
     }
     
-    // Check for unbalanced braces
     if ($brace_count != 0) {
         $errors[] = [
             'type' => 'syntax',
@@ -673,7 +680,6 @@ function simulateAST($code) {
         ];
     }
     
-    // Generate AST based on code structure - SIMPLIFIED for now
     $ast = [
         'type' => 'Program',
         'body' => [
@@ -691,7 +697,6 @@ function simulateAST($code) {
         ]
     ];
     
-    // Parse the code to build a better AST
     if (strpos($code, 'printf') !== false) {
         $ast['body'][0]['body'] = array_merge([
             [
@@ -717,27 +722,22 @@ function simulateSymbolTable($code) {
     
     $errors = [];
     
-    // FIXED: Better semantic analysis - don't flag stdio.h, printf, etc.
     $lines = explode("\n", $code);
     $currentFunction = null;
     $declared_vars = [];
     
-    // Known library functions and valid identifiers
     $library_functions = ['printf', 'scanf', 'malloc', 'free', 'strlen', 'strcpy'];
-    $valid_identifiers = ['stdio', 'h', 'd', 'n', 's', 'c', 'f']; // Common format specifiers
+    $valid_identifiers = ['stdio', 'h', 'd', 'n', 's', 'c', 'f'];
     
     foreach ($lines as $lineNum => $line) {
         $line = trim($line);
         
-        // Remove string literals to avoid false positives
         $line_without_strings = preg_replace('/"[^"]*"/', 'STRING', $line);
         
-        // Skip preprocessor and comments
         if (strpos($line, '#') === 0 || strpos($line, '//') === 0) {
             continue;
         }
         
-        // Detect function declarations
         if (preg_match('/^\s*(int|void|float|double|char)\s+(\w+)\s*\(([^)]*)\)/', $line, $matches)) {
             $currentFunction = $matches[2];
             $symbol_table['functions'][$currentFunction] = [
@@ -750,7 +750,6 @@ function simulateSymbolTable($code) {
             $declared_vars[] = $currentFunction;
         }
         
-        // Detect variable declarations
         elseif (preg_match('/^\s*(int|float|double|char)\s+(\w+)\s*(=\s*[^;]+)?\s*;/', $line_without_strings, $matches)) {
             $var_name = $matches[2];
             $declared_vars[] = $var_name;
@@ -771,36 +770,30 @@ function simulateSymbolTable($code) {
             }
         }
         
-        // Check for undeclared variables - but exclude known valid ones
         if (preg_match_all('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b/', $line_without_strings, $matches)) {
             foreach ($matches[1] as $identifier) {
-                // Skip keywords, types, library functions, and valid identifiers
                 if (in_array($identifier, ['int', 'return', 'if', 'else', 'for', 'while', 'printf', 'main', 
                                           'char', 'float', 'double', 'void', 'include']) ||
                     in_array($identifier, $library_functions) ||
                     in_array($identifier, $valid_identifiers) ||
-                    $identifier === 'STRING' || // Our placeholder
+                    $identifier === 'STRING' ||
                     strpos($identifier, 'stdio') === 0) {
                     continue;
                 }
                 
-                // Check if it's a function call
                 if (strpos($line, $identifier . '(') !== false) {
-                    // This is a function call, not a variable
                     continue;
                 }
                 
-                // Only flag if not declared and looks like a variable
                 if (!in_array($identifier, $declared_vars) && 
                     !in_array($identifier, array_keys($symbol_table['functions']))) {
-                    // Make sure it's not part of a string or comment
                     if (strpos($line, '"' . $identifier . '"') === false &&
                         strpos($line, "'" . $identifier . "'") === false) {
                         $errors[] = [
                             'type' => 'semantic',
                             'message' => "Undeclared identifier: $identifier",
                             'line' => $lineNum + 1,
-                            'severity' => 'warning' // Make it a warning, not error
+                            'severity' => 'warning'
                         ];
                     }
                 }
@@ -819,7 +812,6 @@ function simulateIR($code) {
     $ir = [];
     $errors = [];
     
-    // Generate simple IR based on code
     $lines = explode("\n", $code);
     
     foreach ($lines as $line) {
@@ -850,7 +842,6 @@ function simulateOptimization($code) {
     $optimizations = [];
     $errors = [];
     
-    // Simulate some optimizations
     $optimizations[] = 'Constant folding';
     $optimizations[] = 'Dead code elimination';
     $optimizations[] = 'Loop invariant code motion';
@@ -867,20 +858,57 @@ function simulateAssembly($code) {
     $assembly = [];
     $errors = [];
     
-    // Generate simple assembly
+    // Generate assembly based on code content
+    $assembly[] = '; Generated Assembly Code';
+    $assembly[] = '; From: ' . substr($code, 0, 50) . '...';
+    $assembly[] = '';
+    
     $assembly[] = '.section .text';
     $assembly[] = '.global main';
+    $assembly[] = '';
     $assembly[] = 'main:';
-    $assembly[] = '  push %rbp';
-    $assembly[] = '  mov %rsp, %rbp';
-    $assembly[] = '  movl $10, -4(%rbp)   # x = 10';
-    $assembly[] = '  movl $20, -8(%rbp)   # y = 20';
-    $assembly[] = '  movl -4(%rbp), %eax';
-    $assembly[] = '  addl -8(%rbp), %eax';
-    $assembly[] = '  movl %eax, -12(%rbp) # result = x + y';
-    $assembly[] = '  movl $0, %eax        # return 0';
-    $assembly[] = '  pop %rbp';
-    $assembly[] = '  ret';
+    $assembly[] = '    push   %rbp';
+    $assembly[] = '    mov    %rsp, %rbp';
+    $assembly[] = '';
+    
+    // Add some assembly based on code analysis
+    if (strpos($code, 'printf') !== false) {
+        $assembly[] = '    ; Printf implementation';
+        $assembly[] = '    lea    .LC0(%rip), %rdi';
+        $assembly[] = '    mov    $0, %eax';
+        $assembly[] = '    call   printf@PLT';
+        $assembly[] = '';
+    }
+    
+    if (strpos($code, 'int ') !== false && preg_match_all('/int\s+(\w+)\s*=\s*(\d+)/', $code, $matches)) {
+        $assembly[] = '    ; Variable declarations';
+        for ($i = 0; $i < count($matches[1]); $i++) {
+            $var = $matches[1][$i];
+            $val = $matches[2][$i];
+            $offset = ($i + 1) * 4;
+            $assembly[] = "    movl   \$$val, -{$offset}(%rbp)   ; $var = $val";
+        }
+        $assembly[] = '';
+    }
+    
+    if (strpos($code, '+') !== false && preg_match('/(\w+)\s*=\s*(\w+)\s*\+\s*(\w+)/', $code)) {
+        $assembly[] = '    ; Addition operation';
+        $assembly[] = '    mov    -4(%rbp), %eax';
+        $assembly[] = '    add    -8(%rbp), %eax';
+        $assembly[] = '    mov    %eax, -12(%rbp)';
+        $assembly[] = '';
+    }
+    
+    $assembly[] = '    mov    $0, %eax        ; return 0';
+    $assembly[] = '    pop    %rbp';
+    $assembly[] = '    ret';
+    $assembly[] = '';
+    
+    if (strpos($code, 'printf') !== false) {
+        $assembly[] = '.section .rodata';
+        $assembly[] = '.LC0:';
+        $assembly[] = '    .string "Result: %d\\n"';
+    }
     
     return [
         'assembly' => $assembly,
@@ -895,7 +923,7 @@ function simulateAssembly($code) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>3D C Compiler Visualizer - Final Project</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
@@ -919,72 +947,125 @@ function simulateAssembly($code) {
         }
         
         .header {
-            background: rgba(17, 34, 64, 0.9);
-            padding: 15px 20px;
+            background: rgba(17, 34, 64, 0.95);
+            padding: 12px 15px;
             border-bottom: 1px solid rgba(100, 255, 218, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .header h1 {
             color: #64ffda;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        
-        .header h1 i {
-            color: #64ffda;
+            gap: 8px;
+            flex: 1;
+            min-width: 250px;
         }
         
         .subtitle {
             color: #8892b0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
         }
         
         .container {
-            display: grid;
-            grid-template-columns: 450px 1fr 500px;
-            grid-template-rows: 1fr;
+            display: flex;
+            flex-direction: column;
             height: calc(100vh - 140px);
-            gap: 15px;
-            padding: 15px;
+            padding: 10px;
             flex: 1;
+            overflow: hidden;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                flex-direction: row;
+            }
         }
         
         .panel {
             background: rgba(17, 34, 64, 0.7);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 15px;
             border: 1px solid rgba(100, 255, 218, 0.1);
             display: flex;
             flex-direction: column;
             backdrop-filter: blur(5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            min-height: 300px;
+        }
+        
+        .controls-panel {
+            width: 100%;
+            max-width: 100%;
+            order: 1;
+        }
+        
+        @media (min-width: 992px) {
+            .controls-panel {
+                width: 400px;
+                min-width: 400px;
+                order: 1;
+            }
+        }
+        
+        .visualization-panel {
+            flex: 1;
+            order: 2;
+            min-height: 400px;
+        }
+        
+        .output-panel {
+            width: 100%;
+            max-width: 100%;
+            order: 3;
+        }
+        
+        @media (min-width: 992px) {
+            .output-panel {
+                width: 450px;
+                min-width: 450px;
+                order: 3;
+            }
         }
         
         .panel-header {
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 2px solid rgba(100, 255, 218, 0.3);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .panel-header h2 {
             color: #64ffda;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .panel-header i {
             color: #64ffda;
+            font-size: 1.1rem;
         }
         
         /* Left Panel - Controls */
@@ -993,29 +1074,29 @@ function simulateAssembly($code) {
         }
         
         .control-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .control-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #64ffda;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         select, input[type="range"] {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 10px;
             background: rgba(10, 25, 47, 0.8);
             border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 8px;
+            border-radius: 6px;
             color: #e6f1ff;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s;
         }
         
@@ -1033,14 +1114,14 @@ function simulateAssembly($code) {
         .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 12px;
         }
         
         .checkbox-group label {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
             color: #8892b0;
             font-weight: 400;
@@ -1053,30 +1134,32 @@ function simulateAssembly($code) {
         
         .button-group {
             display: flex;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
         }
         
         .btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: linear-gradient(135deg, #64ffda, #00d9a6);
             color: #0a192f;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
+            min-width: 120px;
         }
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(100, 255, 218, 0.4);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
         }
         
         .btn:disabled {
@@ -1099,26 +1182,26 @@ function simulateAssembly($code) {
         /* Center Panel - Visualization */
         .visualization-panel {
             position: relative;
-            overflow: hidden;
         }
         
         #visualization-canvas {
             width: 100%;
             height: 100%;
-            border-radius: 8px;
+            border-radius: 6px;
         }
         
         .visualization-controls {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            z-index: 10;
         }
         
         .icon-btn {
-            width: 42px;
-            height: 42px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: rgba(10, 25, 47, 0.8);
             border: 1px solid rgba(100, 255, 218, 0.3);
@@ -1128,7 +1211,7 @@ function simulateAssembly($code) {
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .icon-btn:hover {
@@ -1143,22 +1226,22 @@ function simulateAssembly($code) {
         
         .status-bar {
             margin-top: auto;
-            padding: 15px;
+            padding: 12px;
             background: rgba(10, 25, 47, 0.8);
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid rgba(100, 255, 218, 0.1);
         }
         
         #status-message {
-            margin-bottom: 10px;
-            font-size: 0.95rem;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .progress-bar {
-            height: 6px;
+            height: 5px;
             background: rgba(136, 146, 176, 0.2);
             border-radius: 3px;
             overflow: hidden;
@@ -1179,22 +1262,24 @@ function simulateAssembly($code) {
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .code-editor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         
         .code-editor-header h3 {
             color: #64ffda;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         textarea {
@@ -1202,16 +1287,17 @@ function simulateAssembly($code) {
             background: #0a192f;
             color: #e6f1ff;
             border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 6px;
+            padding: 12px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
             resize: none;
             white-space: pre;
             overflow: auto;
             tab-size: 4;
             transition: border 0.3s;
+            min-height: 200px;
         }
         
         textarea:focus {
@@ -1222,25 +1308,26 @@ function simulateAssembly($code) {
         /* Output Tabs */
         .output-tabs {
             display: flex;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-bottom: 1px solid rgba(100, 255, 218, 0.1);
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 4px;
         }
         
         .output-tab {
-            padding: 10px 20px;
+            padding: 8px 12px;
             background: none;
             border: none;
             color: #8892b0;
             cursor: pointer;
             transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-            font-size: 0.9rem;
+            border-bottom: 2px solid transparent;
+            font-size: 0.85rem;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            white-space: nowrap;
         }
         
         .output-tab:hover {
@@ -1259,16 +1346,16 @@ function simulateAssembly($code) {
         .output-content {
             flex: 1;
             background: #0a192f;
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 6px;
+            padding: 12px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            line-height: 1.6;
+            font-size: 11px;
+            line-height: 1.5;
             white-space: pre-wrap;
             word-wrap: break-word;
             overflow-y: auto;
             display: none;
-            max-height: 350px;
+            max-height: 300px;
             border: 1px solid rgba(100, 255, 218, 0.1);
         }
         
@@ -1277,20 +1364,20 @@ function simulateAssembly($code) {
         }
         
         .stage-info {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 15px;
+            padding: 15px;
             background: rgba(10, 25, 47, 0.8);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            line-height: 1.6;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.5;
             border: 1px solid rgba(100, 255, 218, 0.1);
         }
         
         .error-section {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 15px;
+            padding: 15px;
             background: rgba(255, 107, 107, 0.1);
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid rgba(255, 107, 107, 0.3);
             max-height: 200px;
             overflow-y: auto;
@@ -1298,12 +1385,12 @@ function simulateAssembly($code) {
         }
         
         .error-item {
-            padding: 12px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
             background: rgba(255, 107, 107, 0.2);
-            border-radius: 6px;
+            border-radius: 5px;
             border-left: 4px solid #ff6b6b;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .error-warning {
@@ -1312,11 +1399,11 @@ function simulateAssembly($code) {
         
         .stage-status {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             font-weight: bold;
-            margin-left: 10px;
+            margin-left: 8px;
         }
         
         .status-completed {
@@ -1338,51 +1425,57 @@ function simulateAssembly($code) {
             position: absolute;
             background: rgba(10, 25, 47, 0.95);
             color: #e6f1ff;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 5px;
             border: 1px solid #64ffda;
             pointer-events: none;
             z-index: 1000;
-            max-width: 300px;
-            font-size: 0.85rem;
+            max-width: 250px;
+            font-size: 0.8rem;
             display: none;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
         
         .footer {
-            background: rgba(17, 34, 64, 0.9);
-            padding: 15px 20px;
+            background: rgba(17, 34, 64, 0.95);
+            padding: 12px 15px;
             border-top: 1px solid rgba(100, 255, 218, 0.1);
-            text-align: center;
-            color: #8892b0;
-            font-size: 0.9rem;
             backdrop-filter: blur(10px);
+            flex-shrink: 0;
         }
         
         .footer-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
+            gap: 15px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
         .authors {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            justify-content: center;
         }
         
         .author {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: #64ffda;
+            font-size: 0.9rem;
         }
         
         .course-info {
             color: #8892b0;
+            font-size: 0.85rem;
+            text-align: center;
+            flex: 1;
         }
         
         .university {
@@ -1390,77 +1483,215 @@ function simulateAssembly($code) {
             font-weight: 600;
         }
         
+        .github-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #64ffda;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .github-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         
         ::-webkit-scrollbar-track {
             background: rgba(10, 25, 47, 0.5);
-            border-radius: 4px;
+            border-radius: 3px;
         }
         
         ::-webkit-scrollbar-thumb {
             background: rgba(100, 255, 218, 0.3);
-            border-radius: 4px;
+            border-radius: 3px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(100, 255, 218, 0.5);
         }
         
-        /* Responsive */
-        @media (max-width: 1400px) {
+        /* Mobile-specific styles */
+        @media (max-width: 991px) {
             .container {
-                grid-template-columns: 400px 1fr 450px;
+                height: auto;
+                min-height: calc(100vh - 140px);
+                overflow-y: auto;
             }
-        }
-        
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr;
+            
+            .main-content {
+                flex-direction: column;
                 height: auto;
             }
             
+            .panel {
+                min-height: 300px;
+                max-height: none;
+            }
+            
             .visualization-panel {
-                height: 500px;
+                height: 400px;
+                min-height: 400px;
+            }
+            
+            .controls-panel, .output-panel {
+                min-height: 400px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .header {
+                padding: 10px;
             }
             
             .footer-content {
                 flex-direction: column;
-                gap: 10px;
                 text-align: center;
+                gap: 10px;
             }
             
             .authors {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
+            }
+            
+            .course-info {
+                order: -1;
+                width: 100%;
+            }
+            
+            .github-link {
+                order: 2;
             }
         }
         
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
             
-            .container {
-                padding: 10px;
-                gap: 10px;
+            .subtitle {
+                font-size: 0.8rem;
             }
             
             .panel {
-                padding: 15px;
+                padding: 12px;
+            }
+            
+            .panel-header h2 {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 8px;
+                font-size: 0.85rem;
+                min-width: 100px;
+            }
+            
+            .output-tab {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .footer {
+                padding: 10px;
+            }
+            
+            .author, .course-info, .github-link {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.1rem;
+                min-width: auto;
+            }
+            
+            .subtitle {
+                font-size: 0.75rem;
+            }
+            
+            .container {
+                padding: 8px;
+            }
+            
+            .panel {
+                padding: 10px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .output-tabs {
+                justify-content: center;
+            }
+            
+            .output-tab {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .visualization-panel {
+                height: 350px;
+                min-height: 350px;
+            }
+        }
+        
+        /* Mobile menu toggle for output panels */
+        .mobile-menu-toggle {
+            display: none;
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 991px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .output-panel {
+                max-height: 500px;
+                transition: max-height 0.3s ease;
+            }
+            
+            .output-panel.collapsed {
+                max-height: 50px;
+                overflow: hidden;
             }
         }
         
         .info-badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 6px;
             background: rgba(100, 255, 218, 0.1);
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64ffda;
-            margin-left: 10px;
+            margin-left: 8px;
         }
     </style>
 </head>
@@ -1476,77 +1707,78 @@ function simulateAssembly($code) {
     </div>
     
     <div class="container">
-        <!-- Left Panel - Controls -->
-        <div class="panel controls-panel">
-            <div class="panel-header">
-                <i class="fas fa-sliders-h"></i>
-                <h2>Compilation Controls</h2>
-            </div>
-            
-            <div class="control-group">
-                <label for="view-mode"><i class="fas fa-eye"></i> View Mode:</label>
-                <select id="view-mode">
-                    <option value="pipeline">Pipeline View</option>
-                    <option value="ast">AST View</option>
-                    <option value="cfg">Control Flow Graph</option>
-                    <option value="memory">Memory Layout</option>
-                </select>
-            </div>
-            
-            <div class="control-group">
-                <label for="stage-select"><i class="fas fa-code-branch"></i> Pipeline Stage:</label>
-                <select id="stage-select">
-                    <option value="all">All Stages</option>
-                    <option value="lexical">Lexical Analysis</option>
-                    <option value="syntax">Syntax Analysis</option>
-                    <option value="semantic">Semantic Analysis</option>
-                    <option value="ir">IR Generation</option>
-                    <option value="optimization">Optimization</option>
-                    <option value="codegen">Code Generation</option>
-                </select>
-            </div>
-            
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" id="auto-rotate" checked>
-                    <i class="fas fa-sync-alt"></i> Auto Rotate
-                </label>
-                <label>
-                    <input type="checkbox" id="show-labels" checked>
-                    <i class="fas fa-tag"></i> Show Labels
-                </label>
-                <label>
-                    <input type="checkbox" id="show-errors" checked>
-                    <i class="fas fa-exclamation-triangle"></i> Highlight Errors
-                </label>
-            </div>
-            
-            <div class="button-group">
-                <button id="reset-view" class="btn">
-                    <i class="fas fa-undo"></i> Reset View
-                </button>
-                <button id="screenshot" class="btn secondary">
-                    <i class="fas fa-camera"></i> Screenshot
-                </button>
-            </div>
-            
-            <div class="panel-header" style="margin-top: 25px;">
-                <i class="fas fa-code"></i>
-                <h2>Source Code Editor</h2>
-            </div>
-            
-            <div class="code-editor">
-                <div class="code-editor-header">
-                    <h3><i class="fas fa-file-code"></i> C Source Code</h3>
-                    <select id="example-select" style="padding: 8px 12px; background: rgba(10,25,47,0.8); color: #e6f1ff; border-radius: 6px; border: 1px solid rgba(100,255,218,0.2); font-size: 0.9rem;">
-                        <option value="">Load Example...</option>
-                        <option value="simple">Simple Program</option>
-                        <option value="conditional">Conditional Logic</option>
-                        <option value="loop">Loop Example</option>
-                        <option value="function">Function Example</option>
+        <div class="main-content">
+            <!-- Left Panel - Controls -->
+            <div class="panel controls-panel">
+                <div class="panel-header">
+                    <i class="fas fa-sliders-h"></i>
+                    <h2>Compilation Controls</h2>
+                </div>
+                
+                <div class="control-group">
+                    <label for="view-mode"><i class="fas fa-eye"></i> View Mode:</label>
+                    <select id="view-mode">
+                        <option value="pipeline">Pipeline View</option>
+                        <option value="ast">AST View</option>
+                        <option value="cfg">Control Flow Graph</option>
+                        <option value="memory">Memory Layout</option>
                     </select>
                 </div>
-                <textarea id="source-code" spellcheck="false">#include <stdio.h>
+                
+                <div class="control-group">
+                    <label for="stage-select"><i class="fas fa-code-branch"></i> Pipeline Stage:</label>
+                    <select id="stage-select">
+                        <option value="all">All Stages</option>
+                        <option value="lexical">Lexical Analysis</option>
+                        <option value="syntax">Syntax Analysis</option>
+                        <option value="semantic">Semantic Analysis</option>
+                        <option value="ir">IR Generation</option>
+                        <option value="optimization">Optimization</option>
+                        <option value="codegen">Code Generation</option>
+                    </select>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="auto-rotate" checked>
+                        <i class="fas fa-sync-alt"></i> Auto Rotate
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-labels" checked>
+                        <i class="fas fa-tag"></i> Show Labels
+                    </label>
+                    <label>
+                        <input type="checkbox" id="show-errors" checked>
+                        <i class="fas fa-exclamation-triangle"></i> Highlight Errors
+                    </label>
+                </div>
+                
+                <div class="button-group">
+                    <button id="reset-view" class="btn">
+                        <i class="fas fa-undo"></i> Reset View
+                    </button>
+                    <button id="screenshot" class="btn secondary">
+                        <i class="fas fa-camera"></i> Screenshot
+                    </button>
+                </div>
+                
+                <div class="panel-header" style="margin-top: 20px;">
+                    <i class="fas fa-code"></i>
+                    <h2>Source Code Editor</h2>
+                </div>
+                
+                <div class="code-editor">
+                    <div class="code-editor-header">
+                        <h3><i class="fas fa-file-code"></i> C Source Code</h3>
+                        <select id="example-select" style="padding: 6px 10px; background: rgba(10,25,47,0.8); color: #e6f1ff; border-radius: 5px; border: 1px solid rgba(100,255,218,0.2); font-size: 0.85rem;">
+                            <option value="">Load Example...</option>
+                            <option value="simple">Simple Program</option>
+                            <option value="conditional">Conditional Logic</option>
+                            <option value="loop">Loop Example</option>
+                            <option value="function">Function Example</option>
+                        </select>
+                    </div>
+                    <textarea id="source-code" spellcheck="false">#include <stdio.h>
 
 int main() {
     int x = 10;
@@ -1561,109 +1793,115 @@ int main() {
     
     return 0;
 }</textarea>
+                    
+                    <div class="button-group" style="margin-top: 15px;">
+                        <button id="compile-btn" class="btn">
+                            <i class="fas fa-play"></i> Compile & Visualize
+                        </button>
+                        <button id="reset-btn" class="btn danger">
+                            <i class="fas fa-trash"></i> Reset
+                        </button>
+                    </div>
+                </div>
                 
-                <div class="button-group" style="margin-top: 20px;">
-                    <button id="compile-btn" class="btn">
-                        <i class="fas fa-play"></i> Compile & Visualize
+                <div class="status-bar">
+                    <div id="status-message">
+                        <i class="fas fa-info-circle"></i> Ready to compile
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-bar" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center Panel - Visualization -->
+            <div class="panel visualization-panel">
+                <div id="visualization-canvas"></div>
+                <div class="visualization-controls">
+                    <button id="zoom-in" class="icon-btn" title="Zoom In">
+                        <i class="fas fa-search-plus"></i>
                     </button>
-                    <button id="reset-btn" class="btn danger">
-                        <i class="fas fa-trash"></i> Reset
+                    <button id="zoom-out" class="icon-btn" title="Zoom Out">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <button id="reset-camera" class="icon-btn" title="Reset Camera">
+                        <i class="fas fa-crosshairs"></i>
                     </button>
                 </div>
             </div>
             
-            <div class="status-bar">
-                <div id="status-message">
-                    <i class="fas fa-info-circle"></i> Ready to compile
+            <!-- Right Panel - Output -->
+            <div class="panel output-panel" id="output-panel">
+                <button class="mobile-menu-toggle" id="output-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                    <span>Output Panel</span>
+                </button>
+                
+                <div class="panel-header">
+                    <i class="fas fa-terminal"></i>
+                    <h2>Compilation Output</h2>
                 </div>
-                <div class="progress-bar">
-                    <div id="progress-bar" class="progress-fill"></div>
+                
+                <!-- Output tabs -->
+                <div class="output-tabs">
+                    <button class="output-tab active" data-output="tokens">
+                        <i class="fas fa-key"></i> <span class="tab-text">Tokens</span>
+                    </button>
+                    <button class="output-tab" data-output="ast">
+                        <i class="fas fa-project-diagram"></i> <span class="tab-text">AST</span>
+                    </button>
+                    <button class="output-tab" data-output="ir">
+                        <i class="fas fa-microchip"></i> <span class="tab-text">IR Code</span>
+                    </button>
+                    <button class="output-tab" data-output="asm">
+                        <i class="fas fa-microchip"></i> <span class="tab-text">Assembly</span>
+                    </button>
+                    <button class="output-tab" data-output="errors" id="errors-tab" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i> <span class="tab-text">Errors</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Center Panel - Visualization -->
-        <div class="panel visualization-panel">
-            <div id="visualization-canvas"></div>
-            <div class="visualization-controls">
-                <button id="zoom-in" class="icon-btn" title="Zoom In">
-                    <i class="fas fa-search-plus"></i>
-                </button>
-                <button id="zoom-out" class="icon-btn" title="Zoom Out">
-                    <i class="fas fa-search-minus"></i>
-                </button>
-                <button id="reset-camera" class="icon-btn" title="Reset Camera">
-                    <i class="fas fa-crosshairs"></i>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Right Panel - Output -->
-        <div class="panel output-panel">
-            <div class="panel-header">
-                <i class="fas fa-terminal"></i>
-                <h2>Compilation Output</h2>
-            </div>
-            
-            <!-- Output tabs -->
-            <div class="output-tabs">
-                <button class="output-tab active" data-output="tokens">
-                    <i class="fas fa-key"></i> Tokens
-                </button>
-                <button class="output-tab" data-output="ast">
-                    <i class="fas fa-project-diagram"></i> AST
-                </button>
-                <button class="output-tab" data-output="ir">
-                    <i class="fas fa-microchip"></i> IR Code
-                </button>
-                <button class="output-tab" data-output="asm">
-                    <i class="fas fa-microchip"></i> Assembly
-                </button>
-                <button class="output-tab" data-output="errors" id="errors-tab" style="display: none;">
-                    <i class="fas fa-exclamation-circle"></i> Errors
-                </button>
-            </div>
-            
-            <!-- Output content areas -->
-            <div id="tokens-output" class="output-content active"></div>
-            <div id="ast-output" class="output-content"></div>
-            <div id="ir-output" class="output-content"></div>
-            <div id="asm-output" class="output-content"></div>
-            <div id="errors-output" class="output-content"></div>
-            
-            <div class="panel-header" style="margin-top: 25px;">
-                <i class="fas fa-info-circle"></i>
-                <h2>Stage Information</h2>
-            </div>
-            
-            <div id="stage-info" class="stage-info">
-                <p><i class="fas fa-mouse-pointer"></i> Select a compilation stage or node to view details</p>
-                <div style="margin-top: 15px; padding: 15px; background: rgba(100,255,218,0.05); border-radius: 6px; border: 1px dashed rgba(100,255,218,0.2);">
-                    <p style="color: #64ffda; margin-bottom: 8px;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
-                    <p style="font-size: 0.85rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
+                
+                <!-- Output content areas -->
+                <div id="tokens-output" class="output-content active"></div>
+                <div id="ast-output" class="output-content"></div>
+                <div id="ir-output" class="output-content"></div>
+                <div id="asm-output" class="output-content"></div>
+                <div id="errors-output" class="output-content"></div>
+                
+                <div class="panel-header" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>Stage Information</h2>
                 </div>
-            </div>
-            
-            <div id="error-section" class="error-section" style="display: none;">
-                <h4><i class="fas fa-exclamation-triangle"></i> Errors Detected:</h4>
-                <div id="error-list"></div>
-            </div>
-            
-            <div class="panel-header" style="margin-top: 25px;">
-                <i class="fas fa-download"></i>
-                <h2>Export Results</h2>
-            </div>
-            
-            <div class="button-group">
-                <button id="download-ast" class="btn secondary">
-                    <i class="fas fa-download"></i> AST (JSON)
-                </button>
-                <button id="download-asm" class="btn secondary">
-                    <i class="fas fa-download"></i> Assembly
-                </button>
-                <button id="download-source" class="btn secondary">
-                    <i class="fas fa-download"></i> Source Code
-                </button>
+                
+                <div id="stage-info" class="stage-info">
+                    <p><i class="fas fa-mouse-pointer"></i> Select a compilation stage or node to view details</p>
+                    <div style="margin-top: 12px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 5px; border: 1px dashed rgba(100,255,218,0.2);">
+                        <p style="color: #64ffda; margin-bottom: 6px; font-size: 0.9rem;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
+                        <p style="font-size: 0.8rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
+                    </div>
+                </div>
+                
+                <div id="error-section" class="error-section" style="display: none;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Errors Detected:</h4>
+                    <div id="error-list"></div>
+                </div>
+                
+                <div class="panel-header" style="margin-top: 20px;">
+                    <i class="fas fa-download"></i>
+                    <h2>Export Results</h2>
+                </div>
+                
+                <div class="button-group">
+                    <button id="download-ast" class="btn secondary">
+                        <i class="fas fa-download"></i> <span class="btn-text">AST (JSON)</span>
+                    </button>
+                    <button id="download-asm" class="btn secondary">
+                        <i class="fas fa-download"></i> <span class="btn-text">Assembly</span>
+                    </button>
+                    <button id="download-source" class="btn secondary">
+                        <i class="fas fa-download"></i> <span class="btn-text">Source Code</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1671,7 +1909,7 @@ int main() {
     <div class="footer">
         <div class="footer-content">
             <div class="course-info">
-                <span>Final Year Project - Computer Science Department</span>
+                <span>Final Year Project - Computer Science Department | Compiler Design & 3D Visualization System</span>
             </div>
             <div class="authors">
                 <div class="author">
@@ -1683,9 +1921,9 @@ int main() {
                     <span>IRADI ARINDA</span>
                 </div>
             </div>
-            <div class="course-info">
-                <span>Compiler Design & 3D Visualization System</span>
-            </div>
+            <a href="https://github.com/Agabaofficial/c-compiler-3d-visualizer" target="_blank" class="github-link">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
         </div>
     </div>
     
@@ -1708,10 +1946,14 @@ int main() {
                 this.animationId = null;
                 this.totalErrors = 0;
                 this.labels = [];
+                this.isMobile = window.innerWidth < 992;
                 
                 this.init();
                 this.bindEvents();
                 this.animate();
+                
+                // Handle mobile responsiveness
+                window.addEventListener('resize', () => this.handleResize());
             }
             
             init() {
@@ -1746,16 +1988,14 @@ int main() {
                 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
                 directionalLight.position.set(20, 40, 30);
                 directionalLight.castShadow = true;
-                directionalLight.shadow.mapSize.width = 2048;
-                directionalLight.shadow.mapSize.height = 2048;
+                directionalLight.shadow.mapSize.width = 1024;
+                directionalLight.shadow.mapSize.height = 1024;
                 this.scene.add(directionalLight);
                 
                 // Grid
                 const gridHelper = new THREE.GridHelper(100, 20, 0x112240, 0x0a192f);
                 gridHelper.position.y = -5;
                 this.scene.add(gridHelper);
-                
-                window.addEventListener('resize', () => this.onResize());
                 
                 // Setup raycasting for tooltips
                 this.raycaster = new THREE.Raycaster();
@@ -1772,6 +2012,7 @@ int main() {
                 document.getElementById('screenshot').addEventListener('click', () => this.takeScreenshot());
                 document.getElementById('zoom-in').addEventListener('click', () => this.zoom(1.2));
                 document.getElementById('zoom-out').addEventListener('click', () => this.zoom(0.8));
+                document.getElementById('output-toggle').addEventListener('click', () => this.toggleOutputPanel());
                 
                 // Controls
                 document.getElementById('view-mode').addEventListener('change', (e) => {
@@ -1805,7 +2046,7 @@ int main() {
                 // Output tabs
                 document.querySelectorAll('.output-tab').forEach(tab => {
                     tab.addEventListener('click', (e) => {
-                        const outputType = e.target.dataset.output;
+                        const outputType = e.target.dataset.output || e.target.closest('.output-tab').dataset.output;
                         this.showOutput(outputType);
                     });
                 });
@@ -1814,6 +2055,22 @@ int main() {
                 document.getElementById('download-ast').addEventListener('click', () => this.download('ast'));
                 document.getElementById('download-asm').addEventListener('click', () => this.download('asm'));
                 document.getElementById('download-source').addEventListener('click', () => this.download('source'));
+            }
+            
+            toggleOutputPanel() {
+                const outputPanel = document.getElementById('output-panel');
+                const toggleIcon = document.querySelector('#output-toggle i');
+                const toggleText = document.querySelector('#output-toggle span');
+                
+                if (outputPanel.classList.contains('collapsed')) {
+                    outputPanel.classList.remove('collapsed');
+                    toggleIcon.className = 'fas fa-chevron-down';
+                    toggleText.textContent = 'Output Panel';
+                } else {
+                    outputPanel.classList.add('collapsed');
+                    toggleIcon.className = 'fas fa-chevron-up';
+                    toggleText.textContent = 'Output Panel';
+                }
             }
             
             async compile() {
@@ -1950,21 +2207,21 @@ int main() {
                 
                 // Update stage info
                 if (data.stages && data.stages.length > 0) {
-                    let stageHtml = '<h3 style="color: #64ffda; margin-bottom: 15px;">Compilation Pipeline</h3>';
+                    let stageHtml = '<h3 style="color: #64ffda; margin-bottom: 12px; font-size: 1rem;">Compilation Pipeline</h3>';
                     data.stages.forEach(stage => {
                         const statusClass = `status-${stage.status || 'pending'}`;
                         const icon = stage.status === 'completed' ? 'fa-check-circle' : 
                                     stage.status === 'failed' ? 'fa-times-circle' : 'fa-clock';
                         stageHtml += `
-                            <div style="margin-bottom: 12px; padding: 15px; background: rgba(100,255,218,0.05); border-radius: 8px; border: 1px solid rgba(100,255,218,0.1);">
+                            <div style="margin-bottom: 10px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 6px; border: 1px solid rgba(100,255,218,0.1);">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
                                         <i class="fas ${icon}" style="color: ${stage.status === 'completed' ? '#64ffda' : stage.status === 'failed' ? '#ff6b6b' : '#8892b0'}"></i>
-                                        <strong>${stage.name}</strong>
+                                        <strong style="font-size: 0.9rem;">${stage.name}</strong>
                                     </div>
                                     <span class="stage-status ${statusClass}">${stage.status || 'pending'}</span>
                                 </div>
-                                <div style="font-size: 0.85rem; margin-top: 8px; color: #8892b0;">
+                                <div style="font-size: 0.8rem; margin-top: 6px; color: #8892b0;">
                                     <i class="far fa-clock"></i> Duration: ${stage.duration}ms
                                     ${stage.errors && stage.errors.length > 0 ? 
                                         `<br><i class="fas fa-exclamation-circle"></i> Errors: ${stage.errors.length}` : ''}
@@ -2202,8 +2459,8 @@ int main() {
                 nodes.forEach(node => {
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
-                    canvas.width = 300;
-                    canvas.height = 150;
+                    canvas.width = 250;
+                    canvas.height = 120;
                     
                     // Background with gradient
                     const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
@@ -2218,32 +2475,32 @@ int main() {
                     context.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
                     
                     // Title
-                    context.font = 'bold 16px "Inter", sans-serif';
+                    context.font = 'bold 14px "Inter", sans-serif';
                     context.fillStyle = '#64ffda';
                     context.textAlign = 'center';
-                    context.fillText(node.name, canvas.width / 2, 35);
+                    context.fillText(this.truncateText(node.name, 20), canvas.width / 2, 30);
                     
                     // Type
-                    context.font = '13px "Inter", sans-serif';
+                    context.font = '12px "Inter", sans-serif';
                     context.fillStyle = '#8892b0';
-                    context.fillText(`Type: ${node.type}`, canvas.width / 2, 65);
+                    context.fillText(`Type: ${node.type}`, canvas.width / 2, 55);
                     
                     // Status/Info
                     if (node.status) {
-                        context.font = '12px "Inter", sans-serif';
+                        context.font = '11px "Inter", sans-serif';
                         context.fillStyle = node.status === 'completed' ? '#00d9a6' : 
                                           node.status === 'failed' ? '#ff6b6b' : '#ffa502';
-                        context.fillText(`Status: ${node.status}`, canvas.width / 2, 85);
+                        context.fillText(`Status: ${node.status}`, canvas.width / 2, 75);
                     }
                     
                     if (node.error_count > 0) {
                         context.fillStyle = '#ff6b6b';
-                        context.font = '12px "Inter", sans-serif';
-                        context.fillText(`${node.error_count} error(s)`, canvas.width / 2, 105);
+                        context.font = '11px "Inter", sans-serif';
+                        context.fillText(`${node.error_count} error(s)`, canvas.width / 2, 95);
                     } else if (node.duration) {
                         context.fillStyle = '#8892b0';
-                        context.font = '12px "Inter", sans-serif';
-                        context.fillText(`Duration: ${node.duration}ms`, canvas.width / 2, 105);
+                        context.font = '11px "Inter", sans-serif';
+                        context.fillText(`Duration: ${node.duration}ms`, canvas.width / 2, 95);
                     }
                     
                     const texture = new THREE.CanvasTexture(canvas);
@@ -2259,10 +2516,15 @@ int main() {
                         node.position?.z || 0
                     );
                     
-                    sprite.scale.set(12, 6, 1);
+                    sprite.scale.set(10, 5, 1);
                     this.scene.add(sprite);
                     this.labels.push(sprite);
                 });
+            }
+            
+            truncateText(text, maxLength) {
+                if (text.length <= maxLength) return text;
+                return text.substring(0, maxLength) + '...';
             }
             
             toggleLabels() {
@@ -2337,9 +2599,9 @@ int main() {
                 
                 document.getElementById('stage-info').innerHTML = `
                     <p><i class="fas fa-mouse-pointer"></i> Select a compilation stage or node to view details</p>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(100,255,218,0.05); border-radius: 6px; border: 1px dashed rgba(100,255,218,0.2);">
-                        <p style="color: #64ffda; margin-bottom: 8px;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
-                        <p style="font-size: 0.85rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
+                    <div style="margin-top: 12px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 5px; border: 1px dashed rgba(100,255,218,0.2);">
+                        <p style="color: #64ffda; margin-bottom: 6px; font-size: 0.9rem;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
+                        <p style="font-size: 0.8rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
                     </div>
                 `;
                 
@@ -2402,7 +2664,15 @@ int main() {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `${type}_${this.sessionId}.${type === 'source' ? 'c' : 'json'}`;
+                    
+                    if (type === 'asm') {
+                        a.download = `assembly_${this.sessionId}.asm`;
+                    } else if (type === 'ast') {
+                        a.download = `ast_${this.sessionId}.json`;
+                    } else {
+                        a.download = `source_${this.sessionId}.c`;
+                    }
+                    
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -2507,22 +2777,22 @@ int main() {
                     
                     if (data) {
                         tooltip.style.display = 'block';
-                        tooltip.style.left = (event.clientX + 15) + 'px';
-                        tooltip.style.top = (event.clientY + 15) + 'px';
+                        tooltip.style.left = (event.clientX + 10) + 'px';
+                        tooltip.style.top = (event.clientY + 10) + 'px';
                         
-                        let html = `<div style="color: #64ffda; font-weight: bold; margin-bottom: 8px; font-size: 1rem;">${data.name}</div>`;
-                        html += `<div style="margin-bottom: 5px;"><strong>Type:</strong> ${data.type}</div>`;
+                        let html = `<div style="color: #64ffda; font-weight: bold; margin-bottom: 6px; font-size: 0.9rem;">${this.truncateText(data.name, 25)}</div>`;
+                        html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Type:</strong> ${data.type}</div>`;
                         
                         if (data.status) {
-                            html += `<div style="margin-bottom: 5px;"><strong>Status:</strong> ${data.status}</div>`;
+                            html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Status:</strong> ${data.status}</div>`;
                         }
                         
                         if (data.duration) {
-                            html += `<div style="margin-bottom: 5px;"><strong>Duration:</strong> ${data.duration}ms</div>`;
+                            html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Duration:</strong> ${data.duration}ms</div>`;
                         }
                         
                         if (data.error_count > 0) {
-                            html += `<div style="color: #ff6b6b; margin-top: 8px;"><i class="fas fa-exclamation-circle"></i> ${data.error_count} error(s)</div>`;
+                            html += `<div style="color: #ff6b6b; margin-top: 6px; font-size: 0.8rem;"><i class="fas fa-exclamation-circle"></i> ${data.error_count} error(s)</div>`;
                         }
                         
                         tooltip.innerHTML = html;
@@ -2532,11 +2802,14 @@ int main() {
                 }
             }
             
-            onResize() {
+            handleResize() {
                 const container = document.getElementById('visualization-canvas');
                 this.camera.aspect = container.clientWidth / container.clientHeight;
                 this.camera.updateProjectionMatrix();
                 this.renderer.setSize(container.clientWidth, container.clientHeight);
+                
+                // Check if we're now mobile or desktop
+                this.isMobile = window.innerWidth < 992;
             }
             
             animate() {
@@ -2554,6 +2827,22 @@ int main() {
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             window.visualizer = new CompilerVisualizer3D();
+            
+            // Handle mobile-specific adjustments on load
+            if (window.innerWidth < 768) {
+                // Hide some text on mobile for space
+                document.querySelectorAll('.tab-text').forEach(el => {
+                    if (window.innerWidth < 480) {
+                        el.style.display = 'none';
+                    }
+                });
+                
+                document.querySelectorAll('.btn-text').forEach(el => {
+                    if (window.innerWidth < 480) {
+                        el.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
 </body>
