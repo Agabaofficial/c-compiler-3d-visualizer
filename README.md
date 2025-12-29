@@ -8,7 +8,7 @@
 **Compiler3D-Viz** is an educational web application that visualizes the C compilation process in interactive 3D. Experience compilation like never before as abstract concepts transform into tangible, explorable visual structures.
 
 ##  Live Demo
-*Coming soon: [compiler3d-viz.demo.com]()*
+*Coming soon: [[compiler3d-viz.demo.com](https://3d-compiler.gt.tc/)]()*
 
 ##  Features
 
