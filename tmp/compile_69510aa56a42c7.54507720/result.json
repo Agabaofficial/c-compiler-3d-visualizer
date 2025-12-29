@@ -1,0 +1,1809 @@
+{
+    "session_id": "compile_69510aa56a42c7.54507720",
+    "success": false,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 94,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "5",
+                    "line": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 5
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 5
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 5
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 6
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 6
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 8
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 9
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "is",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "greater",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "than",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "10:",
+                    "line": 9
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\"",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "else",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 11
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "is",
+                    "line": 11
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "or",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "less:",
+                    "line": 11
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\"",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 12
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "for",
+                    "line": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 14
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 14
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "3",
+                    "line": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 14
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 14
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 15
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Iteration",
+                    "line": 15
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\"",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 16
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 19
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "failed",
+            "duration": 184,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    null,
+                    {
+                        "type": "PrintfStatement",
+                        "line": 11,
+                        "format": "",
+                        "arguments": [
+                            "sum"
+                        ]
+                    },
+                    {
+                        "type": "ForStatement",
+                        "init": "int i = 0",
+                        "condition": "i < 3",
+                        "update": "i++",
+                        "line": 14,
+                        "body": []
+                    },
+                    {
+                        "type": "PrintfStatement",
+                        "line": 15,
+                        "format": "",
+                        "arguments": [
+                            "i"
+                        ]
+                    },
+                    {
+                        "type": "ReturnStatement",
+                        "value": "0",
+                        "line": 18
+                    }
+                ],
+                "source": "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    int b = 10;\n    int sum = a + b;\n    \n    if (sum > 10) {\n        printf(\"Sum is greater than 10: %d\\n\", sum);\n    } else {\n        printf(\"Sum is 10 or less: %d\\n\", sum);\n    }\n    \n    for(int i = 0; i < 3; i++) {\n        printf(\"Iteration %d\\n\", i);\n    }\n    \n    return 0;\n}"
+            },
+            "errors": [
+                {
+                    "type": "syntax",
+                    "message": "Missing semicolon",
+                    "line": 1,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "failed",
+            "duration": 197,
+            "symbol_table": {
+                "global": [],
+                "functions": {
+                    "main": {
+                        "name": "main",
+                        "return_type": "int",
+                        "params": [],
+                        "variables": [
+                            {
+                                "name": "a",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 4
+                            },
+                            {
+                                "name": "b",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 5
+                            },
+                            {
+                                "name": "sum",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 6
+                            }
+                        ],
+                        "line": 3
+                    }
+                }
+            },
+            "errors": [
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: include",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: stdio",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: h",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: a",
+                    "line": 4,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: b",
+                    "line": 5,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: a",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: b",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 8,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Sum",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: is",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: greater",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: than",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: d",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Sum",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: is",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: or",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: less",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: d",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 11,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 14,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 14,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 14,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Iteration",
+                    "line": 15,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: d",
+                    "line": 15,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 15,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 15,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 295,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "a",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "a",
+                    "value": "5"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "b",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "b",
+                    "value": "10"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "sum",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "sum",
+                    "value": "a + b"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "cmp1",
+                    "src": "sum"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "cmp2",
+                    "src": "10"
+                },
+                {
+                    "op": "CMP",
+                    "src1": "cmp1",
+                    "src2": "cmp2",
+                    "cond": ">"
+                },
+                {
+                    "op": "JMP",
+                    "cond": ">",
+                    "target": "L1_TRUE"
+                },
+                {
+                    "op": "JMP",
+                    "target": "L1_FALSE"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_TRUE"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "JMP",
+                    "target": "L1_END"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_FALSE"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_END"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "i",
+                    "value": "0"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L2_LOOP_START"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "loop_cmp1",
+                    "src": "i"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "loop_cmp2",
+                    "src": "3"
+                },
+                {
+                    "op": "CMP",
+                    "src1": "loop_cmp1",
+                    "src2": "loop_cmp2",
+                    "cond": "<"
+                },
+                {
+                    "op": "JMP",
+                    "cond": "!=<",
+                    "target": "L2_LOOP_END"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L2_END"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": "0"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L2_END"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "ret",
+                    "src": "retval"
+                },
+                {
+                    "op": "RET",
+                    "src": "ret"
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 352,
+            "optimizations": {
+                "constant_folding": true,
+                "constant_propagation": true,
+                "loop_invariant": true,
+                "strength_reduction": true,
+                "dead_code_elimination": true,
+                "common_subexpression": true,
+                "copy_propagation": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 271,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                ".type main, @function",
+                "main:",
+                "    pushq %rbp",
+                "    movq %rsp, %rbp",
+                "    subq $12, %rsp",
+                "    movl $5, -4(%rbp)   # a = 5",
+                "    movl $10, -8(%rbp)   # b = 10",
+                "    movl $a + b, -12(%rbp)   # sum = a + b",
+                "    movl -4(%rbp), %eax   # Load sum",
+                "    cmpl $10, %eax",
+                "    jle .L8_else",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC8(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC8:",
+                "    .string \"Sum is greater than 10: %d\\n\"",
+                "    jmp .L9_end",
+                ".L9_else:",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC10(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC10:",
+                "    .string \"Sum is 10 or less: %d\\n\"",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC14(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC14:",
+                "    .string \"Iteration %d\\n\"",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret",
+                ".section .note.GNU-stack,\"\",@progbits"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4
+            },
+            {
+                "type": "LITERAL",
+                "value": "5",
+                "line": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 5
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 5
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 5
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 6
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 6
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 8
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 9
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "is",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "greater",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "than",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "10:",
+                "line": 9
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\"",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "else",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 11
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "is",
+                "line": 11
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "or",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "less:",
+                "line": 11
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\"",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 12
+            },
+            {
+                "type": "KEYWORD",
+                "value": "for",
+                "line": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 14
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 14
+            },
+            {
+                "type": "LITERAL",
+                "value": "3",
+                "line": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 14
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 14
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 15
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Iteration",
+                "line": 15
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\"",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 16
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 19
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                null,
+                {
+                    "type": "PrintfStatement",
+                    "line": 11,
+                    "format": "",
+                    "arguments": [
+                        "sum"
+                    ]
+                },
+                {
+                    "type": "ForStatement",
+                    "init": "int i = 0",
+                    "condition": "i < 3",
+                    "update": "i++",
+                    "line": 14,
+                    "body": []
+                },
+                {
+                    "type": "PrintfStatement",
+                    "line": 15,
+                    "format": "",
+                    "arguments": [
+                        "i"
+                    ]
+                },
+                {
+                    "type": "ReturnStatement",
+                    "value": "0",
+                    "line": 18
+                }
+            ],
+            "source": "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    int b = 10;\n    int sum = a + b;\n    \n    if (sum > 10) {\n        printf(\"Sum is greater than 10: %d\\n\", sum);\n    } else {\n        printf(\"Sum is 10 or less: %d\\n\", sum);\n    }\n    \n    for(int i = 0; i < 3; i++) {\n        printf(\"Iteration %d\\n\", i);\n    }\n    \n    return 0;\n}"
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "a",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "a",
+                "value": "5"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "b",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "b",
+                "value": "10"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "sum",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "sum",
+                "value": "a + b"
+            },
+            {
+                "op": "LOAD",
+                "dest": "cmp1",
+                "src": "sum"
+            },
+            {
+                "op": "LOAD",
+                "dest": "cmp2",
+                "src": "10"
+            },
+            {
+                "op": "CMP",
+                "src1": "cmp1",
+                "src2": "cmp2",
+                "cond": ">"
+            },
+            {
+                "op": "JMP",
+                "cond": ">",
+                "target": "L1_TRUE"
+            },
+            {
+                "op": "JMP",
+                "target": "L1_FALSE"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_TRUE"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "JMP",
+                "target": "L1_END"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_FALSE"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_END"
+            },
+            {
+                "op": "STORE",
+                "dest": "i",
+                "value": "0"
+            },
+            {
+                "op": "LABEL",
+                "label": "L2_LOOP_START"
+            },
+            {
+                "op": "LOAD",
+                "dest": "loop_cmp1",
+                "src": "i"
+            },
+            {
+                "op": "LOAD",
+                "dest": "loop_cmp2",
+                "src": "3"
+            },
+            {
+                "op": "CMP",
+                "src1": "loop_cmp1",
+                "src2": "loop_cmp2",
+                "cond": "<"
+            },
+            {
+                "op": "JMP",
+                "cond": "!=<",
+                "target": "L2_LOOP_END"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "LABEL",
+                "label": "L2_END"
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": "0"
+            },
+            {
+                "op": "LABEL",
+                "label": "L2_END"
+            },
+            {
+                "op": "LOAD",
+                "dest": "ret",
+                "src": "retval"
+            },
+            {
+                "op": "RET",
+                "src": "ret"
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            ".type main, @function",
+            "main:",
+            "    pushq %rbp",
+            "    movq %rsp, %rbp",
+            "    subq $12, %rsp",
+            "    movl $5, -4(%rbp)   # a = 5",
+            "    movl $10, -8(%rbp)   # b = 10",
+            "    movl $a + b, -12(%rbp)   # sum = a + b",
+            "    movl -4(%rbp), %eax   # Load sum",
+            "    cmpl $10, %eax",
+            "    jle .L8_else",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC8(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC8:",
+            "    .string \"Sum is greater than 10: %d\\n\"",
+            "    jmp .L9_end",
+            ".L9_else:",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC10(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC10:",
+            "    .string \"Sum is 10 or less: %d\\n\"",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC14(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC14:",
+            "    .string \"Iteration %d\\n\"",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret",
+            ".section .note.GNU-stack,\"\",@progbits"
+        ]
+    },
+    "errors": [
+        {
+            "type": "syntax",
+            "message": "Missing semicolon",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: include",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: stdio",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: h",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: a",
+            "line": 4,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: b",
+            "line": 5,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: a",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: b",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 8,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Sum",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: is",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: greater",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: than",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: d",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Sum",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: is",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: or",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: less",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: d",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 11,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 14,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 14,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 14,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Iteration",
+            "line": 15,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: d",
+            "line": 15,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 15,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 15,
+            "severity": "error"
+        }
+    ],
+    "source_code": "#include <stdio.h>\n\nint main() {\n    int a = 5;\n    int b = 10;\n    int sum = a + b;\n    \n    if (sum > 10) {\n        printf(\"Sum is greater than 10: %d\\n\", sum);\n    } else {\n        printf(\"Sum is 10 or less: %d\\n\", sum);\n    }\n    \n    for(int i = 0; i < 3; i++) {\n        printf(\"Iteration %d\\n\", i);\n    }\n    \n    return 0;\n}"
+}

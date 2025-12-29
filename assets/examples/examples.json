@@ -1,0 +1,42 @@
+[
+    {
+        "id": "simple_arithmetic",
+        "name": "Simple Arithmetic",
+        "code": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int y = 5;\n    \n    int sum = x + y;\n    int diff = x - y;\n    int product = x * y;\n    int quotient = x / y;\n    \n    printf(\"Sum: %d\\n\", sum);\n    printf(\"Difference: %d\\n\", diff);\n    printf(\"Product: %d\\n\", product);\n    printf(\"Quotient: %d\\n\", quotient);\n    \n    return 0;\n}"
+    },
+    {
+        "id": "factorial",
+        "name": "Factorial Function",
+        "code": "#include <stdio.h>\n\nint factorial(int n) {\n    if (n <= 1) {\n        return 1;\n    }\n    return n * factorial(n - 1);\n}\n\nint main() {\n    int num = 5;\n    int result = factorial(num);\n    \n    printf(\"Factorial of %d is %d\\n\", num, result);\n    \n    for (int i = 0; i <= 5; i++) {\n        printf(\"factorial(%d) = %d\\n\", i, factorial(i));\n    }\n    \n    return 0;\n}"
+    },
+    {
+        "id": "fibonacci",
+        "name": "Fibonacci Sequence",
+        "code": "#include <stdio.h>\n\nint fibonacci(int n) {\n    if (n <= 1) {\n        return n;\n    }\n    return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nint main() {\n    int terms = 10;\n    \n    printf(\"Fibonacci sequence up to %d terms:\\n\", terms);\n    \n    for (int i = 0; i < terms; i++) {\n        printf(\"%d \", fibonacci(i));\n    }\n    printf(\"\\n\");\n    \n    return 0;\n}"
+    },
+    {
+        "id": "array_operations",
+        "name": "Array Operations",
+        "code": "#include <stdio.h>\n\n#define SIZE 5\n\nint main() {\n    int arr[SIZE] = {10, 20, 30, 40, 50};\n    int sum = 0;\n    int max = arr[0];\n    int min = arr[0];\n    \n    // Calculate sum, max, and min\n    for (int i = 0; i < SIZE; i++) {\n        sum += arr[i];\n        \n        if (arr[i] > max) {\n            max = arr[i];\n        }\n        \n        if (arr[i] < min) {\n            min = arr[i];\n        }\n    }\n    \n    float average = (float)sum / SIZE;\n    \n    printf(\"Array elements: \");\n    for (int i = 0; i < SIZE; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    printf(\"\\n\");\n    \n    printf(\"Sum: %d\\n\", sum);\n    printf(\"Average: %.2f\\n\", average);\n    printf(\"Max: %d\\n\", max);\n    printf(\"Min: %d\\n\", min);\n    \n    return 0;\n}"
+    },
+    {
+        "id": "pointer_demo",
+        "name": "Pointer Demonstration",
+        "code": "#include <stdio.h>\n\nint main() {\n    int x = 42;\n    int *ptr = &x;\n    int **pptr = &ptr;\n    \n    printf(\"Value of x: %d\\n\", x);\n    printf(\"Address of x: %p\\n\", (void*)&x);\n    printf(\"Value of ptr (address of x): %p\\n\", (void*)ptr);\n    printf(\"Value pointed to by ptr: %d\\n\", *ptr);\n    printf(\"Value of pptr (address of ptr): %p\\n\", (void*)pptr);\n    printf(\"Value pointed to by pptr: %p\\n\", (void*)*pptr);\n    printf(\"Value pointed to by *pptr: %d\\n\", **pptr);\n    \n    // Modify value through pointer\n    *ptr = 100;\n    printf(\"\\nAfter modification:\\n\");\n    printf(\"Value of x: %d\\n\", x);\n    printf(\"Value pointed to by ptr: %d\\n\", *ptr);\n    \n    // Array and pointer arithmetic\n    int arr[] = {1, 2, 3, 4, 5};\n    int *arr_ptr = arr;\n    \n    printf(\"\\nArray elements via pointer:\\n\");\n    for (int i = 0; i < 5; i++) {\n        printf(\"arr[%d] = %d\\n\", i, *(arr_ptr + i));\n    }\n    \n    return 0;\n}"
+    },
+    {
+        "id": "struct_example",
+        "name": "Structure Example",
+        "code": "#include <stdio.h>\n#include <string.h>\n\ntypedef struct {\n    char name[50];\n    int age;\n    float gpa;\n} Student;\n\nvoid print_student(Student s) {\n    printf(\"Name: %s\\n\", s.name);\n    printf(\"Age: %d\\n\", s.age);\n    printf(\"GPA: %.2f\\n\", s.gpa);\n    printf(\"\\n\");\n}\n\nint main() {\n    Student students[3];\n    \n    // Initialize students\n    strcpy(students[0].name, \"Alice\");\n    students[0].age = 20;\n    students[0].gpa = 3.8;\n    \n    strcpy(students[1].name, \"Bob\");\n    students[1].age = 21;\n    students[1].gpa = 3.5;\n    \n    strcpy(students[2].name, \"Charlie\");\n    students[2].age = 19;\n    students[2].gpa = 3.9;\n    \n    // Print all students\n    printf(\"Student Records:\\n\\n\");\n    for (int i = 0; i < 3; i++) {\n        print_student(students[i]);\n    }\n    \n    // Find student with highest GPA\n    int highest_index = 0;\n    for (int i = 1; i < 3; i++) {\n        if (students[i].gpa > students[highest_index].gpa) {\n            highest_index = i;\n        }\n    }\n    \n    printf(\"Student with highest GPA:\\n\");\n    print_student(students[highest_index]);\n    \n    return 0;\n}"
+    },
+    {
+        "id": "file_io",
+        "name": "File I/O Operations",
+        "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    FILE *file;\n    char filename[] = \"data.txt\";\n    \n    // Write to file\n    file = fopen(filename, \"w\");\n    if (file == NULL) {\n        printf(\"Error opening file for writing!\\n\");\n        return 1;\n    }\n    \n    fprintf(file, \"Hello, File I/O!\\n\");\n    fprintf(file, \"This is a test file.\\n\");\n    fprintf(file, \"Numbers: %d %d %d\\n\", 10, 20, 30);\n    \n    fclose(file);\n    printf(\"Data written to file successfully.\\n\\n\");\n    \n    // Read from file\n    file = fopen(filename, \"r\");\n    if (file == NULL) {\n        printf(\"Error opening file for reading!\\n\");\n        return 1;\n    }\n    \n    printf(\"Reading from file:\\n\");\n    printf(\"==================\\n\");\n    \n    char line[100];\n    while (fgets(line, sizeof(line), file) != NULL) {\n        printf(\"%s\", line);\n    }\n    \n    fclose(file);\n    \n    return 0;\n}"
+    },
+    {
+        "id": "recursive_tree",
+        "name": "Recursive Tree Algorithm",
+        "code": "#include <stdio.h>\n\nvoid print_pattern(int n, int level) {\n    if (n <= 0) return;\n    \n    // Print spaces for indentation\n    for (int i = 0; i < level; i++) {\n        printf(\"  \");\n    }\n    \n    printf(\"Level %d: Processing %d\\n\", level, n);\n    \n    // Recursive calls\n    print_pattern(n - 1, level + 1);\n    print_pattern(n - 2, level + 1);\n}\n\nint main() {\n    int depth = 4;\n    printf(\"Recursive tree pattern (depth = %d):\\n\\n\", depth);\n    print_pattern(depth, 0);\n    \n    return 0;\n}"
+    }
+]

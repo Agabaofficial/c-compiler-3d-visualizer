@@ -1,0 +1,875 @@
+{
+    "session_id": "compile_69523cb9ada669.84248755",
+    "success": true,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 157,
+            "tokens": [
+                {
+                    "type": "PREPROCESSOR",
+                    "value": "#include <stdio.h>",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "score",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "85",
+                    "line": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 6
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "score",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 6
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "90",
+                    "line": 6
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 6
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 6
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\"Grade:",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "A\\n\"",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "else",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "score",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 8
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "80",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\"Grade:",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "B\\n\"",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "else",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "score",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 10
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "70",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\"Grade:",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "C\\n\"",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 11
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 12
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "else",
+                    "line": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 12
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 13
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\"Grade:",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "F\\n\"",
+                    "line": 13
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 13
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 13
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 14
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 16
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 16
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 17
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "completed",
+            "duration": 186,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "name": "main",
+                        "params": [],
+                        "body": [
+                            {
+                                "type": "PrintStatement",
+                                "format": "\"Hello, World!\"",
+                                "arguments": []
+                            },
+                            {
+                                "type": "ReturnStatement",
+                                "value": {
+                                    "type": "Literal",
+                                    "value": 0
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "completed",
+            "duration": 112,
+            "symbol_table": {
+                "global": [],
+                "functions": {
+                    "main": {
+                        "name": "main",
+                        "return_type": "int",
+                        "params": [],
+                        "variables": [
+                            {
+                                "name": "score",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 4
+                            }
+                        ],
+                        "line": 3
+                    }
+                }
+            },
+            "errors": []
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 284,
+            "ir_code": [
+                {
+                    "op": "store",
+                    "dest": "score",
+                    "value": "85"
+                },
+                {
+                    "op": "ret",
+                    "value": "0"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 437,
+            "optimizations": [
+                "Constant folding",
+                "Dead code elimination",
+                "Loop invariant code motion",
+                "Register allocation"
+            ],
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 512,
+            "assembly": [
+                ".section .text",
+                ".global main",
+                "main:",
+                "  push %rbp",
+                "  mov %rsp, %rbp",
+                "  movl $10, -4(%rbp)   # x = 10",
+                "  movl $20, -8(%rbp)   # y = 20",
+                "  movl -4(%rbp), %eax",
+                "  addl -8(%rbp), %eax",
+                "  movl %eax, -12(%rbp) # result = x + y",
+                "  movl $0, %eax        # return 0",
+                "  pop %rbp",
+                "  ret"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "PREPROCESSOR",
+                "value": "#include <stdio.h>",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "score",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4
+            },
+            {
+                "type": "LITERAL",
+                "value": "85",
+                "line": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 6
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "score",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 6
+            },
+            {
+                "type": "LITERAL",
+                "value": "90",
+                "line": 6
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 6
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 6
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\"Grade:",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "A\\n\"",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "else",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "score",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 8
+            },
+            {
+                "type": "LITERAL",
+                "value": "80",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\"Grade:",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "B\\n\"",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "else",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "score",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 10
+            },
+            {
+                "type": "LITERAL",
+                "value": "70",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\"Grade:",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "C\\n\"",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 11
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 12
+            },
+            {
+                "type": "KEYWORD",
+                "value": "else",
+                "line": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 12
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 13
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\"Grade:",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "F\\n\"",
+                "line": 13
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 13
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 13
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 14
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 16
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 16
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 17
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "name": "main",
+                    "params": [],
+                    "body": [
+                        {
+                            "type": "PrintStatement",
+                            "format": "\"Hello, World!\"",
+                            "arguments": []
+                        },
+                        {
+                            "type": "ReturnStatement",
+                            "value": {
+                                "type": "Literal",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "ir": [
+            {
+                "op": "store",
+                "dest": "score",
+                "value": "85"
+            },
+            {
+                "op": "ret",
+                "value": "0"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".global main",
+            "main:",
+            "  push %rbp",
+            "  mov %rsp, %rbp",
+            "  movl $10, -4(%rbp)   # x = 10",
+            "  movl $20, -8(%rbp)   # y = 20",
+            "  movl -4(%rbp), %eax",
+            "  addl -8(%rbp), %eax",
+            "  movl %eax, -12(%rbp) # result = x + y",
+            "  movl $0, %eax        # return 0",
+            "  pop %rbp",
+            "  ret"
+        ]
+    },
+    "errors": [],
+    "source_code": "#include <stdio.h>\n\nint main() {\n    int score = 85;\n    \n    if (score >= 90) {\n        printf(\"Grade: A\\n\");\n    } else if (score >= 80) {\n        printf(\"Grade: B\\n\");\n    } else if (score >= 70) {\n        printf(\"Grade: C\\n\");\n    } else {\n        printf(\"Grade: F\\n\");\n    }\n    \n    return 0;\n}"
+}

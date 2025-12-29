@@ -1,0 +1,799 @@
+{
+    "session_id": "compile_69510cd8ddc310.06542897",
+    "success": false,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 158,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "x",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "y",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 5
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "20",
+                    "line": 5
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 5
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "result",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "x",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "y",
+                    "line": 6
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 6
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Result:",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\"",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "result",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 9
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "failed",
+            "duration": 175,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    null
+                ],
+                "source": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int y = 20;\n    int result = x + y;\n    printf(\"Result: %d\\n\", result);\n    return 0;\n}"
+            },
+            "errors": [
+                {
+                    "type": "syntax",
+                    "message": "Missing semicolon",
+                    "line": 1,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "failed",
+            "duration": 133,
+            "symbol_table": {
+                "global": [],
+                "functions": {
+                    "main": {
+                        "name": "main",
+                        "return_type": "int",
+                        "params": [],
+                        "variables": [
+                            {
+                                "name": "x",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 4
+                            },
+                            {
+                                "name": "y",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 5
+                            },
+                            {
+                                "name": "result",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 6
+                            }
+                        ],
+                        "line": 3
+                    }
+                }
+            },
+            "errors": [
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: include",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: stdio",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: h",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: x",
+                    "line": 4,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: y",
+                    "line": 5,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: result",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: x",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: y",
+                    "line": 6,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Result",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: d",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: result",
+                    "line": 7,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 279,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "x",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "x",
+                    "value": "10"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "y",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "y",
+                    "value": "20"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "result",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "result",
+                    "value": "x + y"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": "0"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "ret",
+                    "src": "retval"
+                },
+                {
+                    "op": "RET",
+                    "src": "ret"
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 206,
+            "optimizations": {
+                "constant_folding": true,
+                "constant_propagation": true,
+                "dead_code_elimination": true,
+                "common_subexpression": true,
+                "copy_propagation": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 351,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                ".type main, @function",
+                "main:",
+                "    pushq %rbp",
+                "    movq %rsp, %rbp",
+                "    subq $12, %rsp",
+                "    movl $10, -4(%rbp)   # x = 10",
+                "    movl $20, -8(%rbp)   # y = 20",
+                "    movl $x + y, -12(%rbp)   # result = x + y",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC6(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC6:",
+                "    .string \"Result: %d\\n\"",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret",
+                ".section .note.GNU-stack,\"\",@progbits"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "x",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "y",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 5
+            },
+            {
+                "type": "LITERAL",
+                "value": "20",
+                "line": 5
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 5
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "result",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "x",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "y",
+                "line": 6
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 6
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Result:",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\"",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "result",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 9
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                null
+            ],
+            "source": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int y = 20;\n    int result = x + y;\n    printf(\"Result: %d\\n\", result);\n    return 0;\n}"
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "x",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "x",
+                "value": "10"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "y",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "y",
+                "value": "20"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "result",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "result",
+                "value": "x + y"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": "0"
+            },
+            {
+                "op": "LOAD",
+                "dest": "ret",
+                "src": "retval"
+            },
+            {
+                "op": "RET",
+                "src": "ret"
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            ".type main, @function",
+            "main:",
+            "    pushq %rbp",
+            "    movq %rsp, %rbp",
+            "    subq $12, %rsp",
+            "    movl $10, -4(%rbp)   # x = 10",
+            "    movl $20, -8(%rbp)   # y = 20",
+            "    movl $x + y, -12(%rbp)   # result = x + y",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC6(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC6:",
+            "    .string \"Result: %d\\n\"",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret",
+            ".section .note.GNU-stack,\"\",@progbits"
+        ]
+    },
+    "errors": [
+        {
+            "type": "syntax",
+            "message": "Missing semicolon",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: include",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: stdio",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: h",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: x",
+            "line": 4,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: y",
+            "line": 5,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: result",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: x",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: y",
+            "line": 6,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Result",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: d",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: result",
+            "line": 7,
+            "severity": "error"
+        }
+    ],
+    "source_code": "#include <stdio.h>\n\nint main() {\n    int x = 10;\n    int y = 20;\n    int result = x + y;\n    printf(\"Result: %d\\n\", result);\n    return 0;\n}"
+}

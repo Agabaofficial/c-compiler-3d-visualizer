@@ -1,0 +1,1245 @@
+{
+    "session_id": "compile_694fa7630f9cd1.19672186",
+    "success": true,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 119,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "fibonacci",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "n",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "n",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "1",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "n",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 6
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "fibonacci",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "n",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "-",
+                    "line": 7
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "1",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "fibonacci",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "n",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "-",
+                    "line": 7
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "2",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "terms",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 11
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 11
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 11
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 13
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Fibonacci",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sequence",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "up",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "to",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "%d",
+                    "line": 13
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "terms:\\n\",",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "terms",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 13
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "for",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 15
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 15
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "terms",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 15
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 16
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"%d",
+                    "line": 16
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\",",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "fibonacci",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 17
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 18
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"\\n\"",
+                    "line": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 18
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 20
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 20
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 21
+                }
+            ]
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "completed",
+            "duration": 151,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "name": "main",
+                        "params": [],
+                        "body": [
+                            {
+                                "type": "VariableDeclaration",
+                                "declarations": [
+                                    {
+                                        "type": "Identifier",
+                                        "name": "a",
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 5
+                                        }
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "name": "b",
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 10
+                                        }
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "name": "sum",
+                                        "init": {
+                                            "type": "BinaryExpression",
+                                            "operator": "+",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "b"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "completed",
+            "duration": 195,
+            "symbol_table": {
+                "global": [
+                    {
+                        "name": "main",
+                        "type": "function",
+                        "return_type": "int"
+                    }
+                ],
+                "main": [
+                    {
+                        "name": "a",
+                        "type": "int"
+                    },
+                    {
+                        "name": "b",
+                        "type": "int"
+                    },
+                    {
+                        "name": "sum",
+                        "type": "int"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 378,
+            "ir_code": [
+                {
+                    "op": "ALLOC",
+                    "dest": "a",
+                    "type": "int"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "b",
+                    "type": "int"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "sum",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "a",
+                    "value": 5
+                },
+                {
+                    "op": "STORE",
+                    "dest": "b",
+                    "value": 10
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t1",
+                    "src": "a"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t2",
+                    "src": "b"
+                },
+                {
+                    "op": "ADD",
+                    "dest": "sum",
+                    "src1": "t1",
+                    "src2": "t2"
+                }
+            ]
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 290,
+            "optimizations": {
+                "constant_folding": true,
+                "common_subexpression": true
+            }
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 446,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                "main:",
+                "    push %rbp",
+                "    mov %rsp, %rbp",
+                "    sub $16, %rsp",
+                "    movl $5, -4(%rbp)    # a = 5",
+                "    movl $10, -8(%rbp)   # b = 10",
+                "    movl -4(%rbp), %eax",
+                "    addl -8(%rbp), %eax",
+                "    movl %eax, -12(%rbp) # sum = a + b",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret"
+            ]
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "fibonacci",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "n",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "n",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4
+            },
+            {
+                "type": "LITERAL",
+                "value": "1",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "n",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 6
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "fibonacci",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "n",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "-",
+                "line": 7
+            },
+            {
+                "type": "LITERAL",
+                "value": "1",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "fibonacci",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "n",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "-",
+                "line": 7
+            },
+            {
+                "type": "LITERAL",
+                "value": "2",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "terms",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 11
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 11
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 11
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 13
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Fibonacci",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sequence",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "up",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "to",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "%d",
+                "line": 13
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "terms:\\n\",",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "terms",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 13
+            },
+            {
+                "type": "KEYWORD",
+                "value": "for",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 15
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 15
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "terms",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 15
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 16
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"%d",
+                "line": 16
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\",",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "fibonacci",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 17
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 18
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"\\n\"",
+                "line": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 18
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 20
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 20
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 21
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "name": "main",
+                    "params": [],
+                    "body": [
+                        {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "a",
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 5
+                                    }
+                                },
+                                {
+                                    "type": "Identifier",
+                                    "name": "b",
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 10
+                                    }
+                                },
+                                {
+                                    "type": "Identifier",
+                                    "name": "sum",
+                                    "init": {
+                                        "type": "BinaryExpression",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "b"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "ir": [
+            {
+                "op": "ALLOC",
+                "dest": "a",
+                "type": "int"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "b",
+                "type": "int"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "sum",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "a",
+                "value": 5
+            },
+            {
+                "op": "STORE",
+                "dest": "b",
+                "value": 10
+            },
+            {
+                "op": "LOAD",
+                "dest": "t1",
+                "src": "a"
+            },
+            {
+                "op": "LOAD",
+                "dest": "t2",
+                "src": "b"
+            },
+            {
+                "op": "ADD",
+                "dest": "sum",
+                "src1": "t1",
+                "src2": "t2"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            "main:",
+            "    push %rbp",
+            "    mov %rsp, %rbp",
+            "    sub $16, %rsp",
+            "    movl $5, -4(%rbp)    # a = 5",
+            "    movl $10, -8(%rbp)   # b = 10",
+            "    movl -4(%rbp), %eax",
+            "    addl -8(%rbp), %eax",
+            "    movl %eax, -12(%rbp) # sum = a + b",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret"
+        ]
+    }
+}

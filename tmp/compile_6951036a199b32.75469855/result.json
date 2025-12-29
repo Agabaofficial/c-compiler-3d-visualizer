@@ -1,0 +1,568 @@
+{
+    "session_id": "compile_6951036a199b32.75469855",
+    "success": true,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 56,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "5",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 5
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 5
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 5
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 6
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum:",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\",",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 8
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 9
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "completed",
+            "duration": 234,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "name": "main",
+                        "params": [],
+                        "body": [
+                            {
+                                "type": "VariableDeclaration",
+                                "declarations": [
+                                    {
+                                        "type": "VariableDeclarator",
+                                        "id": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 5
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "completed",
+            "duration": 99,
+            "symbol_table": {
+                "global": [
+                    {
+                        "name": "main",
+                        "type": "function",
+                        "return_type": "int"
+                    }
+                ],
+                "main": [
+                    {
+                        "name": "a",
+                        "type": "int",
+                        "scope": "local"
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 299,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "a",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "a",
+                    "value": 5
+                },
+                {
+                    "op": "RET",
+                    "value": 0
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 460,
+            "optimizations": {
+                "constant_folding": true,
+                "dead_code_elimination": false,
+                "common_subexpression": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 295,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                "main:",
+                "    push %rbp",
+                "    mov %rsp, %rbp",
+                "    sub $16, %rsp",
+                "    movl $5, -4(%rbp)",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4
+            },
+            {
+                "type": "LITERAL",
+                "value": "5",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 5
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 5
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 5
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 6
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum:",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\",",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 8
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 9
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "name": "main",
+                    "params": [],
+                    "body": [
+                        {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "a"
+                                    },
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 5
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "a",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "a",
+                "value": 5
+            },
+            {
+                "op": "RET",
+                "value": 0
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            "main:",
+            "    push %rbp",
+            "    mov %rsp, %rbp",
+            "    sub $16, %rsp",
+            "    movl $5, -4(%rbp)",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret"
+        ]
+    },
+    "errors": []
+}

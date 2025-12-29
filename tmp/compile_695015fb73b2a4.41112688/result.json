@@ -1,0 +1,1991 @@
+{
+    "session_id": "compile_695015fb73b2a4.41112688",
+    "success": false,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "failed",
+            "duration": 68,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1,
+                    "col": 0
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1,
+                    "col": 9
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "stdio.h",
+                    "line": 1,
+                    "col": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1,
+                    "col": 17
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3,
+                    "col": 0
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3,
+                    "col": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 3,
+                    "col": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 3,
+                    "col": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 3,
+                    "col": 11
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4,
+                    "col": 0
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 4,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 4,
+                    "col": 6
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "5",
+                    "line": 4,
+                    "col": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 4,
+                    "col": 9
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 5,
+                    "col": 0
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 5,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 5,
+                    "col": 6
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 5,
+                    "col": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 5,
+                    "col": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 6,
+                    "col": 0
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 6,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 6,
+                    "col": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 6,
+                    "col": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 6,
+                    "col": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 6,
+                    "col": 14
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 6,
+                    "col": 15
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "if",
+                    "line": 8,
+                    "col": 0
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 8,
+                    "col": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 8,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 8,
+                    "col": 8
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 8,
+                    "col": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 8,
+                    "col": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 8,
+                    "col": 14
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 9,
+                    "col": 0
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 9,
+                    "col": 6
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum",
+                    "line": 9,
+                    "col": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "is",
+                    "line": 9,
+                    "col": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "greater",
+                    "line": 9,
+                    "col": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "than",
+                    "line": 9,
+                    "col": 23
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "10:",
+                    "line": 9,
+                    "col": 28
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\",",
+                    "line": 9,
+                    "col": 32
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 9,
+                    "col": 39
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 9,
+                    "col": 42
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 9,
+                    "col": 43
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 10,
+                    "col": 0
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "else",
+                    "line": 10,
+                    "col": 2
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 10,
+                    "col": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 11,
+                    "col": 0
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 11,
+                    "col": 6
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum",
+                    "line": 11,
+                    "col": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "is",
+                    "line": 11,
+                    "col": 12
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 11,
+                    "col": 15
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "or",
+                    "line": 11,
+                    "col": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "less:",
+                    "line": 11,
+                    "col": 21
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\",",
+                    "line": 11,
+                    "col": 27
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 11,
+                    "col": 34
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 11,
+                    "col": 37
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 11,
+                    "col": 38
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 12,
+                    "col": 0
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "for",
+                    "line": 14,
+                    "col": 0
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 14,
+                    "col": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 14,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 14,
+                    "col": 10
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 14,
+                    "col": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 14,
+                    "col": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 14,
+                    "col": 17
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "3",
+                    "line": 14,
+                    "col": 19
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 14,
+                    "col": 13
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 14,
+                    "col": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 14,
+                    "col": 23
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 14,
+                    "col": 23
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 14,
+                    "col": 25
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 14,
+                    "col": 27
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 15,
+                    "col": 0
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 15,
+                    "col": 6
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Iteration",
+                    "line": 15,
+                    "col": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\",",
+                    "line": 15,
+                    "col": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 15,
+                    "col": 2
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 15,
+                    "col": 26
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 15,
+                    "col": 27
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 16,
+                    "col": 0
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 18,
+                    "col": 0
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 18,
+                    "col": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 18,
+                    "col": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 19,
+                    "col": 0
+                }
+            ],
+            "errors": [
+                {
+                    "type": "lexical",
+                    "message": "Unexpected character @ at line 5",
+                    "line": 5,
+                    "column": 12,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "completed",
+            "duration": 172,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "name": "main",
+                        "params": [],
+                        "body": [
+                            {
+                                "type": "VariableDeclaration",
+                                "declarations": [
+                                    {
+                                        "type": "Identifier",
+                                        "name": "a",
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 5
+                                        }
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "name": "b",
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 10
+                                        }
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "name": "sum",
+                                        "init": {
+                                            "type": "BinaryExpression",
+                                            "operator": "+",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "b"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "IfStatement",
+                                "test": {
+                                    "type": "BinaryExpression",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "sum"
+                                    },
+                                    "right": {
+                                        "type": "Literal",
+                                        "value": 10
+                                    }
+                                },
+                                "consequent": {
+                                    "type": "BlockStatement",
+                                    "body": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                    "type": "Identifier",
+                                                    "name": "printf"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Literal",
+                                                        "value": "Sum is greater than 10: %d\\n"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "sum"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "alternate": {
+                                    "type": "BlockStatement",
+                                    "body": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                    "type": "Identifier",
+                                                    "name": "printf"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Literal",
+                                                        "value": "Sum is 10 or less: %d\\n"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "sum"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "init": {
+                                    "type": "VariableDeclaration",
+                                    "declarations": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "i",
+                                            "init": {
+                                                "type": "Literal",
+                                                "value": 0
+                                            }
+                                        }
+                                    ]
+                                },
+                                "test": {
+                                    "type": "BinaryExpression",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "Literal",
+                                        "value": 3
+                                    }
+                                },
+                                "update": {
+                                    "type": "UpdateExpression",
+                                    "operator": "++",
+                                    "argument": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    }
+                                },
+                                "body": {
+                                    "type": "BlockStatement",
+                                    "body": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                    "type": "Identifier",
+                                                    "name": "printf"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Literal",
+                                                        "value": "Iteration %d\\n"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ReturnStatement",
+                                "argument": {
+                                    "type": "Literal",
+                                    "value": 0
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "completed",
+            "duration": 153,
+            "symbol_table": {
+                "global": [
+                    {
+                        "name": "main",
+                        "type": "function",
+                        "return_type": "int"
+                    }
+                ],
+                "main": [
+                    {
+                        "name": "a",
+                        "type": "int",
+                        "scope": "local",
+                        "initialized": true
+                    },
+                    {
+                        "name": "b",
+                        "type": "int",
+                        "scope": "local",
+                        "initialized": true
+                    },
+                    {
+                        "name": "sum",
+                        "type": "int",
+                        "scope": "local",
+                        "initialized": true
+                    },
+                    {
+                        "name": "i",
+                        "type": "int",
+                        "scope": "local",
+                        "initialized": true
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 352,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "a",
+                    "type": "int"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "b",
+                    "type": "int"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "sum",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "a",
+                    "value": 5
+                },
+                {
+                    "op": "STORE",
+                    "dest": "b",
+                    "value": 10
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t1",
+                    "src": "a"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t2",
+                    "src": "b"
+                },
+                {
+                    "op": "ADD",
+                    "dest": "t3",
+                    "src1": "t1",
+                    "src2": "t2"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "sum",
+                    "src": "t3"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t4",
+                    "src": "sum"
+                },
+                {
+                    "op": "CMP",
+                    "src1": "t4",
+                    "src2": 10
+                },
+                {
+                    "op": "JLE",
+                    "target": "L2"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "str1",
+                        "sum"
+                    ]
+                },
+                {
+                    "op": "JMP",
+                    "target": "L3"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L2"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "str2",
+                        "sum"
+                    ]
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L3"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "i",
+                    "value": 0
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L4"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t5",
+                    "src": "i"
+                },
+                {
+                    "op": "CMP",
+                    "src1": "t5",
+                    "src2": 3
+                },
+                {
+                    "op": "JGE",
+                    "target": "L6"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "str3",
+                        "i"
+                    ]
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t6",
+                    "src": "i"
+                },
+                {
+                    "op": "ADD",
+                    "dest": "t7",
+                    "src1": "t6",
+                    "src2": 1
+                },
+                {
+                    "op": "STORE",
+                    "dest": "i",
+                    "src": "t7"
+                },
+                {
+                    "op": "JMP",
+                    "target": "L4"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L6"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": 0
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "t8",
+                    "src": "retval"
+                },
+                {
+                    "op": "RET",
+                    "src": "t8"
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                },
+                {
+                    "op": "DATA",
+                    "label": "str1",
+                    "value": "Sum is greater than 10: %d\\n"
+                },
+                {
+                    "op": "DATA",
+                    "label": "str2",
+                    "value": "Sum is 10 or less: %d\\n"
+                },
+                {
+                    "op": "DATA",
+                    "label": "str3",
+                    "value": "Iteration %d\\n"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 367,
+            "optimizations": {
+                "constant_folding": true,
+                "common_subexpression": true,
+                "dead_code_elimination": true,
+                "loop_invariant": true,
+                "strength_reduction": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 383,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                ".type main, @function",
+                "main:",
+                "    pushq %rbp",
+                "    movq %rsp, %rbp",
+                "    subq $32, %rsp",
+                "    movl $5, -4(%rbp)      # a = 5",
+                "    movl $10, -8(%rbp)     # b = 10",
+                "    movl -4(%rbp), %eax",
+                "    addl -8(%rbp), %eax",
+                "    movl %eax, -12(%rbp)   # sum = a + b",
+                "    movl -12(%rbp), %eax",
+                "    cmpl $10, %eax",
+                "    jle .L2",
+                "    movl -12(%rbp), %edx",
+                "    leaq .LC0(%rip), %rax",
+                "    movq %rax, %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                "    jmp .L3",
+                ".L2:",
+                "    movl -12(%rbp), %edx",
+                "    leaq .LC1(%rip), %rax",
+                "    movq %rax, %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".L3:",
+                "    movl $0, -16(%rbp)     # i = 0",
+                ".L4:",
+                "    cmpl $2, -16(%rbp)",
+                "    jg .L5",
+                "    movl -16(%rbp), %edx",
+                "    leaq .LC2(%rip), %rax",
+                "    movq %rax, %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                "    addl $1, -16(%rbp)",
+                "    jmp .L4",
+                ".L5:",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret",
+                ".section .rodata",
+                ".LC0:",
+                "    .string \"Sum is greater than 10: %d\\n\"",
+                ".LC1:",
+                "    .string \"Sum is 10 or less: %d\\n\"",
+                ".LC2:",
+                "    .string \"Iteration %d\\n\""
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1,
+                "col": 0
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1,
+                "col": 9
+            },
+            {
+                "type": "KEYWORD",
+                "value": "stdio.h",
+                "line": 1,
+                "col": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1,
+                "col": 17
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3,
+                "col": 0
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3,
+                "col": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 3,
+                "col": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 3,
+                "col": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 3,
+                "col": 11
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4,
+                "col": 0
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 4,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 4,
+                "col": 6
+            },
+            {
+                "type": "LITERAL",
+                "value": "5",
+                "line": 4,
+                "col": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 4,
+                "col": 9
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 5,
+                "col": 0
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 5,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 5,
+                "col": 6
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 5,
+                "col": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 5,
+                "col": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 6,
+                "col": 0
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 6,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 6,
+                "col": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 6,
+                "col": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 6,
+                "col": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 6,
+                "col": 14
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 6,
+                "col": 15
+            },
+            {
+                "type": "KEYWORD",
+                "value": "if",
+                "line": 8,
+                "col": 0
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 8,
+                "col": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 8,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 8,
+                "col": 8
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 8,
+                "col": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 8,
+                "col": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 8,
+                "col": 14
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 9,
+                "col": 0
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 9,
+                "col": 6
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum",
+                "line": 9,
+                "col": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "is",
+                "line": 9,
+                "col": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "greater",
+                "line": 9,
+                "col": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "than",
+                "line": 9,
+                "col": 23
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "10:",
+                "line": 9,
+                "col": 28
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\",",
+                "line": 9,
+                "col": 32
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 9,
+                "col": 39
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 9,
+                "col": 42
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 9,
+                "col": 43
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 10,
+                "col": 0
+            },
+            {
+                "type": "KEYWORD",
+                "value": "else",
+                "line": 10,
+                "col": 2
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 10,
+                "col": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 11,
+                "col": 0
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 11,
+                "col": 6
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum",
+                "line": 11,
+                "col": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "is",
+                "line": 11,
+                "col": 12
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 11,
+                "col": 15
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "or",
+                "line": 11,
+                "col": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "less:",
+                "line": 11,
+                "col": 21
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\",",
+                "line": 11,
+                "col": 27
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 11,
+                "col": 34
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 11,
+                "col": 37
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 11,
+                "col": 38
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 12,
+                "col": 0
+            },
+            {
+                "type": "KEYWORD",
+                "value": "for",
+                "line": 14,
+                "col": 0
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 14,
+                "col": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 14,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 14,
+                "col": 10
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 14,
+                "col": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 14,
+                "col": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 14,
+                "col": 17
+            },
+            {
+                "type": "LITERAL",
+                "value": "3",
+                "line": 14,
+                "col": 19
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 14,
+                "col": 13
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 14,
+                "col": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 14,
+                "col": 23
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 14,
+                "col": 23
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 14,
+                "col": 25
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 14,
+                "col": 27
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 15,
+                "col": 0
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 15,
+                "col": 6
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Iteration",
+                "line": 15,
+                "col": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\",",
+                "line": 15,
+                "col": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 15,
+                "col": 2
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 15,
+                "col": 26
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 15,
+                "col": 27
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 16,
+                "col": 0
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 18,
+                "col": 0
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 18,
+                "col": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 18,
+                "col": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 19,
+                "col": 0
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "name": "main",
+                    "params": [],
+                    "body": [
+                        {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "a",
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 5
+                                    }
+                                },
+                                {
+                                    "type": "Identifier",
+                                    "name": "b",
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 10
+                                    }
+                                },
+                                {
+                                    "type": "Identifier",
+                                    "name": "sum",
+                                    "init": {
+                                        "type": "BinaryExpression",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "b"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "IfStatement",
+                            "test": {
+                                "type": "BinaryExpression",
+                                "operator": ">",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "sum"
+                                },
+                                "right": {
+                                    "type": "Literal",
+                                    "value": 10
+                                }
+                            },
+                            "consequent": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "CallExpression",
+                                            "callee": {
+                                                "type": "Identifier",
+                                                "name": "printf"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Literal",
+                                                    "value": "Sum is greater than 10: %d\\n"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "sum"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "alternate": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "CallExpression",
+                                            "callee": {
+                                                "type": "Identifier",
+                                                "name": "printf"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Literal",
+                                                    "value": "Sum is 10 or less: %d\\n"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "sum"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "ForStatement",
+                            "init": {
+                                "type": "VariableDeclaration",
+                                "declarations": [
+                                    {
+                                        "type": "Identifier",
+                                        "name": "i",
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 0
+                                        }
+                                    }
+                                ]
+                            },
+                            "test": {
+                                "type": "BinaryExpression",
+                                "operator": "<",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "i"
+                                },
+                                "right": {
+                                    "type": "Literal",
+                                    "value": 3
+                                }
+                            },
+                            "update": {
+                                "type": "UpdateExpression",
+                                "operator": "++",
+                                "argument": {
+                                    "type": "Identifier",
+                                    "name": "i"
+                                }
+                            },
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "CallExpression",
+                                            "callee": {
+                                                "type": "Identifier",
+                                                "name": "printf"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Literal",
+                                                    "value": "Iteration %d\\n"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "i"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "ReturnStatement",
+                            "argument": {
+                                "type": "Literal",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "a",
+                "type": "int"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "b",
+                "type": "int"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "sum",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "a",
+                "value": 5
+            },
+            {
+                "op": "STORE",
+                "dest": "b",
+                "value": 10
+            },
+            {
+                "op": "LOAD",
+                "dest": "t1",
+                "src": "a"
+            },
+            {
+                "op": "LOAD",
+                "dest": "t2",
+                "src": "b"
+            },
+            {
+                "op": "ADD",
+                "dest": "t3",
+                "src1": "t1",
+                "src2": "t2"
+            },
+            {
+                "op": "STORE",
+                "dest": "sum",
+                "src": "t3"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1"
+            },
+            {
+                "op": "LOAD",
+                "dest": "t4",
+                "src": "sum"
+            },
+            {
+                "op": "CMP",
+                "src1": "t4",
+                "src2": 10
+            },
+            {
+                "op": "JLE",
+                "target": "L2"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "str1",
+                    "sum"
+                ]
+            },
+            {
+                "op": "JMP",
+                "target": "L3"
+            },
+            {
+                "op": "LABEL",
+                "label": "L2"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "str2",
+                    "sum"
+                ]
+            },
+            {
+                "op": "LABEL",
+                "label": "L3"
+            },
+            {
+                "op": "STORE",
+                "dest": "i",
+                "value": 0
+            },
+            {
+                "op": "LABEL",
+                "label": "L4"
+            },
+            {
+                "op": "LOAD",
+                "dest": "t5",
+                "src": "i"
+            },
+            {
+                "op": "CMP",
+                "src1": "t5",
+                "src2": 3
+            },
+            {
+                "op": "JGE",
+                "target": "L6"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "str3",
+                    "i"
+                ]
+            },
+            {
+                "op": "LOAD",
+                "dest": "t6",
+                "src": "i"
+            },
+            {
+                "op": "ADD",
+                "dest": "t7",
+                "src1": "t6",
+                "src2": 1
+            },
+            {
+                "op": "STORE",
+                "dest": "i",
+                "src": "t7"
+            },
+            {
+                "op": "JMP",
+                "target": "L4"
+            },
+            {
+                "op": "LABEL",
+                "label": "L6"
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": 0
+            },
+            {
+                "op": "LOAD",
+                "dest": "t8",
+                "src": "retval"
+            },
+            {
+                "op": "RET",
+                "src": "t8"
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            },
+            {
+                "op": "DATA",
+                "label": "str1",
+                "value": "Sum is greater than 10: %d\\n"
+            },
+            {
+                "op": "DATA",
+                "label": "str2",
+                "value": "Sum is 10 or less: %d\\n"
+            },
+            {
+                "op": "DATA",
+                "label": "str3",
+                "value": "Iteration %d\\n"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            ".type main, @function",
+            "main:",
+            "    pushq %rbp",
+            "    movq %rsp, %rbp",
+            "    subq $32, %rsp",
+            "    movl $5, -4(%rbp)      # a = 5",
+            "    movl $10, -8(%rbp)     # b = 10",
+            "    movl -4(%rbp), %eax",
+            "    addl -8(%rbp), %eax",
+            "    movl %eax, -12(%rbp)   # sum = a + b",
+            "    movl -12(%rbp), %eax",
+            "    cmpl $10, %eax",
+            "    jle .L2",
+            "    movl -12(%rbp), %edx",
+            "    leaq .LC0(%rip), %rax",
+            "    movq %rax, %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            "    jmp .L3",
+            ".L2:",
+            "    movl -12(%rbp), %edx",
+            "    leaq .LC1(%rip), %rax",
+            "    movq %rax, %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".L3:",
+            "    movl $0, -16(%rbp)     # i = 0",
+            ".L4:",
+            "    cmpl $2, -16(%rbp)",
+            "    jg .L5",
+            "    movl -16(%rbp), %edx",
+            "    leaq .LC2(%rip), %rax",
+            "    movq %rax, %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            "    addl $1, -16(%rbp)",
+            "    jmp .L4",
+            ".L5:",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret",
+            ".section .rodata",
+            ".LC0:",
+            "    .string \"Sum is greater than 10: %d\\n\"",
+            ".LC1:",
+            "    .string \"Sum is 10 or less: %d\\n\"",
+            ".LC2:",
+            "    .string \"Iteration %d\\n\""
+        ]
+    },
+    "errors": [
+        {
+            "type": "lexical",
+            "message": "Unexpected character @ at line 5",
+            "line": 5,
+            "column": 12,
+            "severity": "error"
+        }
+    ]
+}

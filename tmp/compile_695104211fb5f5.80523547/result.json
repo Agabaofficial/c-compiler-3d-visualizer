@@ -1,0 +1,778 @@
+{
+    "session_id": "compile_695104211fb5f5.80523547",
+    "success": true,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 153,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a,",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b,",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 6
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Enter",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "two",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "numbers:",
+                    "line": 6
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 6
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "scanf",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"%d",
+                    "line": 7
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\",",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a,",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\/",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\/",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\u274c",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "BUG:",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "missing",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "'&'",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "before",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "and",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 9
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "(",
+                    "line": 10
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Sum",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 10
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\",",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ")",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 10
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 12
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "0",
+                    "line": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ";",
+                    "line": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "}",
+                    "line": 13
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "completed",
+            "duration": 205,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "name": "main",
+                        "params": [],
+                        "body": [
+                            {
+                                "type": "VariableDeclaration",
+                                "declarations": [
+                                    {
+                                        "type": "VariableDeclarator",
+                                        "id": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "init": {
+                                            "type": "Literal",
+                                            "value": 5
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "completed",
+            "duration": 235,
+            "symbol_table": {
+                "global": [
+                    {
+                        "name": "main",
+                        "type": "function",
+                        "return_type": "int"
+                    }
+                ],
+                "main": [
+                    {
+                        "name": "a",
+                        "type": "int",
+                        "scope": "local"
+                    }
+                ]
+            },
+            "errors": []
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 254,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "a",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "a",
+                    "value": 5
+                },
+                {
+                    "op": "RET",
+                    "value": 0
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 390,
+            "optimizations": {
+                "constant_folding": true,
+                "dead_code_elimination": false,
+                "common_subexpression": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 335,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                "main:",
+                "    push %rbp",
+                "    mov %rsp, %rbp",
+                "    sub $16, %rsp",
+                "    movl $5, -4(%rbp)",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a,",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b,",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 6
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Enter",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "two",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "numbers:",
+                "line": 6
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 6
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "scanf",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"%d",
+                "line": 7
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\",",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a,",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\/",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\/",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\u274c",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "BUG:",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "missing",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "'&'",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "before",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "and",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 9
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "(",
+                "line": 10
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Sum",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 10
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\",",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ")",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 10
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 12
+            },
+            {
+                "type": "LITERAL",
+                "value": "0",
+                "line": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ";",
+                "line": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "}",
+                "line": 13
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "FunctionDeclaration",
+                    "name": "main",
+                    "params": [],
+                    "body": [
+                        {
+                            "type": "VariableDeclaration",
+                            "declarations": [
+                                {
+                                    "type": "VariableDeclarator",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "a"
+                                    },
+                                    "init": {
+                                        "type": "Literal",
+                                        "value": 5
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "a",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "a",
+                "value": 5
+            },
+            {
+                "op": "RET",
+                "value": 0
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            "main:",
+            "    push %rbp",
+            "    mov %rsp, %rbp",
+            "    sub $16, %rsp",
+            "    movl $5, -4(%rbp)",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret"
+        ]
+    },
+    "errors": []
+}

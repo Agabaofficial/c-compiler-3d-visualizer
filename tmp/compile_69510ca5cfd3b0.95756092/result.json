@@ -1,0 +1,2298 @@
+{
+    "session_id": "compile_69510ca5cfd3b0.95756092",
+    "success": false,
+    "stages": [
+        {
+            "name": "Lexical Analysis",
+            "status": "completed",
+            "duration": 186,
+            "tokens": [
+                {
+                    "type": "IDENTIFIER",
+                    "value": "#include",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "stdio.h",
+                    "line": 1
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": ">",
+                    "line": 1
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "multiply",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 3
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 3
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 3
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "a",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "*",
+                    "line": 4
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "b",
+                    "line": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 4
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 5
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "float",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "calculateAverage",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "arr[]",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 7
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "size",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 7
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 7
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 8
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 8
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 8
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "for",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 9
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "<",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "size",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "i",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 9
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 9
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "+",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 10
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "arr[i]",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 10
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 11
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 12
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "float",
+                    "line": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "sum",
+                    "line": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "\/",
+                    "line": 12
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "size",
+                    "line": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 12
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 13
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 15
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "main",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 15
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 15
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "x",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 16
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "5",
+                    "line": 16
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "y",
+                    "line": 16
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 16
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "7",
+                    "line": 16
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 16
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 17
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "product",
+                    "line": 17
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 17
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "multiply",
+                    "line": 17
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 17
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "x",
+                    "line": 17
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 17
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "y",
+                    "line": 17
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 17
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 17
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 18
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Product:",
+                    "line": 18
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%d\\n\"",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 18
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "product",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 18
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 18
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "int",
+                    "line": 20
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "numbers[]",
+                    "line": 20
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "{",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "10",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "20",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "30",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "40",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 20
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "50",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 20
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 20
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "float",
+                    "line": 21
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "average",
+                    "line": 21
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "=",
+                    "line": 21
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "calculateAverage",
+                    "line": 21
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 21
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "numbers",
+                    "line": 21
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 21
+                },
+                {
+                    "type": "LITERAL",
+                    "value": "5",
+                    "line": 21
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 21
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 21
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "printf",
+                    "line": 22
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "(",
+                    "line": 22
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "\"Average:",
+                    "line": 22
+                },
+                {
+                    "type": "STRING_LITERAL",
+                    "value": "%.2f\\n\"",
+                    "line": 22
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ",",
+                    "line": 22
+                },
+                {
+                    "type": "IDENTIFIER",
+                    "value": "average",
+                    "line": 22
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ")",
+                    "line": 22
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 22
+                },
+                {
+                    "type": "KEYWORD",
+                    "value": "return",
+                    "line": 24
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": ";",
+                    "line": 24
+                },
+                {
+                    "type": "PUNCTUATOR",
+                    "value": "}",
+                    "line": 25
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Syntax Analysis",
+            "status": "failed",
+            "duration": 211,
+            "ast": {
+                "type": "Program",
+                "body": [
+                    null,
+                    null,
+                    {
+                        "type": "ReturnStatement",
+                        "value": "(float)sum \/ size",
+                        "line": 12
+                    },
+                    null,
+                    {
+                        "type": "VariableDeclaration",
+                        "data_type": "float",
+                        "name": "average",
+                        "value": "calculateAverage(numbers, 5)",
+                        "line": 21
+                    },
+                    {
+                        "type": "PrintfStatement",
+                        "line": 22,
+                        "format": "",
+                        "arguments": [
+                            "average"
+                        ]
+                    },
+                    {
+                        "type": "ReturnStatement",
+                        "value": "0",
+                        "line": 24
+                    }
+                ],
+                "source": "#include <stdio.h>\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nfloat calculateAverage(int arr[], int size) {\n    int sum = 0;\n    for (int i = 0; i < size; i++) {\n        sum += arr[i];\n    }\n    return (float)sum \/ size;\n}\n\nint main() {\n    int x = 5, y = 7;\n    int product = multiply(x, y);\n    printf(\"Product: %d\\n\", product);\n    \n    int numbers[] = {10, 20, 30, 40, 50};\n    float average = calculateAverage(numbers, 5);\n    printf(\"Average: %.2f\\n\", average);\n    \n    return 0;\n}"
+            },
+            "errors": [
+                {
+                    "type": "syntax",
+                    "message": "Missing semicolon",
+                    "line": 1,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "Semantic Analysis",
+            "status": "failed",
+            "duration": 167,
+            "symbol_table": {
+                "global": [],
+                "functions": {
+                    "multiply": {
+                        "name": "multiply",
+                        "return_type": "int",
+                        "params": [
+                            {
+                                "type": "int",
+                                "name": "a"
+                            },
+                            {
+                                "type": "int",
+                                "name": "b"
+                            }
+                        ],
+                        "variables": [],
+                        "line": 3
+                    },
+                    "calculateAverage": {
+                        "name": "calculateAverage",
+                        "return_type": "float",
+                        "params": [
+                            {
+                                "type": "int",
+                                "name": "arr"
+                            },
+                            {
+                                "type": "int",
+                                "name": "size"
+                            }
+                        ],
+                        "variables": [
+                            {
+                                "name": "sum",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 8
+                            }
+                        ],
+                        "line": 7
+                    },
+                    "main": {
+                        "name": "main",
+                        "return_type": "int",
+                        "params": [],
+                        "variables": [
+                            {
+                                "name": "x",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 16
+                            },
+                            {
+                                "name": "product",
+                                "type": "int",
+                                "initialized": true,
+                                "line": 17
+                            },
+                            {
+                                "name": "average",
+                                "type": "float",
+                                "initialized": true,
+                                "line": 21
+                            }
+                        ],
+                        "line": 15
+                    }
+                }
+            },
+            "errors": [
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: include",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: stdio",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: h",
+                    "line": 1,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: a",
+                    "line": 3,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: b",
+                    "line": 3,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: a",
+                    "line": 4,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: b",
+                    "line": 4,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: float",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: arr",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: size",
+                    "line": 7,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 8,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: size",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 9,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 10,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: arr",
+                    "line": 10,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: i",
+                    "line": 10,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: float",
+                    "line": 12,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: sum",
+                    "line": 12,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: size",
+                    "line": 12,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: x",
+                    "line": 16,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: y",
+                    "line": 16,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: product",
+                    "line": 17,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: x",
+                    "line": 17,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Product",
+                    "line": 18,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: d",
+                    "line": 18,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 18,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: product",
+                    "line": 18,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: numbers",
+                    "line": 20,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: float",
+                    "line": 21,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: average",
+                    "line": 21,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: numbers",
+                    "line": 21,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: Average",
+                    "line": 22,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: n",
+                    "line": 22,
+                    "severity": "error"
+                },
+                {
+                    "type": "semantic",
+                    "message": "Undeclared variable: average",
+                    "line": 22,
+                    "severity": "error"
+                }
+            ]
+        },
+        {
+            "name": "IR Generation",
+            "status": "completed",
+            "duration": 384,
+            "ir_code": [
+                {
+                    "op": "FUNC_START",
+                    "label": "main"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": "a * b"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "sum",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "sum",
+                    "value": "0"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "i",
+                    "value": "0"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_LOOP_START"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "loop_cmp1",
+                    "src": "i"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "loop_cmp2",
+                    "src": "size"
+                },
+                {
+                    "op": "CMP",
+                    "src1": "loop_cmp1",
+                    "src2": "loop_cmp2",
+                    "cond": "<"
+                },
+                {
+                    "op": "JMP",
+                    "cond": "!=<",
+                    "target": "L1_LOOP_END"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_END"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": "(float)sum \/ size"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_END"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "x",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "x",
+                    "value": "5, y = 7"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "product",
+                    "type": "int"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "product",
+                    "value": "multiply(x, y)"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_END"
+                },
+                {
+                    "op": "ALLOC",
+                    "dest": "average",
+                    "type": "float"
+                },
+                {
+                    "op": "STORE",
+                    "dest": "average",
+                    "value": "calculateAverage(numbers, 5)"
+                },
+                {
+                    "op": "CALL",
+                    "func": "printf",
+                    "args": [
+                        "string",
+                        "..."
+                    ]
+                },
+                {
+                    "op": "STORE",
+                    "dest": "retval",
+                    "value": "0"
+                },
+                {
+                    "op": "LABEL",
+                    "label": "L1_END"
+                },
+                {
+                    "op": "LOAD",
+                    "dest": "ret",
+                    "src": "retval"
+                },
+                {
+                    "op": "RET",
+                    "src": "ret"
+                },
+                {
+                    "op": "FUNC_END",
+                    "label": "main"
+                }
+            ],
+            "errors": []
+        },
+        {
+            "name": "Optimization",
+            "status": "completed",
+            "duration": 415,
+            "optimizations": {
+                "constant_folding": true,
+                "constant_propagation": true,
+                "loop_invariant": true,
+                "strength_reduction": true,
+                "dead_code_elimination": true,
+                "common_subexpression": true,
+                "copy_propagation": true
+            },
+            "errors": []
+        },
+        {
+            "name": "Code Generation",
+            "status": "completed",
+            "duration": 385,
+            "assembly": [
+                ".section .text",
+                ".globl main",
+                ".type main, @function",
+                "main:",
+                "    pushq %rbp",
+                "    movq %rsp, %rbp",
+                "    subq $16, %rsp",
+                "    movl $a * b, %eax",
+                "    movl $0, -4(%rbp)   # sum = 0",
+                "    movl $(float)sum \/ size, %eax",
+                "    movl $5, y = 7, -8(%rbp)   # x = 5, y = 7",
+                "    movl $multiply(x, y), -12(%rbp)   # product = multiply(x, y)",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC17(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC17:",
+                "    .string \"Product: %d\\n\"",
+                "    movl $calculateAverage(numbers, 5), -16(%rbp)   # average = calculateAverage(numbers, 5)",
+                "    movl -4(%rbp), %esi   # Load argument",
+                "    leaq .LC21(%rip), %rdi",
+                "    movl $0, %eax",
+                "    call printf@PLT",
+                ".LC21:",
+                "    .string \"Average: %.2f\\n\"",
+                "    movl $0, %eax",
+                "    leave",
+                "    ret",
+                ".section .note.GNU-stack,\"\",@progbits"
+            ],
+            "errors": []
+        }
+    ],
+    "outputs": {
+        "tokens": [
+            {
+                "type": "IDENTIFIER",
+                "value": "#include",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "stdio.h",
+                "line": 1
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": ">",
+                "line": 1
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "multiply",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 3
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 3
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 3
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "a",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "*",
+                "line": 4
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "b",
+                "line": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 4
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 5
+            },
+            {
+                "type": "KEYWORD",
+                "value": "float",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "calculateAverage",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "arr[]",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 7
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "size",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 7
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 7
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 8
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 8
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 8
+            },
+            {
+                "type": "KEYWORD",
+                "value": "for",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 9
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "<",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "size",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "i",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 9
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 9
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "+",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 10
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "arr[i]",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 10
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 11
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 12
+            },
+            {
+                "type": "KEYWORD",
+                "value": "float",
+                "line": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "sum",
+                "line": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "\/",
+                "line": 12
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "size",
+                "line": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 12
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 13
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 15
+            },
+            {
+                "type": "KEYWORD",
+                "value": "main",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 15
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 15
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "x",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 16
+            },
+            {
+                "type": "LITERAL",
+                "value": "5",
+                "line": 16
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "y",
+                "line": 16
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 16
+            },
+            {
+                "type": "LITERAL",
+                "value": "7",
+                "line": 16
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 16
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 17
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "product",
+                "line": 17
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 17
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "multiply",
+                "line": 17
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 17
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "x",
+                "line": 17
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 17
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "y",
+                "line": 17
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 17
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 17
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 18
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Product:",
+                "line": 18
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%d\\n\"",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 18
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "product",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 18
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 18
+            },
+            {
+                "type": "KEYWORD",
+                "value": "int",
+                "line": 20
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "numbers[]",
+                "line": 20
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "{",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "10",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "20",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "30",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "40",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 20
+            },
+            {
+                "type": "LITERAL",
+                "value": "50",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 20
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 20
+            },
+            {
+                "type": "KEYWORD",
+                "value": "float",
+                "line": 21
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "average",
+                "line": 21
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "=",
+                "line": 21
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "calculateAverage",
+                "line": 21
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 21
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "numbers",
+                "line": 21
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 21
+            },
+            {
+                "type": "LITERAL",
+                "value": "5",
+                "line": 21
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 21
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 21
+            },
+            {
+                "type": "KEYWORD",
+                "value": "printf",
+                "line": 22
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "(",
+                "line": 22
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "\"Average:",
+                "line": 22
+            },
+            {
+                "type": "STRING_LITERAL",
+                "value": "%.2f\\n\"",
+                "line": 22
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ",",
+                "line": 22
+            },
+            {
+                "type": "IDENTIFIER",
+                "value": "average",
+                "line": 22
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ")",
+                "line": 22
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 22
+            },
+            {
+                "type": "KEYWORD",
+                "value": "return",
+                "line": 24
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": ";",
+                "line": 24
+            },
+            {
+                "type": "PUNCTUATOR",
+                "value": "}",
+                "line": 25
+            }
+        ],
+        "ast": {
+            "type": "Program",
+            "body": [
+                null,
+                null,
+                {
+                    "type": "ReturnStatement",
+                    "value": "(float)sum \/ size",
+                    "line": 12
+                },
+                null,
+                {
+                    "type": "VariableDeclaration",
+                    "data_type": "float",
+                    "name": "average",
+                    "value": "calculateAverage(numbers, 5)",
+                    "line": 21
+                },
+                {
+                    "type": "PrintfStatement",
+                    "line": 22,
+                    "format": "",
+                    "arguments": [
+                        "average"
+                    ]
+                },
+                {
+                    "type": "ReturnStatement",
+                    "value": "0",
+                    "line": 24
+                }
+            ],
+            "source": "#include <stdio.h>\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nfloat calculateAverage(int arr[], int size) {\n    int sum = 0;\n    for (int i = 0; i < size; i++) {\n        sum += arr[i];\n    }\n    return (float)sum \/ size;\n}\n\nint main() {\n    int x = 5, y = 7;\n    int product = multiply(x, y);\n    printf(\"Product: %d\\n\", product);\n    \n    int numbers[] = {10, 20, 30, 40, 50};\n    float average = calculateAverage(numbers, 5);\n    printf(\"Average: %.2f\\n\", average);\n    \n    return 0;\n}"
+        },
+        "ir": [
+            {
+                "op": "FUNC_START",
+                "label": "main"
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": "a * b"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "sum",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "sum",
+                "value": "0"
+            },
+            {
+                "op": "STORE",
+                "dest": "i",
+                "value": "0"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_LOOP_START"
+            },
+            {
+                "op": "LOAD",
+                "dest": "loop_cmp1",
+                "src": "i"
+            },
+            {
+                "op": "LOAD",
+                "dest": "loop_cmp2",
+                "src": "size"
+            },
+            {
+                "op": "CMP",
+                "src1": "loop_cmp1",
+                "src2": "loop_cmp2",
+                "cond": "<"
+            },
+            {
+                "op": "JMP",
+                "cond": "!=<",
+                "target": "L1_LOOP_END"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_END"
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": "(float)sum \/ size"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_END"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "x",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "x",
+                "value": "5, y = 7"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "product",
+                "type": "int"
+            },
+            {
+                "op": "STORE",
+                "dest": "product",
+                "value": "multiply(x, y)"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_END"
+            },
+            {
+                "op": "ALLOC",
+                "dest": "average",
+                "type": "float"
+            },
+            {
+                "op": "STORE",
+                "dest": "average",
+                "value": "calculateAverage(numbers, 5)"
+            },
+            {
+                "op": "CALL",
+                "func": "printf",
+                "args": [
+                    "string",
+                    "..."
+                ]
+            },
+            {
+                "op": "STORE",
+                "dest": "retval",
+                "value": "0"
+            },
+            {
+                "op": "LABEL",
+                "label": "L1_END"
+            },
+            {
+                "op": "LOAD",
+                "dest": "ret",
+                "src": "retval"
+            },
+            {
+                "op": "RET",
+                "src": "ret"
+            },
+            {
+                "op": "FUNC_END",
+                "label": "main"
+            }
+        ],
+        "asm": [
+            ".section .text",
+            ".globl main",
+            ".type main, @function",
+            "main:",
+            "    pushq %rbp",
+            "    movq %rsp, %rbp",
+            "    subq $16, %rsp",
+            "    movl $a * b, %eax",
+            "    movl $0, -4(%rbp)   # sum = 0",
+            "    movl $(float)sum \/ size, %eax",
+            "    movl $5, y = 7, -8(%rbp)   # x = 5, y = 7",
+            "    movl $multiply(x, y), -12(%rbp)   # product = multiply(x, y)",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC17(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC17:",
+            "    .string \"Product: %d\\n\"",
+            "    movl $calculateAverage(numbers, 5), -16(%rbp)   # average = calculateAverage(numbers, 5)",
+            "    movl -4(%rbp), %esi   # Load argument",
+            "    leaq .LC21(%rip), %rdi",
+            "    movl $0, %eax",
+            "    call printf@PLT",
+            ".LC21:",
+            "    .string \"Average: %.2f\\n\"",
+            "    movl $0, %eax",
+            "    leave",
+            "    ret",
+            ".section .note.GNU-stack,\"\",@progbits"
+        ]
+    },
+    "errors": [
+        {
+            "type": "syntax",
+            "message": "Missing semicolon",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: include",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: stdio",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: h",
+            "line": 1,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: a",
+            "line": 3,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: b",
+            "line": 3,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: a",
+            "line": 4,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: b",
+            "line": 4,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: float",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: arr",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: size",
+            "line": 7,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 8,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: size",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 9,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 10,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: arr",
+            "line": 10,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: i",
+            "line": 10,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: float",
+            "line": 12,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: sum",
+            "line": 12,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: size",
+            "line": 12,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: x",
+            "line": 16,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: y",
+            "line": 16,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: product",
+            "line": 17,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: x",
+            "line": 17,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Product",
+            "line": 18,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: d",
+            "line": 18,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 18,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: product",
+            "line": 18,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: numbers",
+            "line": 20,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: float",
+            "line": 21,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: average",
+            "line": 21,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: numbers",
+            "line": 21,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: Average",
+            "line": 22,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: n",
+            "line": 22,
+            "severity": "error"
+        },
+        {
+            "type": "semantic",
+            "message": "Undeclared variable: average",
+            "line": 22,
+            "severity": "error"
+        }
+    ],
+    "source_code": "#include <stdio.h>\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nfloat calculateAverage(int arr[], int size) {\n    int sum = 0;\n    for (int i = 0; i < size; i++) {\n        sum += arr[i];\n    }\n    return (float)sum \/ size;\n}\n\nint main() {\n    int x = 5, y = 7;\n    int product = multiply(x, y);\n    printf(\"Product: %d\\n\", product);\n    \n    int numbers[] = {10, 20, 30, 40, 50};\n    float average = calculateAverage(numbers, 5);\n    printf(\"Average: %.2f\\n\", average);\n    \n    return 0;\n}"
+}
