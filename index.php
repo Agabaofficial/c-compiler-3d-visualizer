@@ -1919,7 +1919,7 @@ ini_set('error_log', 'hub_errors.log');
                         <li><a href="mailto:contact@compilerhub.dev">
                             <i class="fas fa-envelope"></i> Email
                         </a></li>
-                        <li><a href="#">
+                        <li><a href="documentation.php">
                             <i class="fas fa-book"></i> Documentation
                         </a></li>
                         <li><a href="#">
@@ -2654,3 +2654,4 @@ ini_set('error_log', 'hub_errors.log');
     </script>
 </body>
 </html>
+
