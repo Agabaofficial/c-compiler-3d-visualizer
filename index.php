@@ -1,934 +1,38 @@
 <?php
+// index.php - Modern Compiler Visualizer Hub
 // Turn off error display but log errors
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', 'php_errors.log');
-
-// Create tmp directory if it doesn't exist
-if (!is_dir('tmp')) {
-    mkdir('tmp', 0777, true);
-}
-
-// Handle API calls - check before any output
-$api_endpoint = $_GET['api'] ?? '';
-if ($api_endpoint) {
-    handleApiRequest($api_endpoint);
-    exit;
-}
-
-function handleApiRequest($endpoint) {
-    // Clear any existing output buffers
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    // Set JSON headers
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type');
-    
-    // Handle preflight requests
-    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        http_response_code(200);
-        exit;
-    }
-    
-    // Start fresh output buffer
-    ob_start();
-    
-    try {
-        switch ($endpoint) {
-            case 'compile':
-                $result = handleCompile();
-                break;
-            case 'visualize':
-                $result = handleVisualize();
-                break;
-            case 'step':
-                $result = handleStep();
-                break;
-            case 'download':
-                handleDownload();
-                exit; // Download handles its own output
-            case 'errors':
-                $result = handleErrorReport();
-                break;
-            default:
-                $result = ['error' => 'Invalid API endpoint'];
-                break;
-        }
-        
-        // Ensure we only output JSON
-        ob_clean();
-        echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        
-    } catch (Exception $e) {
-        ob_clean();
-        echo json_encode(['error' => $e->getMessage()]);
-    } catch (Throwable $t) {
-        ob_clean();
-        echo json_encode(['error' => $t->getMessage()]);
-    }
-    
-    ob_end_flush();
-}
-
-function handleCompile() {
-    // Get JSON input
-    $input = file_get_contents('php://input');
-    if (empty($input)) {
-        return ['error' => 'No input data received'];
-    }
-    
-    $data = json_decode($input, true);
-    
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        return ['error' => 'Invalid JSON input: ' . json_last_error_msg()];
-    }
-    
-    $source_code = $data['source_code'] ?? '';
-    
-    if (empty($source_code)) {
-        return ['error' => 'No source code provided'];
-    }
-    
-    $session_id = uniqid('compile_', true);
-    $tmp_dir = "tmp/{$session_id}";
-    
-    if (!mkdir($tmp_dir, 0777, true) && !is_dir($tmp_dir)) {
-        return ['error' => 'Failed to create temporary directory'];
-    }
-    
-    // Save the source code
-    if (file_put_contents("{$tmp_dir}/source.c", $source_code) === false) {
-        return ['error' => 'Failed to save source code'];
-    }
-    
-    $result = [
-        'session_id' => $session_id,
-        'success' => true,
-        'stages' => [],
-        'outputs' => [],
-        'errors' => [],
-        'source_code' => $source_code
-    ];
-    
-    // Generate dynamic compilation results based on input
-    $lexicalResult = simulateTokens($source_code);
-    $result['stages'][] = [
-        'name' => 'Lexical Analysis',
-        'status' => $lexicalResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(50, 200),
-        'tokens' => $lexicalResult['tokens'],
-        'errors' => $lexicalResult['errors']
-    ];
-    
-    $syntaxResult = simulateAST($source_code);
-    $result['stages'][] = [
-        'name' => 'Syntax Analysis',
-        'status' => $syntaxResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(100, 300),
-        'ast' => $syntaxResult['ast'],
-        'errors' => $syntaxResult['errors']
-    ];
-    
-    $semanticResult = simulateSymbolTable($source_code);
-    $result['stages'][] = [
-        'name' => 'Semantic Analysis',
-        'status' => $semanticResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(80, 250),
-        'symbol_table' => $semanticResult['symbol_table'],
-        'errors' => $semanticResult['errors']
-    ];
-    
-    $irResult = simulateIR($source_code);
-    $result['stages'][] = [
-        'name' => 'IR Generation',
-        'status' => $irResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(150, 400),
-        'ir_code' => $irResult['ir'],
-        'errors' => $irResult['errors']
-    ];
-    
-    $optResult = simulateOptimization($source_code);
-    $result['stages'][] = [
-        'name' => 'Optimization',
-        'status' => $optResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(200, 500),
-        'optimizations' => $optResult['optimizations'],
-        'errors' => $optResult['errors']
-    ];
-    
-    $codegenResult = simulateAssembly($source_code);
-    $result['stages'][] = [
-        'name' => 'Code Generation',
-        'status' => $codegenResult['has_errors'] ? 'failed' : 'completed',
-        'duration' => rand(250, 600),
-        'assembly' => $codegenResult['assembly'],
-        'errors' => $codegenResult['errors']
-    ];
-    
-    // Collect all errors
-    $all_errors = [];
-    foreach ($result['stages'] as $stage) {
-        if (!empty($stage['errors'])) {
-            $all_errors = array_merge($all_errors, $stage['errors']);
-            $result['success'] = false;
-        }
-    }
-    
-    $result['errors'] = $all_errors;
-    
-    $result['outputs'] = [
-        'tokens' => $result['stages'][0]['tokens'],
-        'ast' => $result['stages'][1]['ast'],
-        'ir' => $result['stages'][3]['ir_code'],
-        'asm' => $result['stages'][5]['assembly']
-    ];
-    
-    // Save result
-    file_put_contents("{$tmp_dir}/result.json", json_encode($result, JSON_PRETTY_PRINT));
-    return $result;
-}
-
-function handleVisualize() {
-    $session_id = $_GET['session_id'] ?? '';
-    $stage = $_GET['stage'] ?? 'all';
-    $view = $_GET['view'] ?? 'pipeline';
-    
-    if (empty($session_id)) {
-        return ['error' => 'No session ID provided'];
-    }
-    
-    $result_file = "tmp/{$session_id}/result.json";
-    if (!file_exists($result_file)) {
-        return ['error' => 'Session not found or compilation not completed'];
-    }
-    
-    $result = json_decode(file_get_contents($result_file), true);
-    
-    // Generate visualization data based on stage and view
-    $viz_data = generateVisualizationData($result, $stage, $view);
-    
-    return $viz_data;
-}
-
-function handleStep() {
-    return [
-        'message' => 'Step execution not implemented in this demo',
-        'current_stage' => 'lexical',
-        'next_stage' => 'syntax'
-    ];
-}
-
-function handleDownload() {
-    $session_id = $_GET['session_id'] ?? '';
-    $type = $_GET['type'] ?? 'source';
-    
-    if (empty($session_id)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'No session ID provided']);
-        exit;
-    }
-    
-    $tmp_dir = "tmp/{$session_id}";
-    
-    switch ($type) {
-        case 'source':
-            $file = "{$tmp_dir}/source.c";
-            $filename = "source_{$session_id}.c";
-            $content_type = 'text/plain';
-            break;
-        case 'ast':
-            $result_file = "{$tmp_dir}/result.json";
-            if (!file_exists($result_file)) {
-                http_response_code(404);
-                echo json_encode(['error' => 'File not found']);
-                exit;
-            }
-            
-            $result = json_decode(file_get_contents($result_file), true);
-            $content = json_encode($result['outputs']['ast'], JSON_PRETTY_PRINT);
-            $filename = "ast_{$session_id}.json";
-            $content_type = 'application/json';
-            
-            header('Content-Type: ' . $content_type);
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            header('Content-Length: ' . strlen($content));
-            echo $content;
-            exit;
-            
-        case 'asm':
-            $result_file = "{$tmp_dir}/result.json";
-            if (!file_exists($result_file)) {
-                http_response_code(404);
-                echo json_encode(['error' => 'File not found']);
-                exit;
-            }
-            
-            $result = json_decode(file_get_contents($result_file), true);
-            $assembly = $result['outputs']['asm'] ?? [];
-            $content = is_array($assembly) ? implode("\n", $assembly) : $assembly;
-            $filename = "assembly_{$session_id}.asm";
-            $content_type = 'text/plain';
-            
-            header('Content-Type: ' . $content_type);
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            header('Content-Length: ' . strlen($content));
-            echo $content;
-            exit;
-            
-        default:
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid download type']);
-            exit;
-    }
-    
-    if (!file_exists($file)) {
-        http_response_code(404);
-        echo json_encode(['error' => 'File not found']);
-        exit;
-    }
-    
-    header('Content-Type: ' . $content_type);
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Content-Length: ' . filesize($file));
-    
-    readfile($file);
-    exit;
-}
-
-function handleErrorReport() {
-    $session_id = $_GET['session_id'] ?? '';
-    
-    if (empty($session_id)) {
-        return ['error' => 'No session ID provided'];
-    }
-    
-    $result_file = "tmp/{$session_id}/result.json";
-    if (!file_exists($result_file)) {
-        return ['error' => 'Session not found'];
-    }
-    
-    $result = json_decode(file_get_contents($result_file), true);
-    
-    return [
-        'session_id' => $session_id,
-        'errors' => $result['errors'] ?? [],
-        'warnings' => $result['warnings'] ?? [],
-        'total_errors' => count($result['errors'] ?? []),
-        'success' => $result['success'] ?? false
-    ];
-}
-
-// ... [Previous functions: generateVisualizationData, getCFGNodeColor, getMemorySectionColor, createASTNodes, getASTNodeColor, simulateTokens, simulateAST, simulateSymbolTable, simulateIR, simulateOptimization, simulateAssembly] ...
-
-// These functions remain the same as before
-function generateVisualizationData($result, $stage, $view) {
-    // ... same as before ...
-    $nodes = [];
-    $edges = [];
-    
-    if ($view === 'pipeline') {
-        $stages = [
-            ['id' => 'lexical', 'name' => 'Lexical Analysis', 'x' => -30, 'y' => 0, 'z' => 0],
-            ['id' => 'syntax', 'name' => 'Syntax Analysis', 'x' => -18, 'y' => 0, 'z' => 0],
-            ['id' => 'semantic', 'name' => 'Semantic Analysis', 'x' => -6, 'y' => 0, 'z' => 0],
-            ['id' => 'ir', 'name' => 'IR Generation', 'x' => 6, 'y' => 0, 'z' => 0],
-            ['id' => 'optimization', 'name' => 'Optimization', 'x' => 18, 'y' => 0, 'z' => 0],
-            ['id' => 'codegen', 'name' => 'Code Generation', 'x' => 30, 'y' => 0, 'z' => 0],
-        ];
-        
-        foreach ($stages as $stage_info) {
-            $stage_data = null;
-            foreach ($result['stages'] as $s) {
-                if (strpos(strtolower($s['name']), strtolower($stage_info['id'])) !== false) {
-                    $stage_data = $s;
-                    break;
-                }
-            }
-            
-            $has_errors = $stage_data && !empty($stage_data['errors']);
-            
-            $nodes[] = [
-                'id' => $stage_info['id'],
-                'name' => $stage_info['name'],
-                'type' => 'stage',
-                'color' => $has_errors ? '#e74c3c' : '#2ecc71',
-                'position' => ['x' => $stage_info['x'], 'y' => $stage_info['y'], 'z' => $stage_info['z']],
-                'size' => 3,
-                'status' => $stage_data['status'] ?? 'pending',
-                'duration' => $stage_data['duration'] ?? 0,
-                'has_errors' => $has_errors,
-                'error_count' => $has_errors ? count($stage_data['errors']) : 0
-            ];
-        }
-        
-        // Create edges between stages
-        for ($i = 0; $i < count($stages) - 1; $i++) {
-            $edges[] = [
-                'from' => $stages[$i]['id'],
-                'to' => $stages[$i+1]['id'],
-                'type' => 'pipeline',
-                'color' => '#3498db'
-            ];
-        }
-    } elseif ($view === 'ast') {
-        if (isset($result['outputs']['ast'])) {
-            $ast = $result['outputs']['ast'];
-            $node_id = 0;
-            createASTNodes($ast, $nodes, $edges, $node_id, 0, 10, 0, -1);
-        }
-    } elseif ($view === 'cfg') {
-        $cfg_nodes = [
-            ['id' => 'entry', 'name' => 'Entry', 'x' => 0, 'y' => 20, 'z' => 0, 'type' => 'entry'],
-            ['id' => 'decl', 'name' => 'Declarations', 'x' => -10, 'y' => 10, 'z' => 0, 'type' => 'declaration'],
-            ['id' => 'init', 'name' => 'Initialization', 'x' => -10, 'y' => 0, 'z' => 0, 'type' => 'statement'],
-            ['id' => 'cond', 'name' => 'Condition Check', 'x' => 0, 'y' => -10, 'z' => 0, 'type' => 'condition'],
-            ['id' => 'body', 'name' => 'Loop Body', 'x' => 10, 'y' => 0, 'z' => 0, 'type' => 'statement'],
-            ['id' => 'inc', 'name' => 'Increment', 'x' => 10, 'y' => 10, 'z' => 0, 'type' => 'statement'],
-            ['id' => 'exit', 'name' => 'Exit', 'x' => 0, 'y' => -20, 'z' => 0, 'type' => 'exit'],
-        ];
-        
-        foreach ($cfg_nodes as $node) {
-            $nodes[] = [
-                'id' => $node['id'],
-                'name' => $node['name'],
-                'type' => $node['type'],
-                'color' => getCFGNodeColor($node['type']),
-                'position' => ['x' => $node['x'], 'y' => $node['y'], 'z' => $node['z']],
-                'size' => 2.5,
-                'has_errors' => false,
-                'error_count' => 0
-            ];
-        }
-        
-        $cfg_edges = [
-            ['from' => 'entry', 'to' => 'decl', 'type' => 'control_flow'],
-            ['from' => 'decl', 'to' => 'init', 'type' => 'control_flow'],
-            ['from' => 'init', 'to' => 'cond', 'type' => 'control_flow'],
-            ['from' => 'cond', 'to' => 'body', 'type' => 'conditional', 'label' => 'true'],
-            ['from' => 'cond', 'to' => 'exit', 'type' => 'conditional', 'label' => 'false'],
-            ['from' => 'body', 'to' => 'inc', 'type' => 'control_flow'],
-            ['from' => 'inc', 'to' => 'cond', 'type' => 'control_flow'],
-        ];
-        
-        foreach ($cfg_edges as $edge) {
-            $edges[] = $edge;
-        }
-    } elseif ($view === 'memory') {
-        $memory_sections = [
-            ['id' => 'text', 'name' => 'Text (Code)', 'x' => -20, 'y' => 15, 'z' => 0, 'size' => 4, 'height' => 3],
-            ['id' => 'data', 'name' => 'Data', 'x' => -10, 'y' => 15, 'z' => 0, 'size' => 3, 'height' => 4],
-            ['id' => 'bss', 'name' => 'BSS', 'x' => 0, 'y' => 15, 'z' => 0, 'size' => 3, 'height' => 5],
-            ['id' => 'heap', 'name' => 'Heap', 'x' => 10, 'y' => 5, 'z' => 0, 'size' => 4, 'height' => 6],
-            ['id' => 'stack', 'name' => 'Stack', 'x' => 20, 'y' => -5, 'z' => 0, 'size' => 5, 'height' => 8],
-        ];
-        
-        foreach ($memory_sections as $section) {
-            $nodes[] = [
-                'id' => $section['id'],
-                'name' => $section['name'],
-                'type' => 'memory_section',
-                'color' => getMemorySectionColor($section['id']),
-                'position' => ['x' => $section['x'], 'y' => $section['y'], 'z' => $section['z']],
-                'size' => $section['size'],
-                'height' => $section['height'],
-                'has_errors' => false,
-                'error_count' => 0
-            ];
-        }
-        
-        $allocations = [
-            ['id' => 'var_x', 'name' => 'int x = 10', 'x' => -20, 'y' => 5, 'z' => 5, 'size' => 1.5],
-            ['id' => 'var_y', 'name' => 'int y = 20', 'x' => -20, 'y' => 2, 'z' => 5, 'size' => 1.5],
-            ['id' => 'var_result', 'name' => 'int result', 'x' => -20, 'y' => -1, 'z' => 5, 'size' => 1.5],
-            ['id' => 'func_main', 'name' => 'main()', 'x' => -20, 'y' => 8, 'z' => 5, 'size' => 1.5],
-        ];
-        
-        foreach ($allocations as $alloc) {
-            $nodes[] = [
-                'id' => $alloc['id'],
-                'name' => $alloc['name'],
-                'type' => 'allocation',
-                'color' => '#9b59b6',
-                'position' => ['x' => $alloc['x'], 'y' => $alloc['y'], 'z' => $alloc['z']],
-                'size' => $alloc['size'],
-                'has_errors' => false,
-                'error_count' => 0
-            ];
-        }
-    }
-    
-    return [
-        'nodes' => $nodes,
-        'edges' => $edges,
-        'view' => $view,
-        'stage' => $stage,
-        'session_id' => $result['session_id'] ?? ''
-    ];
-}
-
-function getCFGNodeColor($type) {
-    $colors = [
-        'entry' => '#2ecc71',
-        'exit' => '#e74c3c',
-        'condition' => '#f39c12',
-        'statement' => '#3498db',
-        'declaration' => '#9b59b6'
-    ];
-    return $colors[$type] ?? '#95a5a6';
-}
-
-function getMemorySectionColor($section) {
-    $colors = [
-        'text' => '#3498db',
-        'data' => '#2ecc71',
-        'bss' => '#f39c12',
-        'heap' => '#9b59b6',
-        'stack' => '#e74c3c'
-    ];
-    return $colors[$section] ?? '#95a5a6';
-}
-
-function createASTNodes($node, &$nodes, &$edges, &$node_id, $x, $y, $z, $parent_id) {
-    $current_id = $node_id++;
-    $node_type = $node['type'] ?? 'Unknown';
-    $node_name = $node['name'] ?? $node_type;
-    $node_value = $node['value'] ?? '';
-    
-    $nodes[] = [
-        'id' => 'ast_node_' . $current_id,
-        'name' => $node_name . ($node_value ? ': ' . $node_value : ''),
-        'type' => $node_type,
-        'color' => getASTNodeColor($node_type),
-        'position' => ['x' => $x, 'y' => $y, 'z' => $z],
-        'size' => 2,
-        'has_errors' => false,
-        'error_count' => 0
-    ];
-    
-    if ($parent_id >= 0) {
-        $edges[] = [
-            'from' => 'ast_node_' . $parent_id,
-            'to' => 'ast_node_' . $current_id,
-            'type' => 'parent_child',
-            'color' => '#2ecc71'
-        ];
-    }
-    
-    $child_index = 0;
-    foreach ($node as $key => $value) {
-        if ($key === 'type' || $key === 'name' || $key === 'value') continue;
-        
-        if (is_array($value) && isset($value['type'])) {
-            $child_x = $x + 15;
-            $child_y = $y - 8 - ($child_index * 8);
-            $child_z = $z + ($child_index * 5);
-            createASTNodes($value, $nodes, $edges, $node_id, $child_x, $child_y, $child_z, $current_id);
-            $child_index++;
-        } elseif (is_array($value) && is_array(reset($value)) && isset(reset($value)['type'])) {
-            foreach ($value as $child) {
-                if (is_array($child) && isset($child['type'])) {
-                    $child_x = $x + 15;
-                    $child_y = $y - 8 - ($child_index * 8);
-                    $child_z = $z + ($child_index * 5);
-                    createASTNodes($child, $nodes, $edges, $node_id, $child_x, $child_y, $child_z, $current_id);
-                    $child_index++;
-                }
-            }
-        }
-    }
-    
-    return $current_id;
-}
-
-function getASTNodeColor($type) {
-    $colors = [
-        'Program' => '#3498db',
-        'FunctionDeclaration' => '#2ecc71',
-        'ReturnStatement' => '#e74c3c',
-        'PrintStatement' => '#f39c12',
-        'Literal' => '#9b59b6',
-        'Expression' => '#1abc9c'
-    ];
-    return $colors[$type] ?? '#95a5a6';
-}
-
-function simulateTokens($code) {
-    $tokens = [];
-    $errors = [];
-    
-    $code = preg_replace('/\/\/.*$/m', '', $code);
-    $code = preg_replace('/\/\*.*?\*\//s', '', $code);
-    
-    $lines = explode("\n", $code);
-    
-    foreach ($lines as $lineNum => $line) {
-        $line = trim($line);
-        if (empty($line)) continue;
-        
-        if (strpos($line, '#') === 0) {
-            $tokens[] = [
-                'type' => 'PREPROCESSOR',
-                'value' => $line,
-                'line' => $lineNum + 1
-            ];
-            continue;
-        }
-        
-        $quoteCount = substr_count($line, '"');
-        if ($quoteCount % 2 != 0) {
-            $errors[] = [
-                'type' => 'lexical',
-                'message' => 'Unterminated string literal',
-                'line' => $lineNum + 1,
-                'severity' => 'error'
-            ];
-        }
-        
-        $words = preg_split('/(\s+|(?<=[(){};=+\-\/*<>!,])|(?=[(){};=+\-\/*<>!,]))/', $line, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        
-        foreach ($words as $word) {
-            $word = trim($word);
-            if (empty($word)) continue;
-            
-            $token = [
-                'type' => 'IDENTIFIER',
-                'value' => $word,
-                'line' => $lineNum + 1
-            ];
-            
-            $keywords = ['int', 'return', 'if', 'else', 'for', 'while', 'printf', 'main', 'char', 'float', 'double', 'void', 'include'];
-            $types = ['int', 'char', 'float', 'double', 'void'];
-            
-            if (in_array($word, $keywords)) {
-                $token['type'] = 'KEYWORD';
-            } elseif (is_numeric($word)) {
-                $token['type'] = 'LITERAL';
-            } elseif (preg_match('/^".*"$/', $word) || preg_match("/^'.*'$/", $word)) {
-                $token['type'] = 'STRING_LITERAL';
-            } elseif (preg_match('/^[+\-*/=<>!&|]+$/', $word)) {
-                $token['type'] = 'OPERATOR';
-            } elseif (preg_match('/^[(){}\[\];,]$/', $word)) {
-                $token['type'] = 'PUNCTUATOR';
-            } elseif (preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $word)) {
-                // Already set as IDENTIFIER
-            }
-            
-            $tokens[] = $token;
-        }
-    }
-    
-    return [
-        'tokens' => $tokens,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-function simulateAST($code) {
-    $errors = [];
-    
-    $lines = explode("\n", $code);
-    $brace_count = 0;
-    
-    foreach ($lines as $lineNum => $line) {
-        $line = trim($line);
-        if (empty($line)) continue;
-        
-        if (strpos($line, '#') === 0) {
-            continue;
-        }
-        
-        if (strpos($line, '//') === 0) {
-            continue;
-        }
-        
-        $brace_count += substr_count($line, '{');
-        $brace_count -= substr_count($line, '}');
-        
-        if (!empty($line) && 
-            substr($line, -1) !== ';' &&
-            substr($line, -1) !== '{' &&
-            substr($line, -1) !== '}' &&
-            substr($line, -1) !== ':' &&
-            !preg_match('/^(if|for|while|else|do)\b/', $line) &&
-            !preg_match('/^#/', $line) &&
-            !preg_match('/^\/\//', $line) &&
-            !preg_match('/^\/\*/', $line) &&
-            !preg_match('/^\*/', $line)) {
-            
-            if (preg_match('/(=\s*[^;]+|printf\s*\(|return\s+[^;])$/', $line)) {
-                $errors[] = [
-                    'type' => 'syntax',
-                    'message' => 'Missing semicolon',
-                    'line' => $lineNum + 1,
-                    'severity' => 'error'
-                ];
-            }
-        }
-    }
-    
-    if ($brace_count != 0) {
-        $errors[] = [
-            'type' => 'syntax',
-            'message' => 'Unbalanced braces',
-            'severity' => 'error'
-        ];
-    }
-    
-    $ast = [
-        'type' => 'Program',
-        'body' => [
-            [
-                'type' => 'FunctionDeclaration',
-                'name' => 'main',
-                'params' => [],
-                'body' => [
-                    [
-                        'type' => 'ReturnStatement',
-                        'value' => ['type' => 'Literal', 'value' => 0]
-                    ]
-                ]
-            ]
-        ]
-    ];
-    
-    if (strpos($code, 'printf') !== false) {
-        $ast['body'][0]['body'] = array_merge([
-            [
-                'type' => 'PrintStatement',
-                'format' => '"Hello, World!"',
-                'arguments' => []
-            ]
-        ], $ast['body'][0]['body']);
-    }
-    
-    return [
-        'ast' => $ast,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-function simulateSymbolTable($code) {
-    $symbol_table = [
-        'global' => [],
-        'functions' => []
-    ];
-    
-    $errors = [];
-    
-    $lines = explode("\n", $code);
-    $currentFunction = null;
-    $declared_vars = [];
-    
-    $library_functions = ['printf', 'scanf', 'malloc', 'free', 'strlen', 'strcpy'];
-    $valid_identifiers = ['stdio', 'h', 'd', 'n', 's', 'c', 'f'];
-    
-    foreach ($lines as $lineNum => $line) {
-        $line = trim($line);
-        
-        $line_without_strings = preg_replace('/"[^"]*"/', 'STRING', $line);
-        
-        if (strpos($line, '#') === 0 || strpos($line, '//') === 0) {
-            continue;
-        }
-        
-        if (preg_match('/^\s*(int|void|float|double|char)\s+(\w+)\s*\(([^)]*)\)/', $line, $matches)) {
-            $currentFunction = $matches[2];
-            $symbol_table['functions'][$currentFunction] = [
-                'name' => $currentFunction,
-                'return_type' => $matches[1],
-                'params' => [],
-                'variables' => [],
-                'line' => $lineNum + 1
-            ];
-            $declared_vars[] = $currentFunction;
-        }
-        
-        elseif (preg_match('/^\s*(int|float|double|char)\s+(\w+)\s*(=\s*[^;]+)?\s*;/', $line_without_strings, $matches)) {
-            $var_name = $matches[2];
-            $declared_vars[] = $var_name;
-            
-            if ($currentFunction) {
-                $symbol_table['functions'][$currentFunction]['variables'][] = [
-                    'name' => $var_name,
-                    'type' => $matches[1],
-                    'initialized' => isset($matches[3]),
-                    'line' => $lineNum + 1
-                ];
-            } else {
-                $symbol_table['global'][] = [
-                    'name' => $var_name,
-                    'type' => $matches[1],
-                    'line' => $lineNum + 1
-                ];
-            }
-        }
-        
-        if (preg_match_all('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b/', $line_without_strings, $matches)) {
-            foreach ($matches[1] as $identifier) {
-                if (in_array($identifier, ['int', 'return', 'if', 'else', 'for', 'while', 'printf', 'main', 
-                                          'char', 'float', 'double', 'void', 'include']) ||
-                    in_array($identifier, $library_functions) ||
-                    in_array($identifier, $valid_identifiers) ||
-                    $identifier === 'STRING' ||
-                    strpos($identifier, 'stdio') === 0) {
-                    continue;
-                }
-                
-                if (strpos($line, $identifier . '(') !== false) {
-                    continue;
-                }
-                
-                if (!in_array($identifier, $declared_vars) && 
-                    !in_array($identifier, array_keys($symbol_table['functions']))) {
-                    if (strpos($line, '"' . $identifier . '"') === false &&
-                        strpos($line, "'" . $identifier . "'") === false) {
-                        $errors[] = [
-                            'type' => 'semantic',
-                            'message' => "Undeclared identifier: $identifier",
-                            'line' => $lineNum + 1,
-                            'severity' => 'warning'
-                        ];
-                    }
-                }
-            }
-        }
-    }
-    
-    return [
-        'symbol_table' => $symbol_table,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-function simulateIR($code) {
-    $ir = [];
-    $errors = [];
-    
-    $lines = explode("\n", $code);
-    
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if (empty($line) || strpos($line, '#') === 0 || strpos($line, '//') === 0) {
-            continue;
-        }
-        
-        if (preg_match('/int\s+(\w+)\s*=\s*(\d+)\s*;/', $line, $matches)) {
-            $ir[] = ['op' => 'store', 'dest' => $matches[1], 'value' => $matches[2]];
-        } elseif (preg_match('/int\s+(\w+)\s*=\s*(\w+)\s*\+\s*(\w+)\s*;/', $line, $matches)) {
-            $ir[] = ['op' => 'add', 'dest' => $matches[1], 'src1' => $matches[2], 'src2' => $matches[3]];
-        } elseif (preg_match('/printf\(".*%d.*",\s*(\w+)\)/', $line, $matches)) {
-            $ir[] = ['op' => 'print', 'value' => $matches[1]];
-        } elseif (preg_match('/return\s+(\d+)\s*;/', $line, $matches)) {
-            $ir[] = ['op' => 'ret', 'value' => $matches[1]];
-        }
-    }
-    
-    return [
-        'ir' => $ir,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-function simulateOptimization($code) {
-    $optimizations = [];
-    $errors = [];
-    
-    $optimizations[] = 'Constant folding';
-    $optimizations[] = 'Dead code elimination';
-    $optimizations[] = 'Loop invariant code motion';
-    $optimizations[] = 'Register allocation';
-    
-    return [
-        'optimizations' => $optimizations,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-function simulateAssembly($code) {
-    $assembly = [];
-    $errors = [];
-    
-    // Generate assembly based on code content
-    $assembly[] = '; Generated Assembly Code';
-    $assembly[] = '; From: ' . substr($code, 0, 50) . '...';
-    $assembly[] = '';
-    
-    $assembly[] = '.section .text';
-    $assembly[] = '.global main';
-    $assembly[] = '';
-    $assembly[] = 'main:';
-    $assembly[] = '    push   %rbp';
-    $assembly[] = '    mov    %rsp, %rbp';
-    $assembly[] = '';
-    
-    // Add some assembly based on code analysis
-    if (strpos($code, 'printf') !== false) {
-        $assembly[] = '    ; Printf implementation';
-        $assembly[] = '    lea    .LC0(%rip), %rdi';
-        $assembly[] = '    mov    $0, %eax';
-        $assembly[] = '    call   printf@PLT';
-        $assembly[] = '';
-    }
-    
-    if (strpos($code, 'int ') !== false && preg_match_all('/int\s+(\w+)\s*=\s*(\d+)/', $code, $matches)) {
-        $assembly[] = '    ; Variable declarations';
-        for ($i = 0; $i < count($matches[1]); $i++) {
-            $var = $matches[1][$i];
-            $val = $matches[2][$i];
-            $offset = ($i + 1) * 4;
-            $assembly[] = "    movl   \$$val, -{$offset}(%rbp)   ; $var = $val";
-        }
-        $assembly[] = '';
-    }
-    
-    if (strpos($code, '+') !== false && preg_match('/(\w+)\s*=\s*(\w+)\s*\+\s*(\w+)/', $code)) {
-        $assembly[] = '    ; Addition operation';
-        $assembly[] = '    mov    -4(%rbp), %eax';
-        $assembly[] = '    add    -8(%rbp), %eax';
-        $assembly[] = '    mov    %eax, -12(%rbp)';
-        $assembly[] = '';
-    }
-    
-    $assembly[] = '    mov    $0, %eax        ; return 0';
-    $assembly[] = '    pop    %rbp';
-    $assembly[] = '    ret';
-    $assembly[] = '';
-    
-    if (strpos($code, 'printf') !== false) {
-        $assembly[] = '.section .rodata';
-        $assembly[] = '.LC0:';
-        $assembly[] = '    .string "Result: %d\\n"';
-    }
-    
-    return [
-        'assembly' => $assembly,
-        'errors' => $errors,
-        'has_errors' => !empty($errors)
-    ];
-}
-
-// If we reach here and no API endpoint was called, output the HTML
+ini_set('error_log', 'hub_errors.log');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>3D C Compiler Visualizer - Final Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ CompilerHub | Advanced Compiler Visualization Platform</title>
+    
+    <!-- Three.js for 3D background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <!-- Three.js Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/effects/OutlineEffect.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS for scroll animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Typed.js for typing effect -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
     <style>
         * {
             margin: 0;
@@ -936,1912 +40,2615 @@ function simulateAssembly($code) {
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #00ff9d;
+            --primary-dark: #00d9a6;
+            --secondary: #6c63ff;
+            --accent: #ff2e63;
+            --dark: #0a192f;
+            --darker: #071121;
+            --light: #ccd6f6;
+            --gray: #8892b0;
+            --neon-glow: 0 0 20px var(--primary);
+            --neon-secondary: 0 0 15px var(--secondary);
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
-            color: #ccd6f6;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
         }
         
-        .header {
-            background: rgba(17, 34, 64, 0.95);
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            flex-wrap: wrap;
-            gap: 10px;
+        .tech-grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -3;
+            animation: gridMove 20s linear infinite;
         }
         
-        .header h1 {
-            color: #64ffda;
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            min-width: 250px;
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
         
-        .subtitle {
-            color: #8892b0;
-            font-size: 0.85rem;
-            font-weight: 400;
+        #canvas3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.4;
+        }
+        
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
         
         .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        .header {
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-container {
             display: flex;
-            flex-direction: column;
-            height: calc(100vh - 140px);
-            padding: 10px;
-            flex: 1;
-            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
         }
         
-        .main-content {
+        .logo {
             display: flex;
-            flex: 1;
-            gap: 10px;
-            overflow: hidden;
-            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            position: relative;
         }
         
-        @media (min-width: 992px) {
-            .main-content {
-                flex-direction: row;
-            }
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-size: 22px;
+            box-shadow: var(--neon-glow);
+            animation: pulseGlow 2s infinite;
         }
         
-        .panel {
-            background: rgba(17, 34, 64, 0.7);
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary); }
+            50% { box-shadow: 0 0 30px var(--primary), 0 0 40px var(--secondary); }
+        }
+        
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+        
+        .logo-badge {
+            position: absolute;
+            top: -8px;
+            right: -30px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
             border-radius: 10px;
-            padding: 15px;
-            border: 1px solid rgba(100, 255, 218, 0.1);
+            font-weight: 600;
+            transform: rotate(15deg);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::before {
+            content: '> ';
+            color: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+        
+        .github-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .github-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+        
+        .github-btn:hover::before {
+            left: 100%;
+        }
+        
+        .github-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 200px 0 150px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: -1;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+        }
+        
+        .hero-typed {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 40px;
+            min-height: 60px;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 80px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+            padding: 20px;
+            background: rgba(17, 34, 64, 0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            min-width: 180px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--neon-glow);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Animated Workflow Section */
+        .workflow-section {
+            padding: 150px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .workflow-container {
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            min-height: 300px;
-        }
-        
-        .controls-panel {
-            width: 100%;
-            max-width: 100%;
-            order: 1;
-        }
-        
-        @media (min-width: 992px) {
-            .controls-panel {
-                width: 400px;
-                min-width: 400px;
-                order: 1;
-            }
-        }
-        
-        .visualization-panel {
-            flex: 1;
-            order: 2;
-            min-height: 400px;
-        }
-        
-        .output-panel {
-            width: 100%;
-            max-width: 100%;
-            order: 3;
-        }
-        
-        @media (min-width: 992px) {
-            .output-panel {
-                width: 450px;
-                min-width: 450px;
-                order: 3;
-            }
-        }
-        
-        .panel-header {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
-            display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .panel-header h2 {
-            color: #64ffda;
+        .workflow-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
+        }
+        
+        .workflow-subtitle {
+            text-align: center;
+            color: var(--gray);
             font-size: 1.2rem;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            max-width: 700px;
+            margin: 0 auto 60px;
         }
         
-        .panel-header i {
-            color: #64ffda;
-            font-size: 1.1rem;
+        .workflow-stages {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            position: relative;
+            margin-bottom: 60px;
         }
         
-        /* Left Panel - Controls */
-        .controls-panel {
-            overflow-y: auto;
+        .workflow-stages::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            z-index: 1;
         }
         
-        .control-group {
-            margin-bottom: 15px;
+        .workflow-stage {
+            text-align: center;
+            position: relative;
+            z-index: 2;
         }
         
-        .control-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #64ffda;
-            font-weight: 500;
-            font-size: 0.9rem;
+        .stage-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--dark);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid var(--primary);
+            color: var(--primary);
+            font-size: 30px;
+            position: relative;
+            overflow: hidden;
         }
         
-        select, input[type="range"] {
+        .stage-icon::before {
+            content: '';
+            position: absolute;
             width: 100%;
-            padding: 8px 10px;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.1), transparent);
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stage-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stage-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Code Editor Demo */
+        .code-demo {
+            width: 100%;
             background: rgba(10, 25, 47, 0.8);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 6px;
-            color: #e6f1ff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .demo-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: all 0.3s;
         }
         
-        select:focus, input[type="range"]:focus {
-            outline: none;
-            border-color: #64ffda;
-            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1);
+        .control-btn:hover {
+            background: rgba(0, 255, 157, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.2);
         }
         
-        select option {
-            background: #112240;
-            color: #e6f1ff;
+        .code-container {
+            padding: 30px;
+            position: relative;
+            min-height: 400px;
         }
         
-        .checkbox-group {
+        .code-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--light);
+            white-space: pre;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            min-height: 300px;
+        }
+        
+        .code-line {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .code-line .token.keyword { color: #ff6b6b; }
+        .code-line .token.type { color: #64ffda; }
+        .code-line .token.string { color: #feca57; }
+        .code-line .token.comment { color: #8892b0; }
+        .code-line .token.function { color: #6c63ff; }
+        .code-line .token.number { color: #00d9a6; }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: var(--primary);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .compile-btn-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .compile-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 15px 40px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .compile-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow);
+        }
+        
+        .compile-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Visualization Demo */
+        .visualization-demo {
+            width: 100%;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .viz-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Languages Grid */
+        .languages-section {
+            padding: 150px 0;
+            position: relative;
+        }
+        
+        .languages-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(108, 99, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 80px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+        
+        .language-card {
+            background: linear-gradient(145deg, rgba(17, 34, 64, 0.8), rgba(10, 25, 47, 0.8));
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            backdrop-filter: blur(10px);
+            height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 12px;
+            position: relative;
+            z-index: 1;
         }
         
-        .checkbox-group label {
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.05), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .language-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), var(--neon-glow);
+            border-color: var(--primary);
+        }
+        
+        .language-card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-header {
+            padding: 30px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            color: #8892b0;
-            font-weight: 400;
-            transition: color 0.3s;
+            gap: 20px;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            position: relative;
+            overflow: hidden;
         }
         
-        .checkbox-group label:hover {
-            color: #e6f1ff;
-        }
-        
-        .button-group {
+        .language-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
             display: flex;
-            gap: 10px;
-            margin-top: 12px;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .language-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            filter: blur(10px);
+            opacity: 0.6;
+            z-index: -1;
+        }
+        
+        .language-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .language-status {
+            margin-left: auto;
+            padding: 5px 15px;
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .card-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .language-description {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+        
+        .language-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .language-link {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .language-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow);
+        }
+        
+        /* Features Visualization */
+        .features-visualization {
+            padding: 150px 0;
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.9), rgba(17, 34, 64, 0.9));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .features-visualization::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            transition: all 0.4s;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--neon-glow);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 35px;
+            color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--light);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .feature-description {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 150px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+        }
+        
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 60px;
+            line-height: 1.8;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
             flex-wrap: wrap;
         }
         
         .btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #64ffda, #00d9a6);
-            color: #0a192f;
+            padding: 18px 35px;
+            border-radius: 12px;
+            text-decoration: none;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
-            min-width: 120px;
+            gap: 12px;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+        }
+        
+        .btn-secondary {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+            transform: translateY(-5px);
+            box-shadow: var(--neon-glow);
         }
         
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn.secondary {
-            background: linear-gradient(135deg, #8892b0, #a8b2d1);
-            color: #0a192f;
-        }
-        
-        .btn.danger {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            color: white;
-        }
-        
-        /* Center Panel - Visualization */
-        .visualization-panel {
+        /* Footer */
+        .footer {
+            background: rgba(10, 25, 47, 0.98);
+            padding: 80px 0 40px;
+            border-top: 1px solid rgba(0, 255, 157, 0.1);
             position: relative;
-        }
-        
-        #visualization-canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 6px;
-        }
-        
-        .visualization-controls {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-        
-        .icon-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(10, 25, 47, 0.8);
-            border: 1px solid rgba(100, 255, 218, 0.3);
-            color: #64ffda;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-        
-        .icon-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-            transform: scale(1.1);
-        }
-        
-        /* Right Panel - Output */
-        .output-panel {
-            overflow-y: auto;
-        }
-        
-        .status-bar {
-            margin-top: auto;
-            padding: 12px;
-            background: rgba(10, 25, 47, 0.8);
-            border-radius: 6px;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-        }
-        
-        #status-message {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .progress-bar {
-            height: 5px;
-            background: rgba(136, 146, 176, 0.2);
-            border-radius: 3px;
             overflow: hidden;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #64ffda, #00d9a6);
-            width: 0%;
-            transition: width 0.5s;
-        }
-        
-        .error-indicator {
-            background: linear-gradient(90deg, #ff6b6b, #ff4757);
-        }
-        
-        .code-editor {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin-top: 15px;
-        }
-        
-        .code-editor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .code-editor-header h3 {
-            color: #64ffda;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        textarea {
-            flex: 1;
-            background: #0a192f;
-            color: #e6f1ff;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 6px;
-            padding: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            line-height: 1.5;
-            resize: none;
-            white-space: pre;
-            overflow: auto;
-            tab-size: 4;
-            transition: border 0.3s;
-            min-height: 200px;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #64ffda;
-        }
-        
-        /* Output Tabs */
-        .output-tabs {
-            display: flex;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        
-        .output-tab {
-            padding: 8px 12px;
-            background: none;
-            border: none;
-            color: #8892b0;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-        
-        .output-tab:hover {
-            color: #e6f1ff;
-        }
-        
-        .output-tab.active {
-            color: #64ffda;
-            border-bottom-color: #64ffda;
-        }
-        
-        .output-tab.error {
-            color: #ff6b6b;
-        }
-        
-        .output-content {
-            flex: 1;
-            background: #0a192f;
-            border-radius: 6px;
-            padding: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-y: auto;
-            display: none;
-            max-height: 300px;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-        }
-        
-        .output-content.active {
-            display: block;
-        }
-        
-        .stage-info {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(10, 25, 47, 0.8);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            line-height: 1.5;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-        }
-        
-        .error-section {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 107, 107, 0.1);
-            border-radius: 6px;
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-        }
-        
-        .error-item {
-            padding: 10px;
-            margin-bottom: 8px;
-            background: rgba(255, 107, 107, 0.2);
-            border-radius: 5px;
-            border-left: 4px solid #ff6b6b;
-            font-size: 0.85rem;
-        }
-        
-        .error-warning {
-            border-left-color: #ffa502;
-        }
-        
-        .stage-status {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        
-        .status-completed {
-            background: rgba(100, 255, 218, 0.2);
-            color: #64ffda;
-        }
-        
-        .status-failed {
-            background: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-        
-        .status-pending {
-            background: rgba(136, 146, 176, 0.2);
-            color: #8892b0;
-        }
-        
-        .tooltip {
+        .footer::before {
+            content: '';
             position: absolute;
-            background: rgba(10, 25, 47, 0.95);
-            color: #e6f1ff;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #64ffda;
-            pointer-events: none;
-            z-index: 1000;
-            max-width: 250px;
-            font-size: 0.8rem;
-            display: none;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-        }
-        
-        .footer {
-            background: rgba(17, 34, 64, 0.95);
-            padding: 12px 15px;
-            border-top: 1px solid rgba(100, 255, 218, 0.1);
-            backdrop-filter: blur(10px);
-            flex-shrink: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 20px var(--primary);
         }
         
         .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-column h3 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-links a::before {
+            content: '▸';
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0, 255, 157, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
         }
         
         .authors {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 15px;
-            justify-content: center;
-        }
-        
-        .author {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #64ffda;
-            font-size: 0.9rem;
-        }
-        
-        .course-info {
-            color: #8892b0;
-            font-size: 0.85rem;
-            text-align: center;
-            flex: 1;
-        }
-        
-        .university {
-            color: #64ffda;
+            color: var(--primary);
             font-weight: 600;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
         }
         
-        .github-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #64ffda;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-            white-space: nowrap;
+        /* Language-specific colors */
+        .java { background: linear-gradient(135deg, #007396, #f89820); }
+        .cplusplus { background: linear-gradient(135deg, #00599C, #004482); }
+        .c { background: linear-gradient(135deg, #A8B9CC, #555555); }
+        .swift { background: linear-gradient(135deg, #FA7343, #F05138); }
+        .brainfuck { background: linear-gradient(135deg, #2C3E50, #34495E); }
+        .go { background: linear-gradient(135deg, #00ADD8, #00B4A0); }
+        
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
         }
         
-        .github-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-        
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(10, 25, 47, 0.5);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(100, 255, 218, 0.3);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(100, 255, 218, 0.5);
-        }
-        
-        /* Mobile-specific styles */
-        @media (max-width: 991px) {
-            .container {
-                height: auto;
-                min-height: calc(100vh - 140px);
-                overflow-y: auto;
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 3.5rem;
             }
             
-            .main-content {
+            .section-title {
+                font-size: 3rem;
+            }
+            
+            .languages-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .nav-links, .github-btn {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 180px 0 100px;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .workflow-stages {
+                flex-wrap: wrap;
+                gap: 40px;
+                justify-content: center;
+            }
+            
+            .workflow-stages::before {
+                display: none;
+            }
+            
+            .cta-title {
+                font-size: 3rem;
+            }
+            
+            .cta-buttons {
                 flex-direction: column;
-                height: auto;
+                align-items: center;
             }
             
-            .panel {
-                min-height: 300px;
-                max-height: none;
-            }
-            
-            .visualization-panel {
-                height: 400px;
-                min-height: 400px;
-            }
-            
-            .controls-panel, .output-panel {
-                min-height: 400px;
-            }
-            
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            
-            .header {
-                padding: 10px;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            
-            .authors {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .course-info {
-                order: -1;
+            .btn {
                 width: 100%;
-            }
-            
-            .github-link {
-                order: 2;
+                max-width: 350px;
+                justify-content: center;
             }
         }
         
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.2rem;
+            .hero-title {
+                font-size: 2.5rem;
             }
             
-            .subtitle {
-                font-size: 0.8rem;
-            }
-            
-            .panel {
-                padding: 12px;
-            }
-            
-            .panel-header h2 {
+            .hero-subtitle {
                 font-size: 1.1rem;
             }
             
-            .btn {
-                padding: 8px;
-                font-size: 0.85rem;
-                min-width: 100px;
+            .stat-item {
+                min-width: 150px;
+                padding: 15px;
             }
             
-            .output-tab {
-                padding: 6px 10px;
-                font-size: 0.8rem;
+            .stat-number {
+                font-size: 2.5rem;
             }
             
-            .footer {
-                padding: 10px;
+            .languages-grid {
+                grid-template-columns: 1fr;
             }
             
-            .author, .course-info, .github-link {
-                font-size: 0.8rem;
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
             }
         }
         
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.1rem;
-                min-width: auto;
+            .hero-title {
+                font-size: 2.2rem;
             }
             
-            .subtitle {
-                font-size: 0.75rem;
+            .stat-item {
+                min-width: 100%;
             }
             
-            .container {
-                padding: 8px;
+            .code-display {
+                font-size: 12px;
+                padding: 15px;
             }
             
-            .panel {
-                padding: 10px;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                min-width: auto;
-            }
-            
-            .output-tabs {
-                justify-content: center;
-            }
-            
-            .output-tab {
-                padding: 5px 8px;
-                font-size: 0.75rem;
-            }
-            
-            .visualization-panel {
-                height: 350px;
-                min-height: 350px;
+            .language-card {
+                margin: 0 10px;
             }
         }
         
-        /* Mobile menu toggle for output panels */
-        .mobile-menu-toggle {
-            display: none;
-            background: rgba(100, 255, 218, 0.1);
-            border: 1px solid rgba(100, 255, 218, 0.3);
-            color: #64ffda;
-            padding: 8px 12px;
-            border-radius: 5px;
+        /* Scroll animations */
+        [data-aos] {
+            pointer-events: none;
+        }
+        
+        .aos-animate {
+            pointer-events: auto;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 25, 47, 0.8);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid var(--dark);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+        }
+        
+        /* Mobile menu */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1001;
+            transition: right 0.3s;
+            padding: 100px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            border-left: 1px solid rgba(0, 255, 157, 0.1);
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
             cursor: pointer;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
         }
         
-        @media (max-width: 991px) {
-            .mobile-menu-toggle {
-                display: flex;
-            }
-            
-            .output-panel {
-                max-height: 500px;
-                transition: max-height 0.3s ease;
-            }
-            
-            .output-panel.collapsed {
-                max-height: 50px;
-                overflow: hidden;
-            }
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
         
-        .info-badge {
+        .mobile-nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+            display: block;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        /* Terminal-style typing cursor */
+        .typing-cursor {
             display: inline-block;
-            padding: 3px 6px;
-            background: rgba(100, 255, 218, 0.1);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #64ffda;
-            margin-left: 8px;
+            width: 3px;
+            height: 1em;
+            background-color: var(--primary);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary);
+            pointer-events: none;
+        }
+        
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(40px, 9999px, 86px, 0); }
+            95% { clip: rect(45px, 9999px, 72px, 0); }
+            100% { clip: rect(23px, 9999px, 49px, 0); }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div>
-            <h1><i class="fas fa-cogs"></i> 3D C Compiler Visualizer</h1>
-            <div class="subtitle">Interactive Visualization of Compiler Pipeline Stages</div>
-        </div>
-        <div class="course-info">
-            <span class="university">COMPUTER SCIENCE FINAL PROJECT</span>
-        </div>
+    <!-- Tech Grid Background -->
+    <div class="tech-grid"></div>
+    
+    <!-- 3D Background Canvas -->
+    <div id="canvas3d"></div>
+    
+    <!-- Particles Container -->
+    <div class="particles-container" id="particlesContainer"></div>
+    
+    <!-- Overlay for mobile menu -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" id="mobileNavClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="mobile-nav-links">
+            <li><a href="#workflow">Live Workflow</a></li>
+            <li><a href="#languages">Languages</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#cta">Get Started</a></li>
+        </ul>
+        <a href="https://github.com/Agabaofficial/compiler-visualizer-hub" class="github-btn" target="_blank">
+            <i class="fab fa-github"></i> Source Code
+        </a>
     </div>
     
-    <div class="container">
-        <div class="main-content">
-            <!-- Left Panel - Controls -->
-            <div class="panel controls-panel">
-                <div class="panel-header">
-                    <i class="fas fa-sliders-h"></i>
-                    <h2>Compilation Controls</h2>
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-bolt"></i>
                 </div>
-                
-                <div class="control-group">
-                    <label for="view-mode"><i class="fas fa-eye"></i> View Mode:</label>
-                    <select id="view-mode">
-                        <option value="pipeline">Pipeline View</option>
-                        <option value="ast">AST View</option>
-                        <option value="cfg">Control Flow Graph</option>
-                        <option value="memory">Memory Layout</option>
-                    </select>
-                </div>
-                
-                <div class="control-group">
-                    <label for="stage-select"><i class="fas fa-code-branch"></i> Pipeline Stage:</label>
-                    <select id="stage-select">
-                        <option value="all">All Stages</option>
-                        <option value="lexical">Lexical Analysis</option>
-                        <option value="syntax">Syntax Analysis</option>
-                        <option value="semantic">Semantic Analysis</option>
-                        <option value="ir">IR Generation</option>
-                        <option value="optimization">Optimization</option>
-                        <option value="codegen">Code Generation</option>
-                    </select>
-                </div>
-                
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="auto-rotate" checked>
-                        <i class="fas fa-sync-alt"></i> Auto Rotate
-                    </label>
-                    <label>
-                        <input type="checkbox" id="show-labels" checked>
-                        <i class="fas fa-tag"></i> Show Labels
-                    </label>
-                    <label>
-                        <input type="checkbox" id="show-errors" checked>
-                        <i class="fas fa-exclamation-triangle"></i> Highlight Errors
-                    </label>
-                </div>
-                
-                <div class="button-group">
-                    <button id="reset-view" class="btn">
-                        <i class="fas fa-undo"></i> Reset View
-                    </button>
-                    <button id="screenshot" class="btn secondary">
-                        <i class="fas fa-camera"></i> Screenshot
-                    </button>
-                </div>
-                
-                <div class="panel-header" style="margin-top: 20px;">
-                    <i class="fas fa-code"></i>
-                    <h2>Source Code Editor</h2>
-                </div>
-                
-                <div class="code-editor">
-                    <div class="code-editor-header">
-                        <h3><i class="fas fa-file-code"></i> C Source Code</h3>
-                        <select id="example-select" style="padding: 6px 10px; background: rgba(10,25,47,0.8); color: #e6f1ff; border-radius: 5px; border: 1px solid rgba(100,255,218,0.2); font-size: 0.85rem;">
-                            <option value="">Load Example...</option>
-                            <option value="simple">Simple Program</option>
-                            <option value="conditional">Conditional Logic</option>
-                            <option value="loop">Loop Example</option>
-                            <option value="function">Function Example</option>
-                        </select>
-                    </div>
-                    <textarea id="source-code" spellcheck="false">#include <stdio.h>
-
-int main() {
-    int x = 10;
-    int y = 20;
-    int result = x + y;
-    
-    printf("Result: %d\n", result);
-    
-    for (int i = 0; i < 5; i++) {
-        printf("Iteration %d\n", i);
-    }
-    
-    return 0;
-}</textarea>
-                    
-                    <div class="button-group" style="margin-top: 15px;">
-                        <button id="compile-btn" class="btn">
-                            <i class="fas fa-play"></i> Compile & Visualize
-                        </button>
-                        <button id="reset-btn" class="btn danger">
-                            <i class="fas fa-trash"></i> Reset
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="status-bar">
-                    <div id="status-message">
-                        <i class="fas fa-info-circle"></i> Ready to compile
-                    </div>
-                    <div class="progress-bar">
-                        <div id="progress-bar" class="progress-fill"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Center Panel - Visualization -->
-            <div class="panel visualization-panel">
-                <div id="visualization-canvas"></div>
-                <div class="visualization-controls">
-                    <button id="zoom-in" class="icon-btn" title="Zoom In">
-                        <i class="fas fa-search-plus"></i>
-                    </button>
-                    <button id="zoom-out" class="icon-btn" title="Zoom Out">
-                        <i class="fas fa-search-minus"></i>
-                    </button>
-                    <button id="reset-camera" class="icon-btn" title="Reset Camera">
-                        <i class="fas fa-crosshairs"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Right Panel - Output -->
-            <div class="panel output-panel" id="output-panel">
-                <button class="mobile-menu-toggle" id="output-toggle">
-                    <i class="fas fa-chevron-down"></i>
-                    <span>Output Panel</span>
-                </button>
-                
-                <div class="panel-header">
-                    <i class="fas fa-terminal"></i>
-                    <h2>Compilation Output</h2>
-                </div>
-                
-                <!-- Output tabs -->
-                <div class="output-tabs">
-                    <button class="output-tab active" data-output="tokens">
-                        <i class="fas fa-key"></i> <span class="tab-text">Tokens</span>
-                    </button>
-                    <button class="output-tab" data-output="ast">
-                        <i class="fas fa-project-diagram"></i> <span class="tab-text">AST</span>
-                    </button>
-                    <button class="output-tab" data-output="ir">
-                        <i class="fas fa-microchip"></i> <span class="tab-text">IR Code</span>
-                    </button>
-                    <button class="output-tab" data-output="asm">
-                        <i class="fas fa-microchip"></i> <span class="tab-text">Assembly</span>
-                    </button>
-                    <button class="output-tab" data-output="errors" id="errors-tab" style="display: none;">
-                        <i class="fas fa-exclamation-circle"></i> <span class="tab-text">Errors</span>
-                    </button>
-                </div>
-                
-                <!-- Output content areas -->
-                <div id="tokens-output" class="output-content active"></div>
-                <div id="ast-output" class="output-content"></div>
-                <div id="ir-output" class="output-content"></div>
-                <div id="asm-output" class="output-content"></div>
-                <div id="errors-output" class="output-content"></div>
-                
-                <div class="panel-header" style="margin-top: 20px;">
-                    <i class="fas fa-info-circle"></i>
-                    <h2>Stage Information</h2>
-                </div>
-                
-                <div id="stage-info" class="stage-info">
-                    <p><i class="fas fa-mouse-pointer"></i> Select a compilation stage or node to view details</p>
-                    <div style="margin-top: 12px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 5px; border: 1px dashed rgba(100,255,218,0.2);">
-                        <p style="color: #64ffda; margin-bottom: 6px; font-size: 0.9rem;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
-                        <p style="font-size: 0.8rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
-                    </div>
-                </div>
-                
-                <div id="error-section" class="error-section" style="display: none;">
-                    <h4><i class="fas fa-exclamation-triangle"></i> Errors Detected:</h4>
-                    <div id="error-list"></div>
-                </div>
-                
-                <div class="panel-header" style="margin-top: 20px;">
-                    <i class="fas fa-download"></i>
-                    <h2>Export Results</h2>
-                </div>
-                
-                <div class="button-group">
-                    <button id="download-ast" class="btn secondary">
-                        <i class="fas fa-download"></i> <span class="btn-text">AST (JSON)</span>
-                    </button>
-                    <button id="download-asm" class="btn secondary">
-                        <i class="fas fa-download"></i> <span class="btn-text">Assembly</span>
-                    </button>
-                    <button id="download-source" class="btn secondary">
-                        <i class="fas fa-download"></i> <span class="btn-text">Source Code</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <div class="footer-content">
-            <div class="course-info">
-                <span>Final Year Project - Computer Science Department | Compiler Design & 3D Visualization System</span>
-            </div>
-            <div class="authors">
-                <div class="author">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>AGABA OLIVIER</span>
-                </div>
-                <div class="author">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>IRADI ARINDA</span>
-                </div>
-            </div>
-            <a href="https://github.com/Agabaofficial/c-compiler-3d-visualizer" target="_blank" class="github-link">
-                <i class="fab fa-github"></i> View on GitHub
+                <div class="logo-text">CompilerHub</div>
+                <div class="logo-badge">v2.0</div>
             </a>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#workflow">Live Workflow</a></li>
+                    <li><a href="#languages">Languages</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#cta">Get Started</a></li>
+                </ul>
+            </nav>
+            
+            <a href="https://github.com/Agabaofficial/compiler-visualizer-hub" class="github-btn" target="_blank">
+                <i class="fab fa-github"></i> <span class="github-text">View Code</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </div>
+    </header>
     
-    <div id="tooltip" class="tooltip"></div>
-
-    <script>
-        class CompilerVisualizer3D {
-            constructor() {
-                this.sessionId = null;
-                this.currentView = 'pipeline';
-                this.currentStage = 'all';
-                this.autoRotate = true;
-                this.showLabels = true;
-                this.showErrors = true;
-                this.scene = null;
-                this.camera = null;
-                this.renderer = null;
-                this.controls = null;
-                this.objects = [];
-                this.animationId = null;
-                this.totalErrors = 0;
-                this.labels = [];
-                this.isMobile = window.innerWidth < 992;
-                
-                this.init();
-                this.bindEvents();
-                this.animate();
-                
-                // Handle mobile responsiveness
-                window.addEventListener('resize', () => this.handleResize());
-            }
+    <!-- Hero Section -->
+    <section class="hero" data-aos="fade-up">
+        <div class="container">
+            <h1 class="hero-title glitch" data-text="COMPILER VISUALIZER HUB">
+                <span>COMPILER VISUALIZER HUB</span>
+            </h1>
+            <p class="hero-subtitle">
+                Advanced 3D visualization platform for understanding compiler internals across multiple programming languages.
+                Real-time pipeline simulation with interactive node exploration.
+            </p>
             
-            init() {
-                const container = document.getElementById('visualization-canvas');
-                
-                // Scene
-                this.scene = new THREE.Scene();
-                this.scene.background = new THREE.Color(0x0a192f);
-                
-                // Camera
-                this.camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-                this.camera.position.set(0, 30, 50);
-                
-                // Renderer
-                this.renderer = new THREE.WebGLRenderer({ antialias: true });
-                this.renderer.setSize(container.clientWidth, container.clientHeight);
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                container.appendChild(this.renderer.domElement);
-                
-                // Controls
-                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-                this.controls.enableDamping = true;
-                this.controls.dampingFactor = 0.05;
-                this.controls.minDistance = 10;
-                this.controls.maxDistance = 200;
-                
-                // Lights
-                const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-                this.scene.add(ambientLight);
-                
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(20, 40, 30);
-                directionalLight.castShadow = true;
-                directionalLight.shadow.mapSize.width = 1024;
-                directionalLight.shadow.mapSize.height = 1024;
-                this.scene.add(directionalLight);
-                
-                // Grid
-                const gridHelper = new THREE.GridHelper(100, 20, 0x112240, 0x0a192f);
-                gridHelper.position.y = -5;
-                this.scene.add(gridHelper);
-                
-                // Setup raycasting for tooltips
-                this.raycaster = new THREE.Raycaster();
-                this.mouse = new THREE.Vector2();
-                container.addEventListener('mousemove', (e) => this.onMouseMove(e));
-            }
+            <div class="hero-typed" id="typed-text"></div>
             
-            bindEvents() {
-                // Buttons
-                document.getElementById('compile-btn').addEventListener('click', () => this.compile());
-                document.getElementById('reset-btn').addEventListener('click', () => this.reset());
-                document.getElementById('reset-view').addEventListener('click', () => this.resetView());
-                document.getElementById('reset-camera').addEventListener('click', () => this.resetView());
-                document.getElementById('screenshot').addEventListener('click', () => this.takeScreenshot());
-                document.getElementById('zoom-in').addEventListener('click', () => this.zoom(1.2));
-                document.getElementById('zoom-out').addEventListener('click', () => this.zoom(0.8));
-                document.getElementById('output-toggle').addEventListener('click', () => this.toggleOutputPanel());
-                
-                // Controls
-                document.getElementById('view-mode').addEventListener('change', (e) => {
-                    this.currentView = e.target.value;
-                    if (this.sessionId) this.visualize();
-                });
-                
-                document.getElementById('stage-select').addEventListener('change', (e) => {
-                    this.currentStage = e.target.value;
-                    if (this.sessionId) this.visualize();
-                });
-                
-                document.getElementById('auto-rotate').addEventListener('change', (e) => {
-                    this.autoRotate = e.target.checked;
-                });
-                
-                document.getElementById('show-labels').addEventListener('change', (e) => {
-                    this.showLabels = e.target.checked;
-                    this.toggleLabels();
-                });
-                
-                document.getElementById('show-errors').addEventListener('change', (e) => {
-                    this.showErrors = e.target.checked;
-                    if (this.sessionId) this.visualize();
-                });
-                
-                document.getElementById('example-select').addEventListener('change', (e) => {
-                    this.loadExample(e.target.value);
-                });
-                
-                // Output tabs
-                document.querySelectorAll('.output-tab').forEach(tab => {
-                    tab.addEventListener('click', (e) => {
-                        const outputType = e.target.dataset.output || e.target.closest('.output-tab').dataset.output;
-                        this.showOutput(outputType);
-                    });
-                });
-                
-                // Download buttons
-                document.getElementById('download-ast').addEventListener('click', () => this.download('ast'));
-                document.getElementById('download-asm').addEventListener('click', () => this.download('asm'));
-                document.getElementById('download-source').addEventListener('click', () => this.download('source'));
-            }
+            <div class="hero-stats">
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                    <span class="stat-number" id="statLanguages">6</span>
+                    <span class="stat-label">Programming Languages</span>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                    <span class="stat-number" id="statVisualizations">24+</span>
+                    <span class="stat-label">Visualization Modes</span>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                    <span class="stat-number" id="statUsers">1.2k+</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Animated Workflow Section -->
+    <section id="workflow" class="workflow-section">
+        <div class="container">
+            <h2 class="workflow-title" data-aos="fade-up">Live Compilation Workflow</h2>
+            <p class="workflow-subtitle" data-aos="fade-up" data-aos-delay="100">
+                Watch a C program go through the entire compilation pipeline in real-time. 
+                From source code to executable, visualized step by step.
+            </p>
             
-            toggleOutputPanel() {
-                const outputPanel = document.getElementById('output-panel');
-                const toggleIcon = document.querySelector('#output-toggle i');
-                const toggleText = document.querySelector('#output-toggle span');
+            <div class="workflow-stages" data-aos="fade-up" data-aos-delay="200">
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <h3 class="stage-title">Source Code</h3>
+                    <p class="stage-desc">Typing...</p>
+                </div>
                 
-                if (outputPanel.classList.contains('collapsed')) {
-                    outputPanel.classList.remove('collapsed');
-                    toggleIcon.className = 'fas fa-chevron-down';
-                    toggleText.textContent = 'Output Panel';
-                } else {
-                    outputPanel.classList.add('collapsed');
-                    toggleIcon.className = 'fas fa-chevron-up';
-                    toggleText.textContent = 'Output Panel';
-                }
-            }
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="stage-title">Lexical Analysis</h3>
+                    <p class="stage-desc">Tokenizing...</p>
+                </div>
+                
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3 class="stage-title">Syntax Analysis</h3>
+                    <p class="stage-desc">Building AST...</p>
+                </div>
+                
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="stage-title">Semantic Analysis</h3>
+                    <p class="stage-desc">Type checking...</p>
+                </div>
+                
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="stage-title">Code Generation</h3>
+                    <p class="stage-desc">Generating IR...</p>
+                </div>
+                
+                <div class="workflow-stage">
+                    <div class="stage-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <h3 class="stage-title">Assembly</h3>
+                    <p class="stage-desc">Final output...</p>
+                </div>
+            </div>
             
-            async compile() {
-                const sourceCode = document.getElementById('source-code').value;
+            <div class="workflow-container">
+                <!-- Code Editor Demo -->
+                <div class="code-demo" id="codeDemo" data-aos="fade-up" data-aos-delay="300">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <i class="fas fa-code"></i> main.c
+                        </div>
+                        <div class="demo-controls">
+                            <button class="control-btn" id="playBtn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="control-btn" id="resetBtn">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="control-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="code-container">
+                        <div class="code-display" id="codeDisplay">
+                            <div class="code-line"><span class="token comment">// C Program to Demonstrate Compilation Pipeline</span></div>
+                            <div class="code-line"><span class="token comment">// Type: int main() {</span></div>
+                            <div class="code-line"><span class="token keyword">int</span> <span class="token function">main</span>() {</div>
+                            <div class="code-line">    <span class="token keyword">int</span> a = <span class="token number">10</span>;</div>
+                            <div class="code-line">    <span class="token keyword">int</span> b = <span class="token number">20</span>;</div>
+                            <div class="code-line">    <span class="token keyword">int</span> sum = a + b;</div>
+                            <div class="code-line">    </div>
+                            <div class="code-line">    <span class="token keyword">if</span> (sum > <span class="token number">25</span>) {</div>
+                            <div class="code-line">        <span class="token function">printf</span>(<span class="token string">"Sum is greater than 25\n"</span>);</div>
+                            <div class="code-line">    } <span class="token keyword">else</span> {</div>
+                            <div class="code-line">        <span class="token function">printf</span>(<span class="token string">"Sum is 25 or less\n"</span>);</div>
+                            <div class="code-line">    }</div>
+                            <div class="code-line">    </div>
+                            <div class="code-line">    <span class="token keyword">return</span> <span class="token number">0</span>;</div>
+                            <div class="code-line">}</div>
+                        </div>
+                        
+                        <div class="compile-btn-container">
+                            <button class="compile-btn" id="compileBtn">
+                                <i class="fas fa-play-circle"></i> Compile & Visualize
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
-                if (!sourceCode.trim()) {
-                    this.showStatus('Please enter source code', 'error');
-                    return;
-                }
-                
-                this.showStatus('Compiling...', 'info');
-                this.updateProgress(10);
-                
-                try {
-                    const response = await fetch('?api=compile', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ source_code: sourceCode })
-                    });
-                    
-                    // Check if response is OK
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const text = await response.text();
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                    } catch (parseError) {
-                        console.error('Failed to parse JSON:', text);
-                        throw new Error('Invalid JSON response from server');
-                    }
-                    
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    this.sessionId = data.session_id;
-                    this.totalErrors = data.errors?.length || 0;
-                    this.updateProgress(50);
-                    
-                    // Update all output displays
-                    this.updateOutputs(data);
-                    
-                    // Show appropriate output tab
-                    if (this.totalErrors > 0) {
-                        this.showOutput('errors');
-                        document.getElementById('errors-tab').style.display = 'flex';
-                    } else {
-                        this.showOutput('tokens');
-                    }
-                    
-                    // Visualize
-                    await this.visualize();
-                    
-                    this.updateProgress(100);
-                    this.showStatus(
-                        data.success ? 'Compilation successful!' : 'Compilation completed with warnings',
-                        data.success ? 'success' : 'warning'
-                    );
-                    
-                } catch (error) {
-                    this.showStatus('Error: ' + error.message, 'error');
-                    this.updateProgress(0);
-                    console.error('Compilation error:', error);
-                }
-            }
+                <!-- Visualization Demo -->
+                <div class="visualization-demo" id="vizDemo" data-aos="fade-up" data-aos-delay="400">
+                    <canvas class="viz-canvas" id="workflowCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Languages Section -->
+    <section id="languages" class="languages-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Supported Languages</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                Explore compiler internals across diverse programming paradigms. 
+                Each language features unique visualization modes and pipeline stages.
+            </p>
             
-            // Update all outputs
-            updateOutputs(data) {
-                // Tokens output
-                if (data.outputs && data.outputs.tokens) {
-                    const tokensText = data.outputs.tokens.map(t => 
-                        `Line ${t.line}: ${t.type.padEnd(15)} = "${t.value}"`
-                    ).join('\n');
-                    document.getElementById('tokens-output').textContent = tokensText;
-                }
-                
-                // AST output
-                if (data.outputs && data.outputs.ast) {
-                    document.getElementById('ast-output').textContent = 
-                        JSON.stringify(data.outputs.ast, null, 2);
-                }
-                
-                // IR output
-                if (data.outputs && data.outputs.ir) {
-                    const irText = data.outputs.ir.map((instr, idx) => {
-                        const parts = [];
-                        for (const [key, value] of Object.entries(instr)) {
-                            if (key !== 'op') {
-                                parts.push(`${key}: ${value}`);
-                            }
-                        }
-                        return `${idx.toString().padStart(3)}: ${instr.op.padEnd(8)}` + 
-                               (parts.length ? ' [' + parts.join(', ') + ']' : '');
-                    }).join('\n');
-                    document.getElementById('ir-output').textContent = irText;
-                }
-                
-                // Assembly output
-                if (data.outputs && data.outputs.asm) {
-                    document.getElementById('asm-output').textContent = 
-                        Array.isArray(data.outputs.asm) ? data.outputs.asm.join('\n') : data.outputs.asm;
-                }
-                
-                // Errors output
-                if (data.errors && data.errors.length > 0) {
-                    const errorsText = data.errors.map((err, idx) => 
-                        `${idx + 1}. ${err.type || 'Error'}:\n   ${err.message}\n   Line: ${err.line || 'N/A'}\n`
-                    ).join('\n');
-                    document.getElementById('errors-output').textContent = errorsText;
-                    
-                    // Update error section
-                    let errorHtml = '';
-                    data.errors.forEach((error, index) => {
-                        const errorClass = error.severity === 'warning' ? 'error-warning' : '';
-                        const icon = error.severity === 'warning' ? 'fa-exclamation-triangle' : 'fa-times-circle';
-                        errorHtml += `<div class="error-item ${errorClass}">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
-                                <i class="fas ${icon}"></i>
-                                <strong>${error.type || 'Error'}:</strong> ${error.message}
+            <div class="languages-grid">
+                <!-- Java Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="card-header">
+                        <div class="language-icon java">
+                            <i class="fab fa-java"></i>
+                        </div>
+                        <h3 class="language-title">Java</h3>
+                        <div class="language-status">JVM</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Full JVM pipeline visualization including bytecode generation, 
+                            class loading, garbage collection, and JIT compilation. 
+                            Explore Java's write-once-run-anywhere architecture.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">8</span>
+                                <span class="stat-label">Stages</span>
                             </div>
-                            ${error.line ? `<div class="error-line" style="font-size: 0.85rem; color: #ffd166;">Line ${error.line}</div>` : ''}
-                        </div>`;
+                            <div class="stat">
+                                <span class="stat-value">3D</span>
+                                <span class="stat-label">JVM Heap</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Live</span>
+                                <span class="stat-label">GC View</span>
+                            </div>
+                        </div>
+                        
+                        <a href="java.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch Java Visualizer
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- C++ Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="150">
+                    <div class="card-header">
+                        <div class="language-icon cplusplus">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="language-title">C++</h3>
+                        <div class="language-status">Native</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Complex template instantiation, header processing, 
+                            and linker visualization. See how C++ compiles to 
+                            efficient native code with multiple compilation units.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">7</span>
+                                <span class="stat-label">Stages</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">ASM</span>
+                                <span class="stat-label">x86/ARM</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Templates</span>
+                                <span class="stat-label">Visual</span>
+                            </div>
+                        </div>
+                        
+                        <a href="c-plus.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch C++ Visualizer
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- C Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="card-header">
+                        <div class="language-icon c">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3 class="language-title">C</h3>
+                        <div class="language-status">System</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Direct compilation to assembly and machine code. 
+                            Memory layout visualization, pointer operations, 
+                            and preprocessor expansion. The foundation of systems programming.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">6</span>
+                                <span class="stat-label">Stages</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Low</span>
+                                <span class="stat-label">Level View</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Memory</span>
+                                <span class="stat-label">Layout</span>
+                            </div>
+                        </div>
+                        
+                        <a href="c.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch C Visualizer
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Swift Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="250">
+                    <div class="card-header">
+                        <div class="language-icon swift">
+                            <i class="fab fa-swift"></i>
+                        </div>
+                        <h3 class="language-title">Swift</h3>
+                        <div class="language-status">Modern</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Swift Intermediate Language (SIL) visualization, 
+                            ARC optimization, protocol witness tables, and 
+                            generic specialization. Experience modern language features.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">9</span>
+                                <span class="stat-label">Stages</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">SIL</span>
+                                <span class="stat-label">Visual</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">ARC</span>
+                                <span class="stat-label">Live</span>
+                            </div>
+                        </div>
+                        
+                        <a href="swift.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch Swift Visualizer
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Brainfuck Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="card-header">
+                        <div class="language-icon brainfuck">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="language-title">Brainfuck</h3>
+                        <div class="language-status">Esoteric</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Minimalist language with tape memory visualization. 
+                            Watch pointer movements, cell operations, and loop 
+                            execution in real-time. The ultimate simplicity test.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">3</span>
+                                <span class="stat-label">Stages</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Tape</span>
+                                <span class="stat-label">Memory</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">8</span>
+                                <span class="stat-label">Commands</span>
+                            </div>
+                        </div>
+                        
+                        <a href="brain-fuck.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch Brainfuck Visualizer
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Go Card -->
+                <div class="language-card" data-aos="zoom-in" data-aos-delay="350">
+                    <div class="card-header">
+                        <div class="language-icon go">
+                            <img src="https://raw.githubusercontent.com/golang-samples/gopher-vector/master/gopher.png" 
+                                 style="width: 32px; height: 32px; filter: brightness(0) invert(1);" 
+                                 alt="Go Gopher">
+                        </div>
+                        <h3 class="language-title">Go</h3>
+                        <div class="language-status">Concurrent</div>
+                    </div>
+                    <div class="card-body">
+                        <p class="language-description">
+                            Fast compilation pipeline, goroutine scheduling, 
+                            channel operations, and interface tables. Visualize 
+                            Go's unique concurrency model and efficient compilation.
+                        </p>
+                        
+                        <div class="language-stats">
+                            <div class="stat">
+                                <span class="stat-value">7</span>
+                                <span class="stat-label">Stages</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Goroutines</span>
+                                <span class="stat-label">Visual</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Fast</span>
+                                <span class="stat-label">Compile</span>
+                            </div>
+                        </div>
+                        
+                        <a href="go.php" class="language-link">
+                            <i class="fas fa-rocket"></i> Launch Go Visualizer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Visualization -->
+    <section id="features" class="features-visualization">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Advanced Features</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                Cutting-edge visualization tools powered by Three.js and modern web technologies
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3 class="feature-title">Interactive 3D</h3>
+                    <p class="feature-description">
+                        Rotate, zoom, and explore compiler internals in three dimensions with 
+                        real-time WebGL rendering powered by Three.js
+                    </p>
+                </div>
+                
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="150">
+                    <div class="feature-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="feature-title">Pipeline View</h3>
+                    <p class="feature-description">
+                        Step through compilation stages with detailed explanations. 
+                        Watch data flow between lexical, syntax, and semantic analysis
+                    </p>
+                </div>
+                
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3 class="feature-title">AST Explorer</h3>
+                    <p class="feature-description">
+                        Interactive Abstract Syntax Trees with node highlighting, 
+                        zoom, and expand/collapse. Visualize parse tree structures
+                    </p>
+                </div>
+                
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="250">
+                    <div class="feature-icon">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <h3 class="feature-title">Memory Models</h3>
+                    <p class="feature-description">
+                        JVM heap, C stack frames, Swift ARC, and Brainfuck tape 
+                        visualization. Watch memory allocation in real-time
+                    </p>
+                </div>
+                
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3 class="feature-title">Export System</h3>
+                    <p class="feature-description">
+                        Download generated ASTs, intermediate code, and 3D visualizations 
+                        for offline study, presentations, and academic research
+                    </p>
+                </div>
+                
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="350">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">Educational</h3>
+                    <p class="feature-description">
+                        Perfect for computer science education. Used by universities 
+                        worldwide for compiler design and programming language courses
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <div class="cta-container">
+                <h2 class="cta-title" data-aos="fade-up">Start Exploring Now</h2>
+                <p class="cta-subtitle" data-aos="fade-up" data-aos-delay="100">
+                    Whether you're a student learning compiler design, a developer optimizing code,
+                    or a researcher exploring language implementation, CompilerHub provides
+                    unparalleled insights into programming language internals.
+                </p>
+                
+                <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#languages" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Explore All Languages
+                    </a>
+                    <a href="https://github.com/Agabaofficial/compiler-visualizer-hub" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> View Source Code
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CompilerHub</h3>
+                    <p style="color: var(--gray); line-height: 1.8; margin-top: 15px;">
+                        Advanced compiler visualization platform for educational and research purposes.
+                        Interactive 3D visualizations of programming language compilation pipelines.
+                    </p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#workflow">Live Workflow</a></li>
+                        <li><a href="#languages">Languages</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#cta">Get Started</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Languages</h3>
+                    <ul class="footer-links">
+                        <li><a href="java.php">Java Visualizer</a></li>
+                        <li><a href="c-plus.php">C++ Visualizer</a></li>
+                        <li><a href="c.php">C Visualizer</a></li>
+                        <li><a href="swift.php">Swift Visualizer</a></li>
+                        <li><a href="brain-fuck.php">Brainfuck Visualizer</a></li>
+                        <li><a href="go.php">Go Visualizer</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/Agabaofficial" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a></li>
+                        <li><a href="mailto:contact@compilerhub.dev">
+                            <i class="fas fa-envelope"></i> Email
+                        </a></li>
+                        <li><a href="#">
+                            <i class="fas fa-book"></i> Documentation
+                        </a></li>
+                        <li><a href="#">
+                            <i class="fas fa-code-branch"></i> Contribute
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 CompilerHub Visualizer Platform. Final Year Project - Computer Science Department.</p>
+                <p class="authors">Developed by AGABA OLIVIER & IRADI ARINDA</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1200,
+            once: true,
+            offset: 100,
+            disable: 'mobile'
+        });
+        
+        // Typed.js for hero section
+        const typed = new Typed('#typed-text', {
+            strings: [
+                '> Initializing compiler visualization engine...',
+                '> Loading 3D rendering pipeline...',
+                '> Connecting to language compilers...',
+                '> Ready for interactive exploration.'
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true,
+            cursorChar: '_',
+            smartBackspace: true
+        });
+        
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const overlay = document.getElementById('overlay');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if(this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
                     });
-                    document.getElementById('error-list').innerHTML = errorHtml;
-                    document.getElementById('error-section').style.display = 'block';
+                }
+            });
+        });
+        
+        // Animated counter for statistics
+        function animateCounter(element, target, suffix = '', duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if(start >= target) {
+                    element.textContent = target + suffix;
+                    clearInterval(timer);
                 } else {
-                    document.getElementById('error-section').style.display = 'none';
+                    element.textContent = Math.floor(start) + suffix;
                 }
+            }, 16);
+        }
+        
+        // Initialize counters when they come into view
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const statLanguages = document.getElementById('statLanguages');
+                    const statVisualizations = document.getElementById('statVisualizations');
+                    const statUsers = document.getElementById('statUsers');
+                    
+                    animateCounter(statLanguages, 6);
+                    animateCounter(statVisualizations, 24, '+');
+                    animateCounter(statUsers, 1200, '+');
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        const heroSection = document.querySelector('.hero');
+        if(heroSection) {
+            observer.observe(heroSection);
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            const particleCount = 100;
+            
+            for(let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
                 
-                // Update stage info
-                if (data.stages && data.stages.length > 0) {
-                    let stageHtml = '<h3 style="color: #64ffda; margin-bottom: 12px; font-size: 1rem;">Compilation Pipeline</h3>';
-                    data.stages.forEach(stage => {
-                        const statusClass = `status-${stage.status || 'pending'}`;
-                        const icon = stage.status === 'completed' ? 'fa-check-circle' : 
-                                    stage.status === 'failed' ? 'fa-times-circle' : 'fa-clock';
-                        stageHtml += `
-                            <div style="margin-bottom: 10px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 6px; border: 1px solid rgba(100,255,218,0.1);">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <i class="fas ${icon}" style="color: ${stage.status === 'completed' ? '#64ffda' : stage.status === 'failed' ? '#ff6b6b' : '#8892b0'}"></i>
-                                        <strong style="font-size: 0.9rem;">${stage.name}</strong>
-                                    </div>
-                                    <span class="stage-status ${statusClass}">${stage.status || 'pending'}</span>
-                                </div>
-                                <div style="font-size: 0.8rem; margin-top: 6px; color: #8892b0;">
-                                    <i class="far fa-clock"></i> Duration: ${stage.duration}ms
-                                    ${stage.errors && stage.errors.length > 0 ? 
-                                        `<br><i class="fas fa-exclamation-circle"></i> Errors: ${stage.errors.length}` : ''}
-                                </div>
-                            </div>`;
-                    });
-                    document.getElementById('stage-info').innerHTML = stageHtml;
+                // Random properties
+                const size = Math.random() * 4 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                const opacity = Math.random() * 0.5 + 0.1;
+                const color = Math.random() > 0.7 ? 'var(--secondary)' : 
+                             Math.random() > 0.5 ? 'var(--accent)' : 'var(--primary)';
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.background = color;
+                particle.style.opacity = opacity;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                // Add floating animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes float {
+                        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+                        25% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(90deg); }
+                        50% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg); }
+                        75% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(270deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // Workflow animation
+        const codeDisplay = document.getElementById('codeDisplay');
+        const compileBtn = document.getElementById('compileBtn');
+        const codeDemo = document.getElementById('codeDemo');
+        const vizDemo = document.getElementById('vizDemo');
+        const stageDescriptions = document.querySelectorAll('.stage-desc');
+        const stageIcons = document.querySelectorAll('.stage-icon');
+        
+        let isTyping = false;
+        let currentLine = 0;
+        const codeLines = [
+            '// C Program to Demonstrate Compilation Pipeline',
+            '#include <stdio.h>',
+            '',
+            'int main() {',
+            '    int a = 10;',
+            '    int b = 20;',
+            '    int sum = a + b;',
+            '    ',
+            '    if (sum > 25) {',
+            '        printf("Sum is greater than 25\\n");',
+            '    } else {',
+            '        printf("Sum is 25 or less\\n");',
+            '    }',
+            '    ',
+            '    for (int i = 0; i < 3; i++) {',
+            '        printf("Iteration %d\\n", i);',
+            '    }',
+            '    ',
+            '    return 0;',
+            '}'
+        ];
+        
+        function typeCode() {
+            if (isTyping) return;
+            isTyping = true;
+            currentLine = 0;
+            codeDisplay.innerHTML = '';
+            
+            function typeLine() {
+                if (currentLine < codeLines.length) {
+                    const line = codeLines[currentLine];
+                    const lineElement = document.createElement('div');
+                    lineElement.className = 'code-line';
+                    lineElement.innerHTML = highlightSyntax(line);
+                    codeDisplay.appendChild(lineElement);
+                    
+                    // Add cursor to current line
+                    const cursor = document.createElement('span');
+                    cursor.className = 'cursor';
+                    lineElement.appendChild(cursor);
+                    
+                    // Scroll to bottom
+                    codeDisplay.scrollTop = codeDisplay.scrollHeight;
+                    
+                    // Simulate typing delay
+                    setTimeout(() => {
+                        cursor.remove();
+                        currentLine++;
+                        typeLine();
+                    }, line.length * 20 + 200);
+                } else {
+                    isTyping = false;
+                    // Enable compile button
+                    compileBtn.style.animation = 'pulseGlow 1s infinite';
+                    compileBtn.disabled = false;
                 }
             }
             
-            // Show specific output tab
-            showOutput(outputType) {
-                // Update tab buttons
-                document.querySelectorAll('.output-tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    if (tab.dataset.output === outputType) {
-                        tab.classList.add('active');
+            typeLine();
+        }
+        
+        function highlightSyntax(line) {
+            // Simple syntax highlighting
+            return line
+                .replace(/\b(int|return|if|else|for)\b/g, '<span class="token keyword">$1</span>')
+                .replace(/\b(main|printf)\b/g, '<span class="token function">$1</span>')
+                .replace(/\b(a|b|sum|i)\b/g, '<span class="token variable">$1</span>')
+                .replace(/(\d+)/g, '<span class="token number">$1</span>')
+                .replace(/(".*?")/g, '<span class="token string">$1</span>')
+                .replace(/\/\/.*/g, '<span class="token comment">$&</span>');
+        }
+        
+        // Start typing animation when page loads
+        setTimeout(typeCode, 1000);
+        
+        // Compile button click handler
+        compileBtn.addEventListener('click', function() {
+            if (isTyping) return;
+            
+            // Reset button animation
+            this.style.animation = '';
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-cog fa-spin"></i> Compiling...';
+            
+            // Animate through compilation stages
+            const stages = [
+                {name: 'Source Code', desc: 'Complete', icon: 'fas fa-check'},
+                {name: 'Lexical Analysis', desc: 'Tokenizing...', icon: 'fas fa-code'},
+                {name: 'Syntax Analysis', desc: 'Building AST...', icon: 'fas fa-project-diagram'},
+                {name: 'Semantic Analysis', desc: 'Type checking...', icon: 'fas fa-brain'},
+                {name: 'Code Generation', desc: 'Generating IR...', icon: 'fas fa-microchip'},
+                {name: 'Assembly', desc: 'Final output...', icon: 'fas fa-file-code'}
+            ];
+            
+            let stageIndex = 0;
+            
+            function animateStage() {
+                if (stageIndex < stages.length) {
+                    // Update stage description
+                    if (stageIndex > 0) {
+                        stageDescriptions[stageIndex - 1].textContent = 'Complete';
+                        stageIcons[stageIndex - 1].style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
                     }
+                    
+                    if (stageIndex < stages.length) {
+                        stageDescriptions[stageIndex].textContent = stages[stageIndex].desc;
+                        stageIcons[stageIndex].innerHTML = `<i class="${stages[stageIndex].icon}"></i>`;
+                        stageIcons[stageIndex].style.borderColor = 'var(--accent)';
+                        stageIcons[stageIndex].style.boxShadow = '0 0 20px var(--accent)';
+                    }
+                    
+                    stageIndex++;
+                    setTimeout(animateStage, 800);
+                } else {
+                    // All stages complete
+                    compileBtn.innerHTML = '<i class="fas fa-check"></i> Compilation Complete!';
+                    compileBtn.style.background = 'linear-gradient(135deg, var(--secondary), var(--accent))';
+                    
+                    // Show visualization
+                    setTimeout(() => {
+                        codeDemo.style.display = 'none';
+                        vizDemo.style.display = 'block';
+                        initWorkflowVisualization();
+                    }, 1000);
+                }
+            }
+            
+            animateStage();
+        });
+        
+        // Three.js 3D Background
+        function initThreeJS() {
+            const canvas = document.getElementById('canvas3d');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            canvas.appendChild(renderer.domElement);
+            
+            // Add post-processing effects
+            const composer = new THREE.EffectComposer(renderer);
+            const renderPass = new THREE.RenderPass(scene, camera);
+            composer.addPass(renderPass);
+            
+            const bloomPass = new THREE.UnrealBloomPass(
+                new THREE.Vector2(window.innerWidth, window.innerHeight),
+                0.5, // strength
+                0.4, // radius
+                0.85 // threshold
+            );
+            composer.addPass(bloomPass);
+            
+            // Create floating compiler nodes
+            const nodes = [];
+            const nodeColors = [
+                0x00ff9d, // Java green
+                0x00599C, // C++ blue
+                0xA8B9CC, // C gray
+                0xFA7343, // Swift orange
+                0x2C3E50, // Brainfuck dark
+                0x00ADD8  // Go blue
+            ];
+            
+            const nodeGeometries = [
+                new THREE.IcosahedronGeometry(2, 1), // Java
+                new THREE.OctahedronGeometry(2, 1),  // C++
+                new THREE.TetrahedronGeometry(2, 1), // C
+                new THREE.DodecahedronGeometry(2, 0), // Swift
+                new THREE.BoxGeometry(2, 2, 2),      // Brainfuck
+                new THREE.SphereGeometry(2, 16, 16)  // Go
+            ];
+            
+            for(let i = 0; i < 6; i++) {
+                const material = new THREE.MeshPhongMaterial({
+                    color: nodeColors[i],
+                    emissive: nodeColors[i],
+                    emissiveIntensity: 0.3,
+                    transparent: true,
+                    opacity: 0.7,
+                    shininess: 100,
+                    wireframe: false
                 });
                 
-                // Update output content
-                document.querySelectorAll('.output-content').forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === `${outputType}-output`) {
-                        content.classList.add('active');
-                    }
-                });
-            }
-            
-            async visualize() {
-                if (!this.sessionId) return;
+                const node = new THREE.Mesh(nodeGeometries[i], material);
                 
-                try {
-                    const response = await fetch(
-                        `?api=visualize&session_id=${this.sessionId}&stage=${this.currentStage}&view=${this.currentView}`
-                    );
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const text = await response.text();
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                    } catch (parseError) {
-                        console.error('Failed to parse JSON:', text);
-                        throw new Error('Invalid JSON response from server');
-                    }
-                    
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    this.createVisualization(data);
-                    
-                } catch (error) {
-                    console.error('Visualization error:', error);
-                    this.showStatus('Visualization error: ' + error.message, 'error');
-                }
-            }
-            
-            createVisualization(data) {
-                // Clear previous objects
-                this.clearScene();
+                // Position in a helix
+                const angle = (i / 6) * Math.PI * 2;
+                const radius = 15;
+                node.position.x = Math.cos(angle) * radius;
+                node.position.z = Math.sin(angle) * radius;
+                node.position.y = (i - 3) * 4;
                 
-                if (!data.nodes || data.nodes.length === 0) {
-                    // Create default visualization if no data
-                    this.createDefaultVisualization();
-                    return;
-                }
+                node.userData = {
+                    originalY: node.position.y,
+                    speed: 0.5 + Math.random() * 0.5,
+                    angle: angle,
+                    radius: radius
+                };
                 
-                // Create nodes
-                data.nodes.forEach(node => {
-                    this.createNode(node);
-                });
+                scene.add(node);
+                nodes.push(node);
                 
-                // Create edges
-                if (data.edges && data.edges.length > 0) {
-                    data.edges.forEach(edge => {
-                        this.createEdge(edge, data.nodes);
-                    });
-                }
-                
-                // Add labels if enabled
-                if (this.showLabels) {
-                    this.addLabels(data.nodes);
-                }
-            }
-            
-            createDefaultVisualization() {
-                // Create a simple 3D visualization for testing
-                const colors = [0x64ffda, 0x00d9a6, 0xff6b6b, 0xffa502, 0x9b59b6, 0x3498db];
-                
-                for (let i = 0; i < 6; i++) {
-                    const geometry = new THREE.SphereGeometry(3, 32, 32);
-                    const material = new THREE.MeshPhongMaterial({ 
-                        color: colors[i],
-                        emissive: colors[i],
-                        emissiveIntensity: 0.2,
+                // Add connections between nodes
+                if (i > 0) {
+                    const geometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 8);
+                    const connectionMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ff9d,
                         transparent: true,
-                        opacity: 0.9
+                        opacity: 0.2
                     });
                     
-                    const sphere = new THREE.Mesh(geometry, material);
-                    sphere.position.set(i * 12 - 30, 0, 0);
-                    sphere.castShadow = true;
-                    this.scene.add(sphere);
-                    this.objects.push(sphere);
+                    const connection = new THREE.Mesh(geometry, connectionMaterial);
+                    
+                    const prevNode = nodes[i-1];
+                    const midPoint = new THREE.Vector3().addVectors(node.position, prevNode.position).multiplyScalar(0.5);
+                    connection.position.copy(midPoint);
+                    
+                    const distance = node.position.distanceTo(prevNode.position);
+                    connection.scale.y = distance;
+                    
+                    connection.lookAt(prevNode.position);
+                    connection.rotateX(Math.PI / 2);
+                    
+                    scene.add(connection);
                 }
             }
             
-            createNode(node) {
-                let geometry, material;
-                const color = new THREE.Color(node.color || '#64ffda');
+            // Add central processor node
+            const processorGeometry = new THREE.TorusKnotGeometry(3, 1, 100, 16);
+            const processorMaterial = new THREE.MeshPhongMaterial({
+                color: 0x6c63ff,
+                emissive: 0x6c63ff,
+                emissiveIntensity: 0.5,
+                transparent: true,
+                opacity: 0.8
+            });
+            const processor = new THREE.Mesh(processorGeometry, processorMaterial);
+            scene.add(processor);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 15);
+            scene.add(directionalLight);
+            
+            const pointLight = new THREE.PointLight(0x00ff9d, 1, 100);
+            pointLight.position.set(0, 0, 0);
+            scene.add(pointLight);
+            
+            // Camera position
+            camera.position.set(0, 10, 40);
+            
+            // Animation loop
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
                 
-                if (this.currentView === 'memory') {
-                    geometry = new THREE.BoxGeometry(node.size || 3, node.height || 3, node.size || 3);
-                } else if (node.type === 'entry' || node.type === 'exit') {
-                    geometry = new THREE.ConeGeometry(node.size || 2.5, 5, 16);
-                } else if (node.type === 'condition') {
-                    geometry = new THREE.CylinderGeometry(node.size || 2.5, node.size || 2.5, 4, 16);
-                } else {
-                    geometry = new THREE.SphereGeometry(node.size || 2.5, 32, 32);
-                }
+                // Animate nodes
+                nodes.forEach((node, index) => {
+                    node.userData.angle += 0.002 * node.userData.speed;
+                    node.position.x = Math.cos(node.userData.angle + time) * node.userData.radius;
+                    node.position.z = Math.sin(node.userData.angle + time) * node.userData.radius;
+                    node.position.y = node.userData.originalY + Math.sin(time * 0.5 + index) * 3;
+                    
+                    node.rotation.x += 0.01 * node.userData.speed;
+                    node.rotation.y += 0.01 * node.userData.speed;
+                });
                 
-                material = new THREE.MeshPhongMaterial({ 
-                    color: color,
-                    emissive: color,
+                // Animate processor
+                processor.rotation.x += 0.01;
+                processor.rotation.y += 0.01;
+                processor.scale.setScalar(1 + Math.sin(time) * 0.1);
+                
+                // Move point light
+                pointLight.position.x = Math.sin(time * 0.5) * 20;
+                pointLight.position.z = Math.cos(time * 0.5) * 20;
+                
+                // Rotate camera
+                camera.position.x = Math.sin(time * 0.05) * 40;
+                camera.position.z = Math.cos(time * 0.05) * 40;
+                camera.lookAt(0, 0, 0);
+                
+                composer.render();
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                composer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            animate();
+        }
+        
+        // Workflow visualization
+        function initWorkflowVisualization() {
+            const canvas = document.getElementById('workflowCanvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setClearColor(0x0a192f, 1);
+            canvas.appendChild(renderer.domElement);
+            
+            // Create compilation pipeline visualization
+            const pipelineStages = ['Lexical', 'Syntax', 'Semantic', 'IR', 'Optimize', 'CodeGen'];
+            const stageNodes = [];
+            
+            pipelineStages.forEach((stage, i) => {
+                const geometry = new THREE.BoxGeometry(4, 4, 4);
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x00ff9d,
+                    emissive: 0x00ff9d,
                     emissiveIntensity: 0.2,
                     transparent: true,
-                    opacity: 0.9,
-                    shininess: 100
+                    opacity: 0.8
                 });
                 
-                const mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(
-                    node.position?.x || 0,
-                    node.position?.y || 0,
-                    node.position?.z || 0
-                );
-                mesh.castShadow = true;
-                mesh.receiveShadow = true;
+                const node = new THREE.Mesh(geometry, material);
+                node.position.x = (i - (pipelineStages.length - 1) / 2) * 8;
+                node.userData.stage = stage;
                 
-                mesh.userData = node;
-                this.scene.add(mesh);
-                this.objects.push(mesh);
+                scene.add(node);
+                stageNodes.push(node);
                 
-                // Add error indicator if node has errors
-                if (node.has_errors && this.showErrors) {
-                    this.addErrorIndicator(mesh);
-                }
+                // Add stage label
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = 256;
+                canvas.height = 128;
                 
-                // Add glow effect for important nodes
-                if (node.type === 'entry' || node.type === 'exit') {
-                    this.addGlowEffect(mesh);
-                }
-            }
+                context.fillStyle = 'rgba(10, 25, 47, 0.9)';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                
+                context.strokeStyle = '#00ff9d';
+                context.lineWidth = 2;
+                context.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+                
+                context.font = 'bold 24px Orbitron';
+                context.fillStyle = '#00ff9d';
+                context.textAlign = 'center';
+                context.fillText(stage, canvas.width / 2, 50);
+                
+                context.font = '14px Inter';
+                context.fillStyle = '#8892b0';
+                context.fillText(`Stage ${i + 1}`, canvas.width / 2, 80);
+                
+                const texture = new THREE.CanvasTexture(canvas);
+                const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+                const sprite = new THREE.Sprite(spriteMaterial);
+                sprite.position.copy(node.position);
+                sprite.position.y = 6;
+                sprite.scale.set(8, 4, 1);
+                scene.add(sprite);
+            });
             
-            addErrorIndicator(mesh) {
-                const node = mesh.userData;
-                const geometry = new THREE.SphereGeometry((node.size || 2.5) * 1.3, 16, 16);
-                const material = new THREE.MeshBasicMaterial({
-                    color: 0xff6b6b,
-                    transparent: true,
-                    opacity: 0.3,
-                    side: THREE.DoubleSide
-                });
-                
-                const indicator = new THREE.Mesh(geometry, material);
-                indicator.position.copy(mesh.position);
-                this.scene.add(indicator);
-                this.objects.push(indicator);
-            }
-            
-            addGlowEffect(mesh) {
-                const geometry = new THREE.SphereGeometry((mesh.userData.size || 2.5) * 1.5, 16, 16);
-                const material = new THREE.MeshBasicMaterial({
-                    color: 0x64ffda,
-                    transparent: true,
-                    opacity: 0.2,
-                    side: THREE.DoubleSide
-                });
-                
-                const glow = new THREE.Mesh(geometry, material);
-                glow.position.copy(mesh.position);
-                this.scene.add(glow);
-                this.objects.push(glow);
-            }
-            
-            createEdge(edge, nodes) {
-                const fromNode = this.findObjectById(edge.from);
-                const toNode = this.findObjectById(edge.to);
-                
-                if (!fromNode || !toNode) return;
-                
+            // Add connections
+            for(let i = 0; i < stageNodes.length - 1; i++) {
                 const curve = new THREE.CatmullRomCurve3([
-                    fromNode.position.clone(),
+                    stageNodes[i].position.clone(),
                     new THREE.Vector3(
-                        (fromNode.position.x + toNode.position.x) / 2,
-                        (fromNode.position.y + toNode.position.y) / 2 + 8,
-                        (fromNode.position.z + toNode.position.z) / 2
+                        (stageNodes[i].position.x + stageNodes[i + 1].position.x) / 2,
+                        stageNodes[i].position.y + 3,
+                        stageNodes[i].position.z
                     ),
-                    toNode.position.clone()
+                    stageNodes[i + 1].position.clone()
                 ]);
                 
                 const geometry = new THREE.TubeGeometry(curve, 20, 0.2, 8, false);
                 const material = new THREE.MeshBasicMaterial({
-                    color: this.getEdgeColor(edge.type),
+                    color: 0x6c63ff,
                     transparent: true,
-                    opacity: 0.7
+                    opacity: 0.5
                 });
                 
                 const tube = new THREE.Mesh(geometry, material);
-                this.scene.add(tube);
-                this.objects.push(tube);
+                scene.add(tube);
             }
             
-            getEdgeColor(type) {
-                const colors = {
-                    'pipeline': 0x64ffda,
-                    'parent_child': 0x00d9a6,
-                    'control_flow': 0xffa502,
-                    'conditional': 0xff6b6b,
-                    'memory_adjacent': 0x9b59b6
-                };
-                return colors[type] || 0x8892b0;
-            }
-            
-            addLabels(nodes) {
-                // Clear existing labels
-                this.labels.forEach(label => this.scene.remove(label));
-                this.labels = [];
-                
-                nodes.forEach(node => {
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.width = 250;
-                    canvas.height = 120;
-                    
-                    // Background with gradient
-                    const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
-                    gradient.addColorStop(0, 'rgba(10, 25, 47, 0.9)');
-                    gradient.addColorStop(1, 'rgba(17, 34, 64, 0.9)');
-                    context.fillStyle = gradient;
-                    context.fillRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Border
-                    context.strokeStyle = node.color || '#64ffda';
-                    context.lineWidth = 2;
-                    context.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
-                    
-                    // Title
-                    context.font = 'bold 14px "Inter", sans-serif';
-                    context.fillStyle = '#64ffda';
-                    context.textAlign = 'center';
-                    context.fillText(this.truncateText(node.name, 20), canvas.width / 2, 30);
-                    
-                    // Type
-                    context.font = '12px "Inter", sans-serif';
-                    context.fillStyle = '#8892b0';
-                    context.fillText(`Type: ${node.type}`, canvas.width / 2, 55);
-                    
-                    // Status/Info
-                    if (node.status) {
-                        context.font = '11px "Inter", sans-serif';
-                        context.fillStyle = node.status === 'completed' ? '#00d9a6' : 
-                                          node.status === 'failed' ? '#ff6b6b' : '#ffa502';
-                        context.fillText(`Status: ${node.status}`, canvas.width / 2, 75);
-                    }
-                    
-                    if (node.error_count > 0) {
-                        context.fillStyle = '#ff6b6b';
-                        context.font = '11px "Inter", sans-serif';
-                        context.fillText(`${node.error_count} error(s)`, canvas.width / 2, 95);
-                    } else if (node.duration) {
-                        context.fillStyle = '#8892b0';
-                        context.font = '11px "Inter", sans-serif';
-                        context.fillText(`Duration: ${node.duration}ms`, canvas.width / 2, 95);
-                    }
-                    
-                    const texture = new THREE.CanvasTexture(canvas);
-                    const material = new THREE.SpriteMaterial({ 
-                        map: texture,
-                        transparent: true 
-                    });
-                    const sprite = new THREE.Sprite(material);
-                    
-                    sprite.position.set(
-                        node.position?.x || 0,
-                        (node.position?.y || 0) + (node.height || node.size || 2.5) + 2,
-                        node.position?.z || 0
-                    );
-                    
-                    sprite.scale.set(10, 5, 1);
-                    this.scene.add(sprite);
-                    this.labels.push(sprite);
+            // Add data particles flowing through pipeline
+            const particles = [];
+            for(let i = 0; i < 20; i++) {
+                const geometry = new THREE.SphereGeometry(0.3, 8, 8);
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0xff2e63,
+                    transparent: true,
+                    opacity: 0.8
                 });
-            }
-            
-            truncateText(text, maxLength) {
-                if (text.length <= maxLength) return text;
-                return text.substring(0, maxLength) + '...';
-            }
-            
-            toggleLabels() {
-                this.labels.forEach(label => {
-                    label.visible = this.showLabels;
-                });
-            }
-            
-            findObjectById(id) {
-                return this.objects.find(obj => obj.userData?.id === id);
-            }
-            
-            showStatus(message, type = 'info') {
-                const statusEl = document.getElementById('status-message');
-                const icon = type === 'error' ? 'fa-exclamation-circle' : 
-                            type === 'warning' ? 'fa-exclamation-triangle' : 
-                            type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
                 
-                statusEl.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-                
-                const progressBar = document.getElementById('progress-bar');
-                progressBar.className = 'progress-fill';
-                
-                if (type === 'error') {
-                    statusEl.style.color = '#ff6b6b';
-                    progressBar.classList.add('error-indicator');
-                } else if (type === 'warning') {
-                    statusEl.style.color = '#ffa502';
-                } else if (type === 'success') {
-                    statusEl.style.color = '#00d9a6';
-                } else {
-                    statusEl.style.color = '#64ffda';
-                }
-            }
-            
-            updateProgress(percent) {
-                document.getElementById('progress-bar').style.width = percent + '%';
-            }
-            
-            reset() {
-                this.sessionId = null;
-                this.totalErrors = 0;
-                
-                // Reset source code
-                document.getElementById('source-code').value = `#include <stdio.h>
-
-int main() {
-    int x = 10;
-    int y = 20;
-    int result = x + y;
-    
-    printf("Result: %d\\n", result);
-    
-    for (int i = 0; i < 5; i++) {
-        printf("Iteration %d\\n", i);
-    }
-    
-    return 0;
-}`;
-                
-                // Reset outputs
-                document.getElementById('tokens-output').textContent = '';
-                document.getElementById('ast-output').textContent = '';
-                document.getElementById('ir-output').textContent = '';
-                document.getElementById('asm-output').textContent = '';
-                document.getElementById('errors-output').textContent = '';
-                
-                // Reset tabs
-                this.showOutput('tokens');
-                document.getElementById('errors-tab').style.display = 'none';
-                document.getElementById('error-section').style.display = 'none';
-                
-                document.getElementById('stage-info').innerHTML = `
-                    <p><i class="fas fa-mouse-pointer"></i> Select a compilation stage or node to view details</p>
-                    <div style="margin-top: 12px; padding: 12px; background: rgba(100,255,218,0.05); border-radius: 5px; border: 1px dashed rgba(100,255,218,0.2);">
-                        <p style="color: #64ffda; margin-bottom: 6px; font-size: 0.9rem;"><i class="fas fa-lightbulb"></i> <strong>Tip:</strong></p>
-                        <p style="font-size: 0.8rem; color: #8892b0;">Hover over nodes in the 3D visualization to see detailed information. Click and drag to rotate the view.</p>
-                    </div>
-                `;
-                
-                // Reset visualization
-                this.clearScene();
-                this.createDefaultVisualization();
-                
-                // Reset status
-                this.updateProgress(0);
-                this.showStatus('Ready to compile');
-            }
-            
-            clearScene() {
-                this.objects.forEach(obj => {
-                    this.scene.remove(obj);
-                });
-                this.objects = [];
-                
-                this.labels.forEach(label => {
-                    this.scene.remove(label);
-                });
-                this.labels = [];
-            }
-            
-            resetView() {
-                this.camera.position.set(0, 30, 50);
-                this.controls.reset();
-            }
-            
-            zoom(factor) {
-                this.camera.position.multiplyScalar(factor);
-                this.controls.update();
-            }
-            
-            takeScreenshot() {
-                this.renderer.render(this.scene, this.camera);
-                const dataURL = this.renderer.domElement.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.href = dataURL;
-                link.download = `compiler_visualization_${Date.now()}.png`;
-                link.click();
-            }
-            
-            async download(type) {
-                if (!this.sessionId) {
-                    this.showStatus('No compilation session found', 'error');
-                    return;
-                }
-                
-                this.showStatus(`Downloading ${type}...`, 'info');
-                
-                try {
-                    const response = await fetch(`?api=download&session_id=${this.sessionId}&type=${type}`);
-                    
-                    if (!response.ok) {
-                        throw new Error('Download failed');
-                    }
-                    
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    
-                    if (type === 'asm') {
-                        a.download = `assembly_${this.sessionId}.asm`;
-                    } else if (type === 'ast') {
-                        a.download = `ast_${this.sessionId}.json`;
-                    } else {
-                        a.download = `source_${this.sessionId}.c`;
-                    }
-                    
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                    
-                    this.showStatus(`${type} downloaded successfully`, 'success');
-                    
-                } catch (error) {
-                    this.showStatus('Download failed: ' + error.message, 'error');
-                }
-            }
-            
-            loadExample(exampleId) {
-                const examples = {
-                    simple: `#include <stdio.h>
-
-int main() {
-    int x = 10;
-    int y = 20;
-    int result = x + y;
-    printf("Result: %d\\n", result);
-    return 0;
-}`,
-                    conditional: `#include <stdio.h>
-
-int main() {
-    int score = 85;
-    
-    if (score >= 90) {
-        printf("Grade: A\\n");
-    } else if (score >= 80) {
-        printf("Grade: B\\n");
-    } else if (score >= 70) {
-        printf("Grade: C\\n");
-    } else {
-        printf("Grade: F\\n");
-    }
-    
-    return 0;
-}`,
-                    loop: `#include <stdio.h>
-
-int main() {
-    int numbers[5] = {1, 2, 3, 4, 5};
-    int sum = 0;
-    
-    for (int i = 0; i < 5; i++) {
-        sum += numbers[i];
-        printf("Adding %d, sum is now %d\\n", numbers[i], sum);
-    }
-    
-    printf("Total sum: %d\\n", sum);
-    return 0;
-}`,
-                    function: `#include <stdio.h>
-
-int multiply(int a, int b) {
-    return a * b;
-}
-
-float calculateAverage(int arr[], int size) {
-    int sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += arr[i];
-    }
-    return (float)sum / size;
-}
-
-int main() {
-    int x = 5, y = 7;
-    int product = multiply(x, y);
-    printf("Product: %d\\n", product);
-    
-    int numbers[] = {10, 20, 30, 40, 50};
-    float average = calculateAverage(numbers, 5);
-    printf("Average: %.2f\\n", average);
-    
-    return 0;
-}`
+                const particle = new THREE.Mesh(geometry, material);
+                particle.userData = {
+                    progress: Math.random(),
+                    speed: 0.2 + Math.random() * 0.3,
+                    stage: Math.floor(Math.random() * pipelineStages.length)
                 };
                 
-                if (examples[exampleId]) {
-                    document.getElementById('source-code').value = examples[exampleId];
-                    this.showStatus(`Loaded example: ${exampleId}`, 'success');
-                }
+                // Position at random stage
+                const stageIndex = particle.userData.stage;
+                particle.position.copy(stageNodes[stageIndex].position);
+                particle.position.y += 1;
                 
-                document.getElementById('example-select').value = '';
+                scene.add(particle);
+                particles.push(particle);
             }
             
-            onMouseMove(event) {
-                const rect = this.renderer.domElement.getBoundingClientRect();
-                this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 15);
+            scene.add(directionalLight);
+            
+            // Camera position
+            camera.position.set(0, 10, 30);
+            
+            // Controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Animation
+            let animationTime = 0;
+            function animateWorkflow() {
+                requestAnimationFrame(animateWorkflow);
+                animationTime += 0.01;
                 
-                this.raycaster.setFromCamera(this.mouse, this.camera);
-                const intersects = this.raycaster.intersectObjects(this.objects);
+                // Animate stage nodes
+                stageNodes.forEach((node, i) => {
+                    node.rotation.x += 0.01;
+                    node.rotation.y += 0.01;
+                    node.scale.setScalar(1 + Math.sin(animationTime * 2 + i) * 0.1);
+                });
                 
-                const tooltip = document.getElementById('tooltip');
-                if (intersects.length > 0) {
-                    const object = intersects[0].object;
-                    const data = object.userData;
+                // Animate particles
+                particles.forEach(particle => {
+                    particle.userData.progress += particle.userData.speed * 0.01;
                     
-                    if (data) {
-                        tooltip.style.display = 'block';
-                        tooltip.style.left = (event.clientX + 10) + 'px';
-                        tooltip.style.top = (event.clientY + 10) + 'px';
-                        
-                        let html = `<div style="color: #64ffda; font-weight: bold; margin-bottom: 6px; font-size: 0.9rem;">${this.truncateText(data.name, 25)}</div>`;
-                        html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Type:</strong> ${data.type}</div>`;
-                        
-                        if (data.status) {
-                            html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Status:</strong> ${data.status}</div>`;
-                        }
-                        
-                        if (data.duration) {
-                            html += `<div style="margin-bottom: 4px; font-size: 0.8rem;"><strong>Duration:</strong> ${data.duration}ms</div>`;
-                        }
-                        
-                        if (data.error_count > 0) {
-                            html += `<div style="color: #ff6b6b; margin-top: 6px; font-size: 0.8rem;"><i class="fas fa-exclamation-circle"></i> ${data.error_count} error(s)</div>`;
-                        }
-                        
-                        tooltip.innerHTML = html;
+                    if(particle.userData.progress > 1) {
+                        particle.userData.progress = 0;
+                        particle.userData.stage = (particle.userData.stage + 1) % stageNodes.length;
                     }
-                } else {
-                    tooltip.style.display = 'none';
-                }
+                    
+                    const currentStage = particle.userData.stage;
+                    const nextStage = (currentStage + 1) % stageNodes.length;
+                    
+                    // Interpolate between stages
+                    const startPos = stageNodes[currentStage].position.clone();
+                    const endPos = stageNodes[nextStage].position.clone();
+                    
+                    particle.position.x = startPos.x + (endPos.x - startPos.x) * particle.userData.progress;
+                    particle.position.y = startPos.y + 1 + Math.sin(particle.userData.progress * Math.PI) * 2;
+                    particle.position.z = startPos.z + (endPos.z - startPos.z) * particle.userData.progress;
+                });
+                
+                controls.update();
+                renderer.render(scene, camera);
             }
             
-            handleResize() {
-                const container = document.getElementById('visualization-canvas');
-                this.camera.aspect = container.clientWidth / container.clientHeight;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(container.clientWidth, container.clientHeight);
-                
-                // Check if we're now mobile or desktop
-                this.isMobile = window.innerWidth < 992;
-            }
+            animateWorkflow();
             
-            animate() {
-                this.animationId = requestAnimationFrame(() => this.animate());
-                
-                if (this.autoRotate) {
-                    this.scene.rotation.y += 0.001;
-                }
-                
-                this.controls.update();
-                this.renderer.render(this.scene, this.camera);
-            }
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
         }
         
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            window.visualizer = new CompilerVisualizer3D();
+        // Initialize everything
+        window.addEventListener('load', () => {
+            initThreeJS();
+            createParticles();
             
-            // Handle mobile-specific adjustments on load
-            if (window.innerWidth < 768) {
-                // Hide some text on mobile for space
-                document.querySelectorAll('.tab-text').forEach(el => {
-                    if (window.innerWidth < 480) {
-                        el.style.display = 'none';
-                    }
+            // Add click handlers for workflow controls
+            document.getElementById('playBtn').addEventListener('click', () => {
+                if (!isTyping) {
+                    typeCode();
+                }
+            });
+            
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                // Reset workflow
+                codeDemo.style.display = 'block';
+                vizDemo.style.display = 'none';
+                compileBtn.innerHTML = '<i class="fas fa-play-circle"></i> Compile & Visualize';
+                compileBtn.disabled = false;
+                compileBtn.style.animation = '';
+                compileBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+                
+                // Reset stages
+                stageDescriptions.forEach((desc, i) => {
+                    if(i === 0) desc.textContent = 'Typing...';
+                    else desc.textContent = 'Waiting...';
                 });
                 
-                document.querySelectorAll('.btn-text').forEach(el => {
-                    if (window.innerWidth < 480) {
-                        el.style.display = 'none';
-                    }
+                stageIcons.forEach(icon => {
+                    icon.style.background = 'var(--dark)';
+                    icon.style.borderColor = 'var(--primary)';
+                    icon.style.boxShadow = 'none';
+                    icon.innerHTML = `<i class="${icon.querySelector('i').className}"></i>`;
                 });
+                
+                // Start typing again
+                setTimeout(typeCode, 500);
+            });
+            
+            // Start workflow automatically
+            setTimeout(() => {
+                typeCode();
+            }, 2000);
+        });
+        
+        // Add hover effect to cards
+        document.querySelectorAll('.language-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-15px) rotateX(5deg)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotateX(0)';
+            });
+        });
+        
+        // Add keyboard shortcut for workflow reset
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'r' && e.ctrlKey) {
+                document.getElementById('resetBtn').click();
+                e.preventDefault();
             }
         });
     </script>
