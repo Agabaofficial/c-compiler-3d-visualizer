@@ -4,7 +4,52 @@
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', 'hub_errors.log');
+ini_set('error_log', __DIR__ . '/logs/hub_errors.log');
+
+// -----------------------------------------------------------------------
+// Session & backend bootstrap
+// -----------------------------------------------------------------------
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Optionally initialise the database connection (graceful fallback if
+// the .env / database server is not yet configured).
+$dbAvailable = false;
+if (file_exists(__DIR__ . '/src/Config/Constants.php')) {
+    require_once __DIR__ . '/src/Config/Constants.php';
+    \App\Config\Constants::load();
+    try {
+        require_once __DIR__ . '/src/Config/Database.php';
+        \App\Config\Database::getInstance();
+        $dbAvailable = true;
+    } catch (\Throwable $e) {
+        // Database not available – continue in frontend-only mode
+    }
+}
+
+// Convenience flags used in the HTML below
+$isAdmin  = !empty($_SESSION['admin_logged_in']);
+$isUser   = !empty($_SESSION['user_id']);
+
+// Handle sign-out from the main page
+if (isset($_GET['signout'])) {
+    // Prevent session fixation: clear all session data, delete the cookie,
+    // then destroy the server-side session.
+    session_unset();
+    if (ini_get('session.use_cookies')) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(), '', time() - 42000,
+            $params['path'], $params['domain'],
+            $params['secure'], $params['httponly']
+        );
+    }
+    session_destroy();
+    // Redirect to the site root – never echo back the raw REQUEST_URI
+    header('Location: /');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1358,6 +1403,13 @@ ini_set('error_log', 'hub_errors.log');
             <li><a href="#languages">Languages</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#cta">Get Started</a></li>
+            <?php if ($isAdmin): ?>
+            <li><a href="admin/">⚙ Admin Panel</a></li>
+            <?php endif; ?>
+            <?php if ($isUser || $isAdmin): ?>
+            <li><a href="#history">📋 History</a></li>
+            <li><a href="?signout=1">Sign Out</a></li>
+            <?php endif; ?>
         </ul>
         <a href="https://github.com/Agabaofficial/compiler-visualizer-hub" class="github-btn" target="_blank">
             <i class="fab fa-github"></i> Source Code
@@ -1381,6 +1433,13 @@ ini_set('error_log', 'hub_errors.log');
                     <li><a href="#languages">Languages</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#cta">Get Started</a></li>
+                    <?php if ($isAdmin): ?>
+                    <li><a href="admin/" class="nav-link-admin">⚙ Admin Panel</a></li>
+                    <?php endif; ?>
+                    <?php if ($isUser || $isAdmin): ?>
+                    <li><a href="#history" class="nav-link-user">📋 History</a></li>
+                    <li><a href="?signout=1" class="nav-link-signout">Sign Out</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
             

@@ -275,3 +275,101 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Report issues** — help us improve the platform! 
 
 </div>
+
+---
+
+## 🗄️ Backend Infrastructure
+
+CompilerHub ships with a full PHP backend. Enable it by following [SETUP.md](SETUP.md).
+
+### Database Schema
+
+| Table | Purpose |
+|-------|---------|
+| `users` | Registered accounts with bcrypt passwords and role (`user` / `admin`) |
+| `compilation_sessions` | Every compilation run – code, output, language, execution time |
+| `ast_results` | Stored AST JSON and token count linked to a session |
+| `user_preferences` | Per-user UI settings (theme, visualization mode) |
+| `saved_visualizations` | Named, exportable 3D visualization snapshots |
+| `analytics` | Aggregated usage data (language distribution, session duration) |
+| `admin_logs` | Admin action audit trail |
+
+Full DDL lives in [`database/schema.sql`](database/schema.sql).
+
+### Admin Dashboard
+
+Access the admin panel at `/admin/`. Features include:
+
+- 📊 **Dashboard** – real-time system stats (users, compilations, errors)
+- 👥 **User Management** – view, search, ban / unban, promote to admin
+- 📈 **Analytics** – language usage pie chart, daily activity graph
+- 📋 **Logs** – live error and access log viewer
+- ⚙️ **Settings** – runtime configuration panel
+
+### API Documentation
+
+All endpoints are rooted at `/api/v1/`.
+
+#### Authentication
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/auth/register` | Create a new user account |
+| `POST` | `/auth/login` | Obtain access + refresh tokens |
+| `POST` | `/auth/refresh` | Exchange a refresh token for a new access token |
+| `POST` | `/auth/logout` | Invalidate the current session |
+
+#### Compilation
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/compilation/compile` | Compile code and persist the session |
+| `GET`  | `/compilation/history` | Retrieve the authenticated user's history |
+
+#### Visualizations
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST`   | `/visualizations/save` | Save a named visualization snapshot |
+| `GET`    | `/visualizations/list` | List the user's saved visualizations |
+| `GET`    | `/visualizations/load` | Load a specific visualization by ID |
+| `DELETE` | `/visualizations`      | Delete a visualization |
+
+#### Admin (requires admin role)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET`    | `/admin/stats`   | System statistics overview |
+| `GET`    | `/admin/users`   | List all users |
+| `PUT`    | `/admin/users`   | Update user role / ban status |
+| `DELETE` | `/admin/users`   | Delete a user account |
+| `GET`    | `/admin/logs`    | Tail the error/access log |
+
+### Security Features
+
+- 🔒 **JWT authentication** – short-lived access tokens + refresh tokens
+- 🛡️ **CSRF protection** – token-based CSRF mitigation on state-changing endpoints
+- 🧹 **Input sanitisation** – `htmlspecialchars` + prepared statements throughout
+- 🚦 **Rate limiting** – file-based token-bucket (100 req / 60 s per IP by default)
+- 🔐 **Security headers** – `X-Frame-Options`, `X-Content-Type-Options`, `Content-Security-Policy`
+- 🧱 **CORS** – configurable allowed-origin list via `CORS_ALLOWED_ORIGINS`
+- 📝 **Audit logging** – all errors and admin actions written to `logs/`
+
+### Quick Start with Database
+
+```bash
+# 1. Copy and edit environment file
+cp config/.env.example config/.env
+
+# 2. Create database and import schema
+mysql -u root -p -e "CREATE DATABASE compilerhub;"
+mysql -u root -p compilerhub < database/schema.sql
+
+# 3. Serve the project
+php -S localhost:8000
+
+# 4. Open admin panel
+open http://localhost:8000/admin/
+```
+
+See [SETUP.md](SETUP.md) for the complete installation guide including Redis, Apache/Nginx configuration, and production hardening.
