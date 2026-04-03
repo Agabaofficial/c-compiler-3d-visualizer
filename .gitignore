@@ -1,0 +1,29 @@
+# Environment
+config/.env
+*.env
+
+# Logs
+logs/*.log
+!logs/.gitkeep
+
+# Rate limit state files
+logs/rl/
+
+# Temp files
+tmp/
+php_errors.log
+hub_errors.log
+
+# Dependencies
+vendor/
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
