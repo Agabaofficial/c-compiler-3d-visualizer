@@ -10,7 +10,7 @@
     // Config
     // ------------------------------------------------------------------
     const API_BASE      = '/api/v1';
-    const REFRESH_MS    = 60_000; // Auto-refresh every 60 seconds
+    const REFRESH_INTERVAL_MS = 60000; // Auto-refresh every 60 seconds
     const MAX_LOG_LINES = 500;
 
     let accessToken  = sessionStorage.getItem('admin_jwt') || '';
@@ -387,6 +387,6 @@
     setInterval(() => {
         const active = document.querySelector('.nav-item.active')?.dataset.section || 'dashboard';
         if (active === 'dashboard') loadDashboard();
-    }, REFRESH_MS);
+    }, REFRESH_INTERVAL_MS);
 
 })();

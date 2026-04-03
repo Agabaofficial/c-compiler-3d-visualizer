@@ -146,7 +146,7 @@ class CompilerService
             'KEYWORD'    => '\b(int|float|double|char|void|return|if|else|for|while|do|break|continue|switch|case|default|struct|typedef|const|static|extern|class|public|private|protected|new|import|package|func|var|type|range|map|chan|go|defer|select|interface|string|bool|true|false|null|nil|println|printf|scanf)\b',
             'NUMBER'     => '\b\d+(\.\d+)?\b',
             'STRING'     => '"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"',
-            'CHAR'       => "'[^'\\\\](?:\\\\.)?' ",
+            'CHAR'       => "'(?:[^'\\\\]|\\\\.)'",  // single-char literal: 'x' or '\n'
             'COMMENT'    => '//[^\n]*|/\*.*?\*/',
             'OPERATOR'   => '[+\-*/%&|^~<>!=]=?|&&|\|\||<<|>>|\+\+|--|->',
             'PUNCTUATION'=> '[{}()\[\];,.]',
