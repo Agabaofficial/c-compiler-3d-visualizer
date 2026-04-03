@@ -129,9 +129,10 @@ class AdminController
         $type  = $_GET['type'] ?? 'error';
         $lines = min(1000, max(1, (int) ($_GET['lines'] ?? 100)));
 
+        $appRoot = defined('APP_ROOT') ? APP_ROOT : dirname(dirname(dirname(__DIR__)));
         $logFile = $type === 'access'
-            ? (defined('ACCESS_LOG_FILE') ? ACCESS_LOG_FILE : APP_ROOT . '/logs/access.log')
-            : (defined('LOG_FILE')        ? LOG_FILE        : APP_ROOT . '/logs/error.log');
+            ? (defined('ACCESS_LOG_FILE') ? ACCESS_LOG_FILE : $appRoot . '/logs/access.log')
+            : (defined('LOG_FILE')        ? LOG_FILE        : $appRoot . '/logs/error.log');
 
         $entries = $this->readLogTail($logFile, $lines);
 

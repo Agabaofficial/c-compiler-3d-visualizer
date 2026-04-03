@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_login'])) {
     $inputUser = trim($_POST['username'] ?? '');
     $inputPass = $_POST['password'] ?? '';
 
-    if ($inputUser === $adminUser && hash_equals(hash('sha256', $adminPass), hash('sha256', $inputPass))) {
+    if ($inputUser === $adminUser && password_verify($inputPass, password_hash($adminPass, PASSWORD_BCRYPT))) {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_user']      = $inputUser;
         header('Location: ' . $_SERVER['PHP_SELF']);
